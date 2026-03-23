@@ -44,6 +44,25 @@
 
         /* Urgency banner */
         .urgency-banner { background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); }
+
+        /* AI Chat Widget */
+        .chat-widget { position: fixed; bottom: 24px; right: 24px; z-index: 1000; }
+        .chat-button { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .chat-button:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5); }
+        .chat-window { position: absolute; bottom: 80px; right: 0; width: 380px; max-width: calc(100vw - 48px); background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); display: none; flex-direction: column; overflow: hidden; }
+        .chat-window.open { display: flex; }
+        .chat-header { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); padding: 16px; color: white; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px; max-height: 350px; background: #f8fafc; }
+        .chat-input-area { padding: 12px; border-top: 1px solid #e2e8f0; background: white; }
+        .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 12px 16px; }
+        .typing-indicator span { width: 8px; height: 8px; background: #94a3b8; border-radius: 50%; animation: typing 1.4s infinite both; }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
+
+        /* Quick reply buttons */
+        .quick-reply { display: inline-block; padding: 8px 14px; margin: 4px; background: white; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .quick-reply:hover { background: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
     </style>
 </head>
 <body class="bg-white">
@@ -568,7 +587,7 @@
         </div>
     </section>
 
-    <!-- Contact / Chat Form with Calendly -->
+    <!-- Contact / Book Call -->
     <section id="contact" class="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
@@ -577,7 +596,7 @@
                     <span class="text-sm font-medium text-green-800">3 consultation slots available this week</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Book Your Free Consultation</h2>
-                <p class="text-xl text-gray-600">15-minute call. No commitment. Get all your questions answered.</p>
+                <p class="text-xl text-gray-600">30-minute call. No commitment. Get all your questions answered.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
@@ -588,7 +607,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-900">Quick 15-Minute Call</h3>
+                            <h3 class="font-semibold text-gray-900">Quick 30-Minute Call</h3>
                             <p class="text-gray-600 text-sm">We'll discuss your needs and provide a custom quote. No pressure.</p>
                         </div>
                     </div>
@@ -636,26 +655,21 @@
                     </div>
                 </div>
 
-                <!-- Right: Calendly Embed -->
+                <!-- Right: Calendly Button -->
                 <div class="bg-white rounded-2xl card-shadow-lg overflow-hidden">
-                    <!-- Calendly inline widget -->
-                    <div id="calendly-container" class="min-h-[500px]">
-                        <!-- Calendly widget will be loaded here -->
-                        <div class="p-8 text-center">
-                            <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Schedule Your Free Call</h3>
-                            <p class="text-gray-600 mb-6">Pick a time that works for you</p>
-
-                            <!-- Fallback: Direct Calendly Link -->
-                            <a href="#" id="calendly-link" onclick="Calendly.initPopupWidget({url: 'https://calendly.com/automatyn/consultation'}); return false;" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition shadow-lg">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                Book 15-Min Consultation
-                            </a>
-
-                            <p class="text-sm text-gray-500 mt-4">No credit card required</p>
+                    <div class="p-8 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                         </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Schedule Your Free Call</h3>
+                        <p class="text-gray-600 mb-6">Pick a time that works for you</p>
+
+                        <button id="calendly-btn" class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition shadow-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            Book 30-Min Consultation
+                        </button>
+
+                        <p class="text-sm text-gray-500 mt-4">No credit card required</p>
                     </div>
                 </div>
             </div>
@@ -713,6 +727,49 @@
         </div>
     </footer>
 
+    <!-- AI Chat Widget -->
+    <div class="chat-widget" id="chat-widget">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-white">Automatyn Assistant</div>
+                        <div class="text-sm text-blue-100 flex items-center gap-1">
+                            <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                            Online • Ask me anything
+                        </div>
+                    </div>
+                </div>
+                <button onclick="toggleChat()" class="text-white/80 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here -->
+            </div>
+            <div class="chat-input-area">
+                <div class="flex gap-2">
+                    <input type="text" id="chat-input" class="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Ask me anything...">
+                    <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    </button>
+                </div>
+                <div id="quick-replies" class="mt-3 flex flex-wrap">
+                    <button class="quick-reply" onclick="sendQuickReply('What is OpenClaw?')">What is OpenClaw?</button>
+                    <button class="quick-reply" onclick="sendQuickReply('How much does it cost?')">Pricing</button>
+                    <button class="quick-reply" onclick="sendQuickReply('How long does setup take?')">Timeline</button>
+                    <button class="quick-reply" onclick="sendQuickReply('Book a consultation')">Book Call</button>
+                </div>
+            </div>
+        </div>
+        <button class="chat-button" onclick="toggleChat()" id="chat-toggle">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+        </button>
+    </div>
+
     <script>
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -725,16 +782,160 @@
             });
         });
 
-        // Initialize Calendly inline widget after page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Try to load Calendly inline widget
-            if (typeof Calendly !== 'undefined') {
-                Calendly.initInlineWidget({
-                    url: 'https://calendly.com/automatyn/consultation',
-                    parentElement: document.getElementById('calendly-container'),
-                    prefill: {},
-                    utm: {}
-                });
+        // Calendly popup
+        document.getElementById('calendly-btn').addEventListener('click', function() {
+            Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/30min'});
+        });
+
+        // AI Chat Widget
+        const faqResponses = {
+            'what is openclaw': "OpenClaw is an open-source messaging automation platform that lets you build AI-powered chatbots. It supports multiple channels including Telegram, Discord, Slack, WhatsApp, and more. Think of it like a smarter version of many chatbot platforms - with built-in AI capabilities, multi-channel support, and powerful automation features.",
+            'how much does it cost': "Our pricing is simple and one-time:\n\n• **Foundation** - $1,000 (1 channel, basic setup)\n• **Professional** - $2,000 (3 channels, custom agents) - Most popular!\n• **Enterprise** - $3,000 (unlimited channels, priority support)\n\nWe also offer ongoing support for $200/month. All plans include a 14-day money-back guarantee. Would you like to book a free consultation to discuss your specific needs?",
+            'pricing': "Our pricing is simple and one-time:\n\n• **Foundation** - $1,000 (1 channel, basic setup)\n• **Professional** - $2,000 (3 channels, custom agents) - Most popular!\n• **Enterprise** - $3,000 (unlimited channels, priority support)\n\nWe also offer ongoing support for $200/month. All plans include a 14-day money-back guarantee. Would you like to book a free consultation to discuss your specific needs?",
+            'how long does setup take': "Most setups are completed within **24-48 hours** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 30 minutes to discuss your needs\n2. **Setup & configuration** - 24-48 hours\n3. **Testing & verification** - 2-4 hours\n4. **You're live!** - We provide documentation and support\n\nRush delivery is available for Enterprise clients.",
+            'timeline': "Most setups are completed within **24-48 hours** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 30 minutes to discuss your needs\n2. **Setup & configuration** - 24-48 hours\n3. **Testing & verification** - 2-4 hours\n4. **You're live!** - We provide documentation and support\n\nRush delivery is available for Enterprise clients.",
+            'what channels do you support': "We support all OpenClaw channels:\n\n• **Telegram** - Bot setup, webhooks, custom commands\n• **Discord** - Server bots, slash commands, integrations\n• **Slack** - App setup, slash commands, workflows\n• **WhatsApp** - Business API integration\n• **Signal** - Secure messaging setup\n• **iMessage** - Apple Messages integration\n\nAnd more! If OpenClaw supports it, we can configure it.",
+            'channels': "We support all OpenClaw channels:\n\n• **Telegram** - Bot setup, webhooks, custom commands\n• **Discord** - Server bots, slash commands, integrations\n• **Slack** - App setup, slash commands, workflows\n• **WhatsApp** - Business API integration\n• **Signal** - Secure messaging setup\n• **iMessage** - Apple Messages integration\n\nAnd more! If OpenClaw supports it, we can configure it.",
+            'do you need access to my server': "**No!** Your security is our priority. We generate custom setup scripts that you run on your own server. Your API keys, tokens, and data never leave your machine.\n\nFor Enterprise clients who want extra hand-holding, we can do a screenshare session where YOU run the commands while we guide you.",
+            'security': "**No!** Your security is our priority. We generate custom setup scripts that you run on your own server. Your API keys, tokens, and data never leave your machine.\n\nFor Enterprise clients who want extra hand-holding, we can do a screenshare session where YOU run the commands while we guide you.",
+            'refund': "We offer a **14-day money-back guarantee**. If we can't get your OpenClaw setup working, you get a full refund - no questions asked.\n\nWe've never had a refund request because we make sure everything works before we deliver. But the guarantee is there for your peace of mind.",
+            'money back': "We offer a **14-day money-back guarantee**. If we can't get your OpenClaw setup working, you get a full refund - no questions asked.\n\nWe've never had a refund request because we make sure everything works before we deliver. But the guarantee is there for your peace of mind.",
+            'support': "All plans include email support:\n\n• **Foundation** - 30 days of email support\n• **Professional** - 60 days of priority email support\n• **Enterprise** - 90 days of priority email + 1-hour onboarding call\n\nNeed ongoing help? Add our **$200/month** support package for unlimited troubleshooting and monthly updates.",
+            'what if something breaks': "All plans include email support:\n\n• **Foundation** - 30 days of email support\n• **Professional** - 60 days of priority email support\n• **Enterprise** - 90 days of priority email + 1-hour onboarding call\n\nNeed ongoing help? Add our **$200/month** support package for unlimited troubleshooting and monthly updates.",
+            'book': "I'd love to help you get started! Let me open the booking calendar for you.",
+            'book a consultation': "I'd love to help you get started! Let me open the booking calendar for you.",
+            'book a call': "I'd love to help you get started! Let me open the booking calendar for you.",
+            'consultation': "I'd love to help you get started! Let me open the booking calendar for you.",
+            'schedule': "I'd love to help you get started! Let me open the booking calendar for you.",
+            'upgrade': "**Yes, you can upgrade anytime!** Just pay the difference between your current plan and the new one.\n\nFor example, if you start with Foundation ($1,000) and later need Professional ($2,000), you'd just pay the $1,000 difference.\n\nContact us to discuss your upgrade path.",
+            'can i upgrade': "**Yes, you can upgrade anytime!** Just pay the difference between your current plan and the new one.\n\nFor example, if you start with Foundation ($1,000) and later need Professional ($2,000), you'd just pay the $1,000 difference.\n\nContact us to discuss your upgrade path.",
+            'hello': "Hi there! 👋 I'm the Automatyn assistant. I can answer questions about OpenClaw setup, pricing, timelines, and more. What would you like to know?",
+            'hi': "Hi there! 👋 I'm the Automatyn assistant. I can answer questions about OpenClaw setup, pricing, timelines, and more. What would you like to know?",
+            'hey': "Hi there! 👋 I'm the Automatyn assistant. I can answer questions about OpenClaw setup, pricing, timelines, and more. What would you like to know?",
+            'help': "I'm here to help! You can ask me about:\n\n• What is OpenClaw and what can it do?\n• Pricing and plan differences\n• Setup timeline and process\n• Security and data privacy\n• Refund policy\n• How to book a consultation\n\nOr just type your question naturally and I'll do my best to help!",
+            'thanks': "You're welcome! 😊 Is there anything else I can help you with? Feel free to ask more questions or book a free consultation.",
+            'thank you': "You're welcome! 😊 Is there anything else I can help you with? Feel free to ask more questions or book a free consultation.",
+        };
+
+        let chatOpen = false;
+        let messagesStarted = false;
+
+        function toggleChat() {
+            const chatWindow = document.getElementById('chat-window');
+            chatOpen = !chatOpen;
+            if (chatOpen) {
+                chatWindow.classList.add('open');
+                if (!messagesStarted) {
+                    addBotMessage("Hi there! 👋 I'm the Automatyn assistant. I can answer questions about OpenClaw setup, pricing, timelines, and more. What would you like to know?");
+                    messagesStarted = true;
+                }
+                document.getElementById('chat-input').focus();
+            } else {
+                chatWindow.classList.remove('open');
+            }
+        }
+
+        function addBotMessage(text) {
+            const container = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex gap-3 mb-4';
+            msgDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-none px-4 py-3 max-w-xs shadow-sm">
+                    <p class="text-gray-800 text-sm whitespace-pre-line">${text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>
+                </div>
+            `;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function addUserMessage(text) {
+            const container = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'flex gap-3 justify-end mb-4';
+            msgDiv.innerHTML = `
+                <div class="bg-blue-600 rounded-2xl rounded-tr-none px-4 py-3 max-w-xs">
+                    <p class="text-white text-sm">${text}</p>
+                </div>
+            `;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showTyping() {
+            const container = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'flex gap-3 mb-4';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <div class="bg-white rounded-2xl rounded-tl-none px-4 py-3 shadow-sm">
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        function getResponse(input) {
+            const lowerInput = input.toLowerCase().trim();
+
+            // Check for booking-related keywords first
+            const bookingKeywords = ['book', 'consultation', 'schedule', 'call', 'appointment', 'meeting'];
+            if (bookingKeywords.some(kw => lowerInput.includes(kw))) {
+                setTimeout(() => {
+                    Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/30min'});
+                }, 500);
+                return "I'll open the booking calendar for you! Pick a time that works best for your schedule. 📅";
+            }
+
+            // Check FAQ responses
+            for (const [key, response] of Object.entries(faqResponses)) {
+                if (lowerInput.includes(key)) {
+                    return response;
+                }
+            }
+
+            // Fallback
+            return "I'm not sure about that specific question, but I'd be happy to help! Here's what I can tell you about:\n\n• **Pricing** - Plans from $1,000 to $3,000\n• **Timeline** - 24-48 hour setup\n• **Channels** - Telegram, Discord, Slack, WhatsApp, Signal\n• **Security** - Your data stays on your server\n\nOr you can **book a free consultation** to speak with a human expert. Would you like me to open the booking calendar?";
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            addUserMessage(text);
+            input.value = '';
+
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                const response = getResponse(text);
+                addBotMessage(response);
+            }, 800 + Math.random() * 400);
+        }
+
+        function sendQuickReply(text) {
+            document.getElementById('chat-input').value = text;
+            sendMessage();
+        }
+
+        // Enter key to send
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
         });
     </script>
