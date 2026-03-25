@@ -9,13 +9,13 @@
     <meta property="og:title" content="Automatyn | Professional OpenClaw Setup Service">
     <meta property="og:description" content="Get OpenClaw professionally installed. Expert setup for all channels. Starting at $1,000. Book a free consultation.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://automatyn.com/og-image.png">
-    <meta property="og:url" content="https://automatyn.com/">
+    <meta property="og:image" content="https://automatyn.github.io/openclaw/og-image.png">
+    <meta property="og:url" content="https://automatyn.github.io/openclaw/">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Automatyn | Professional OpenClaw Setup Service">
     <meta name="twitter:description" content="Get OpenClaw professionally installed. Expert setup for all channels. Starting at $1,000.">
-    <meta name="twitter:image" content="https://automatyn.com/og-image.png">
-    <link rel="canonical" href="https://automatyn.com/">
+    <meta name="twitter:image" content="https://automatyn.github.io/openclaw/og-image.png">
+    <link rel="canonical" href="https://automatyn.github.io/openclaw/">
 
     <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,6 +28,7 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400;500;700&display=swap" rel="stylesheet">
 
     <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
@@ -36,8 +37,8 @@
         "@type": "ProfessionalService",
         "name": "Automatyn",
         "description": "Professional OpenClaw setup and configuration service for businesses. Expert installation for Telegram, Discord, Slack, WhatsApp, and Signal.",
-        "url": "https://automatyn.com",
-        "logo": "https://automatyn.com/logo.png",
+        "url": "https://automatyn.github.io/openclaw/",
+        "logo": "https://automatyn.github.io/openclaw/logo.png",
         "priceRange": "$1,000 - $3,000",
         "areaServed": "Worldwide",
         "serviceType": ["Software Installation", "Chatbot Configuration", "Messaging Automation Setup"],
@@ -121,15 +122,16 @@
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Automatyn",
-        "url": "https://automatyn.com",
-        "logo": "https://automatyn.com/logo.png",
+        "url": "https://automatyn.github.io/openclaw/",
+        "logo": "https://automatyn.github.io/openclaw/logo.png",
         "description": "Professional automation setup services for OpenClaw and messaging platforms.",
         "sameAs": []
     }
     </script>
 
     <style>
-        * { font-family: 'Inter', sans-serif; }
+        * { font-family: 'Satoshi', sans-serif; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Inter', sans-serif; }
         /* DARK MODE - SHADOW AGENCY THEME */
         :root {
             --neon-purple: #a855f7;
@@ -228,15 +230,8 @@
         .hardware-cta:hover { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 30px rgba(168, 85, 247, 0.2); }
     </style>
 
-    <!-- Analytics Placeholder -->
-    <!-- Google Analytics: Replace GA_MEASUREMENT_ID with your actual ID -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
+    <!-- TODO: Add Google Analytics - replace GA_MEASUREMENT_ID with your actual ID -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script> -->
 </head>
 <body class="bg-black">
     <!-- Mobile Sticky CTA -->
@@ -270,7 +265,22 @@
                     <a href="#about" class="text-gray-400 hover:text-white transition text-sm font-medium">About</a>
                     <a href="#contact" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-2 rounded-lg hover:opacity-90 transition text-sm font-medium shadow-md neon-glow">Book Free Call</a>
                 </div>
-                <a href="#contact" class="md:hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Book Call</a>
+                <div class="md:hidden flex items-center gap-3">
+                    <a href="#contact" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Book Call</a>
+                    <button id="mobile-menu-btn" class="text-gray-400 hover:text-white transition" aria-label="Toggle navigation menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-purple-900/30 py-4">
+                <div class="flex flex-col gap-4 px-4">
+                    <a href="#pricing" class="text-gray-400 hover:text-white transition text-sm font-medium">Pricing</a>
+                    <a href="#case-study" class="text-gray-400 hover:text-white transition text-sm font-medium">Case Study</a>
+                    <a href="#use-cases" class="text-gray-400 hover:text-white transition text-sm font-medium">Use Cases</a>
+                    <a href="#process" class="text-gray-400 hover:text-white transition text-sm font-medium">Process</a>
+                    <a href="#about" class="text-gray-400 hover:text-white transition text-sm font-medium">About</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -1068,6 +1078,67 @@
         </div>
     </section>
 
+    <!-- Embedded Chat Section -->
+    <section id="chat" class="py-20 px-4 bg-black">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center gap-2 bg-purple-900/30 border border-purple-500/30 px-4 py-2 rounded-full mb-4">
+                    <span class="w-2 h-2 bg-green-400 rounded-full pulse" aria-hidden="true"></span>
+                    <span class="text-sm font-medium text-purple-300">Quick Answers</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Have Questions?</h2>
+                <p class="text-xl text-gray-400">Get instant answers about OpenClaw setup, pricing, and more</p>
+            </div>
+
+            <div class="bg-card rounded-2xl border border-purple-500/30 overflow-hidden">
+                <!-- Chat Header -->
+                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-white">Automatyn Assistant</div>
+                            <div class="text-sm text-blue-100 flex items-center gap-1">
+                                <span class="w-2 h-2 bg-green-400 rounded-full" aria-hidden="true"></span>
+                                Online
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="bg-surface p-4 h-80 overflow-y-auto" id="chat-messages">
+                    <div class="flex gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div class="bg-card rounded-2xl rounded-tl-none px-4 py-3 max-w-md border border-purple-500/20">
+                            <p class="text-gray-300 text-sm">Hi! I'm the Automatyn assistant. Ask me about OpenClaw setup, pricing, timelines, and more.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="bg-card border-t border-purple-500/20 p-4">
+                    <div class="flex gap-2 mb-3">
+                        <input type="text" id="chat-input" class="flex-1 px-4 py-3 bg-surface border border-purple-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500" placeholder="Type your question here..." aria-label="Chat message input">
+                        <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition font-semibold neon-glow" aria-label="Send message">
+                            Send
+                        </button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs text-gray-500">Quick questions:</span>
+                        <button class="quick-reply" onclick="sendQuickReply('What is OpenClaw?')">What is OpenClaw?</button>
+                        <button class="quick-reply" onclick="sendQuickReply('How much does it cost?')">Pricing</button>
+                        <button class="quick-reply" onclick="sendQuickReply('How long does setup take?')">Timeline</button>
+                        <button class="quick-reply" onclick="sendQuickReply('Book a consultation')">Book Call</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-black border-t border-purple-900/30 text-white py-12 px-4">
         <div class="max-w-5xl mx-auto">
@@ -1094,9 +1165,9 @@
                     <h4 class="font-semibold mb-4">Company</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
                         <li><a href="#about" class="hover:text-white transition">About</a></li>
-                        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-white transition">Refund Policy</a></li>
+                        <li><a href="mailto:support@automatyn.com?subject=Terms%20of%20Service" class="hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="mailto:support@automatyn.com?subject=Privacy%20Policy" class="hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#faq" class="hover:text-white transition">Refund Policy</a></li>
                     </ul>
                 </div>
                 <div>
@@ -1109,73 +1180,11 @@
                 </div>
             </div>
             <div class="border-t border-purple-900/30 pt-8 text-center text-gray-500 text-sm">
-                <p>&copy; 2025 Automatyn. All rights reserved.</p>
+                <p>&copy; 2026 Automatyn. All rights reserved.</p>
                 <p class="mt-2">Not affiliated with the OpenClaw project. OpenClaw is a trademark of its respective owners.</p>
             </div>
         </div>
     </footer>
-
-    <!-- Embedded AI Chat Section -->
-    <section id="chat" class="py-20 px-4 bg-black">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-12">
-                <div class="inline-flex items-center gap-2 bg-purple-900/30 border border-purple-500/30 px-4 py-2 rounded-full mb-4">
-                    <span class="w-2 h-2 bg-green-400 rounded-full pulse" aria-hidden="true"></span>
-                    <span class="text-sm font-medium text-purple-300">AI-Powered Assistant</span>
-                </div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Have Questions?</h2>
-                <p class="text-xl text-gray-400">Get instant answers about OpenClaw setup, pricing, and more</p>
-            </div>
-
-            <div class="bg-card rounded-2xl border border-purple-500/30 overflow-hidden">
-                <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                        <div>
-                            <div class="font-semibold text-white">Automatyn Assistant</div>
-                            <div class="text-sm text-blue-100 flex items-center gap-1">
-                                <span class="w-2 h-2 bg-green-400 rounded-full" aria-hidden="true"></span>
-                                Online • Ask me anything
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chat Messages -->
-                <div class="bg-surface p-4 h-80 overflow-y-auto" id="chat-messages">
-                    <!-- Initial bot message -->
-                    <div class="flex gap-3 mb-4">
-                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                        </div>
-                        <div class="bg-card rounded-2xl rounded-tl-none px-4 py-3 max-w-md border border-purple-500/20">
-                            <p class="text-gray-300 text-sm">Hi there! 👋 I'm the Automatyn assistant. I can answer questions about OpenClaw setup, pricing, timelines, and more. What would you like to know?</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Chat Input -->
-                <div class="bg-card border-t border-purple-500/20 p-4">
-                    <div class="flex gap-2 mb-3">
-                        <input type="text" id="chat-input" class="flex-1 px-4 py-3 bg-surface border border-purple-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500" placeholder="Type your question here..." aria-label="Chat message input">
-                        <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl hover:opacity-90 transition font-semibold neon-glow" aria-label="Send message">
-                            Send
-                        </button>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="text-xs text-gray-500">Quick questions:</span>
-                        <button class="quick-reply" onclick="sendQuickReply('What is OpenClaw?')">What is OpenClaw?</button>
-                        <button class="quick-reply" onclick="sendQuickReply('How much does it cost?')">Pricing</button>
-                        <button class="quick-reply" onclick="sendQuickReply('How long does setup take?')">Timeline</button>
-                        <button class="quick-reply" onclick="sendQuickReply('Book a consultation')">Book Call</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Hardware Guide Form Handler with Formspree -->
     <script>
@@ -1198,6 +1207,18 @@
     </script>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
