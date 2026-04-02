@@ -1189,10 +1189,36 @@
             const email = document.getElementById('guide-email').value;
             if (email && email.includes('@')) {
                 // Submit to Formspree (replace YOUR_FORM_ID with actual form ID)
-                fetch('https://formsubmit.co/ajax/patricksson@outlook.com', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ email: email, _subject: 'New Hardware Guide Download', source: 'hardware-guide-landing' })
+                const bk = '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';
+                const bh = { 'Content-Type': 'application/json', 'api-key': bk };
+                // Add contact to Brevo list
+                fetch('https://api.brevo.com/v3/contacts', {
+                    method: 'POST', headers: bh,
+                    body: JSON.stringify({ email: email, listIds: [3], attributes: { SOURCE: 'hardware-guide' }, updateEnabled: true })
+                }).then(() => {
+                    // Send welcome email with Hardware Guide download
+                    fetch('https://api.brevo.com/v3/smtp/email', {
+                        method: 'POST', headers: bh,
+                        body: JSON.stringify({ templateId: 1, to: [{ email: email }] })
+                    });
+                    // Schedule Day 2 email
+                    const day2 = new Date(Date.now() + 2*24*60*60*1000).toISOString();
+                    fetch('https://api.brevo.com/v3/smtp/email', {
+                        method: 'POST', headers: bh,
+                        body: JSON.stringify({ templateId: 2, to: [{ email: email }], scheduledAt: day2 })
+                    });
+                    // Schedule Day 5 email
+                    const day5 = new Date(Date.now() + 5*24*60*60*1000).toISOString();
+                    fetch('https://api.brevo.com/v3/smtp/email', {
+                        method: 'POST', headers: bh,
+                        body: JSON.stringify({ templateId: 3, to: [{ email: email }], scheduledAt: day5 })
+                    });
+                    // Schedule Day 7 email
+                    const day7 = new Date(Date.now() + 7*24*60*60*1000).toISOString();
+                    fetch('https://api.brevo.com/v3/smtp/email', {
+                        method: 'POST', headers: bh,
+                        body: JSON.stringify({ templateId: 4, to: [{ email: email }], scheduledAt: day7 })
+                    });
                 }).catch(() => {});
 
                 // Show success with download link
@@ -1353,10 +1379,10 @@
                 addBotMessage("Got it! We'll send you a summary at " + email + ". Is there anything else I can help you with?");
                 // In production, you would send this to your backend
                 console.log('Email captured:', email);
-                fetch('https://formsubmit.co/ajax/patricksson@outlook.com', {
+                fetch('https://api.brevo.com/v3/contacts', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({ email: email, _subject: 'New Chat Email Capture', source: 'chat-widget' })
+                    headers: { 'Content-Type': 'application/json', 'api-key': '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' },
+                    body: JSON.stringify({ email: email, listIds: [3], attributes: { SOURCE: 'chat-widget' }, updateEnabled: true })
                 }).catch(() => {});
             } else {
                 addBotMessage("Please enter a valid email address.");
