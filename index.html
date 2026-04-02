@@ -991,7 +991,7 @@
                     <span class="text-sm font-medium text-purple-300">3 consultation slots available this week</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Book Your Free Consultation</h2>
-                <p class="text-xl text-gray-400">30-minute call. No commitment. Get all your questions answered.</p>
+                <p class="text-xl text-gray-400">15-minute call. No commitment. Get all your questions answered.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
@@ -1002,7 +1002,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-white">Quick 30-Minute Call</h3>
+                            <h3 class="font-semibold text-white">Quick 15-Minute Call</h3>
                             <p class="text-gray-400 text-sm">We'll discuss your needs and provide a custom quote. No pressure.</p>
                         </div>
                     </div>
@@ -1061,7 +1061,7 @@
 
                         <button id="calendly-btn" class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:opacity-90 transition shadow-lg neon-glow">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                            Book 30-Min Consultation
+                            Book 15-Min Consultation
                         </button>
 
                         <p class="text-sm text-gray-500 mt-4">No credit card required</p>
@@ -1189,11 +1189,11 @@
             const email = document.getElementById('guide-email').value;
             if (email && email.includes('@')) {
                 // Submit to Formspree (replace YOUR_FORM_ID with actual form ID)
-                fetch('https://formspree.io/f/YOUR_FORM_ID', {
+                fetch('https://formsubmit.co/ajax/patricksson@outlook.com', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, source: 'hardware-guide-landing' })
-                }).catch(() => {}); // Silently fail for now
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: email, _subject: 'New Hardware Guide Download', source: 'hardware-guide-landing' })
+                }).catch(() => {});
 
                 // Show success with download link
                 const form = this;
@@ -1228,7 +1228,7 @@
 
         // Calendly popup
         document.getElementById('calendly-btn').addEventListener('click', function() {
-            Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/30min'});
+            Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/15min'});
         });
 
         // AI Chat Widget with email capture and human escalation
@@ -1236,8 +1236,8 @@
             'what is openclaw': "OpenClaw is an open-source messaging automation platform that lets you build AI-powered chatbots. It supports multiple channels including Telegram, Discord, Slack, WhatsApp, and more. Think of it like a smarter version of many chatbot platforms - with built-in AI capabilities, multi-channel support, and powerful automation features.",
             'how much does it cost': "Our pricing is simple and one-time:\n\n• **Starter** - $400 (1 channel, basic setup)\n• **Pro** - $800 (3 channels, custom agents + skills) - Most popular!\n• **Business** - $1,500 (unlimited channels, full support)\n\nWe also offer ongoing support for $150/month. All plans include a 14-day money-back guarantee. Would you like to book a free consultation to discuss your specific needs?",
             'pricing': "Our pricing is simple and one-time:\n\n• **Starter** - $400 (1 channel, basic setup)\n• **Pro** - $800 (3 channels, custom agents + skills) - Most popular!\n• **Business** - $1,500 (unlimited channels, full support)\n\nWe also offer ongoing support for $150/month. All plans include a 14-day money-back guarantee. Would you like to book a free consultation to discuss your specific needs?",
-            'how long does setup take': "Most setups are completed **same day** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 30 minutes to discuss your needs\n2. **Setup & configuration** - 2-4 hours\n3. **Testing & verification** - included\n4. **You're live!** - We provide documentation and support\n\nYou'll be up and running before end of day.",
-            'timeline': "Most setups are completed within **24-48 hours** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 30 minutes to discuss your needs\n2. **Setup & configuration** - 24-48 hours\n3. **Testing & verification** - 2-4 hours\n4. **You're live!** - We provide documentation and support\n\nRush delivery is available for Enterprise clients.",
+            'how long does setup take': "Most setups are completed **same day** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 15 minutes to discuss your needs\n2. **Setup & configuration** - 2-4 hours\n3. **Testing & verification** - included\n4. **You're live!** - We provide documentation and support\n\nYou'll be up and running before end of day.",
+            'timeline': "Most setups are completed within **24-48 hours** after our consultation call. Here's the typical timeline:\n\n1. **Consultation call** - 15 minutes to discuss your needs\n2. **Setup & configuration** - 24-48 hours\n3. **Testing & verification** - 2-4 hours\n4. **You're live!** - We provide documentation and support\n\nRush delivery is available for Enterprise clients.",
             'what channels do you support': "We support all OpenClaw channels:\n\n• **Telegram** - Bot setup, webhooks, custom commands\n• **Discord** - Server bots, slash commands, integrations\n• **Slack** - App setup, slash commands, workflows\n• **WhatsApp** - Business API integration\n• **Signal** - Secure messaging setup\n• **iMessage** - Apple Messages integration\n\nAnd more! If OpenClaw supports it, we can configure it.",
             'channels': "We support all OpenClaw channels:\n\n• **Telegram** - Bot setup, webhooks, custom commands\n• **Discord** - Server bots, slash commands, integrations\n• **Slack** - App setup, slash commands, workflows\n• **WhatsApp** - Business API integration\n• **Signal** - Secure messaging setup\n• **iMessage** - Apple Messages integration\n\nAnd more! If OpenClaw supports it, we can configure it.",
             'do you need access to my server': "**No!** Your security is our priority. We generate custom setup scripts that you run on your own server. Your API keys, tokens, and data never leave your machine.\n\nFor Enterprise clients who want extra hand-holding, we can do a screenshare session where YOU run the commands while we guide you.",
@@ -1353,6 +1353,11 @@
                 addBotMessage("Got it! We'll send you a summary at " + email + ". Is there anything else I can help you with?");
                 // In production, you would send this to your backend
                 console.log('Email captured:', email);
+                fetch('https://formsubmit.co/ajax/patricksson@outlook.com', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: email, _subject: 'New Chat Email Capture', source: 'chat-widget' })
+                }).catch(() => {});
             } else {
                 addBotMessage("Please enter a valid email address.");
             }
@@ -1365,16 +1370,16 @@
             const humanKeywords = ['human', 'talk to someone', 'speak to human', 'agent', 'person', 'representative', 'real person'];
             if (humanKeywords.some(kw => lowerInput.includes(kw))) {
                 setTimeout(() => {
-                    Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/30min'});
+                    Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/15min'});
                 }, 500);
-                return "I'd be happy to connect you with a human expert! I'm opening the booking calendar where you can schedule a free 30-minute consultation call. 📅\n\nAlternatively, you can email us at support@automatyn.com for a response within 24 hours.";
+                return "I'd be happy to connect you with a human expert! I'm opening the booking calendar where you can schedule a free 15-minute consultation call. 📅\n\nAlternatively, you can email us at support@automatyn.com for a response within 24 hours.";
             }
 
             // Check for booking-related keywords first
             const bookingKeywords = ['book', 'consultation', 'schedule', 'call', 'appointment', 'meeting'];
             if (bookingKeywords.some(kw => lowerInput.includes(kw))) {
                 setTimeout(() => {
-                    Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/30min'});
+                    Calendly.initPopupWidget({url: 'https://calendly.com/patricksson/15min'});
                 }, 500);
                 return "I'll open the booking calendar for you! Pick a time that works best for your schedule. 📅";
             }
@@ -1407,7 +1412,7 @@
                 // Offer email capture after a few interactions (optional)
                 if (!emailCaptured && Math.random() > 0.7) {
                     setTimeout(() => {
-                        // addEmailCaptureForm(); // Uncomment to enable email capture
+                        addEmailCaptureForm();
                     }, 1000);
                 }
             }, 800 + Math.random() * 400);
