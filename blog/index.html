@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Automatyn — AI Agent Setup Service for Small Businesses</title>
+    <meta name="description" content="Honest takes on AI agents, automation, and how small businesses actually make money with AI in 2026. No fluff, no hype, real mechanics.">
+    <meta name="keywords" content="AI agent blog, automation blog, OpenClaw blog, Claude Managed Agents, small business AI, AI passive income, Automatyn blog">
+    <meta property="og:title" content="Automatyn Blog — Honest Takes on AI Agents & Automation">
+    <meta property="og:description" content="Honest takes on AI agents, automation, and how small businesses actually make money with AI in 2026. No fluff, no hype, real mechanics.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://automatyn.co/og-image-v2.png">
+    <meta property="og:url" content="https://automatyn.co/blog/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Automatyn Blog — Honest Takes on AI Agents & Automation">
+    <meta name="twitter:description" content="Honest takes on AI agents, automation, and how small businesses actually make money with AI in 2026.">
+    <meta name="twitter:image" content="https://automatyn.co/og-image-v2.png">
+    <link rel="canonical" href="https://automatyn.co/blog/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD: Blog schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Automatyn Blog",
+        "description": "Honest takes on AI agents, automation, and small business AI setups.",
+        "url": "https://automatyn.co/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Automatyn",
+            "logo": {"@type": "ImageObject", "url": "https://automatyn.co/logo.png"}
+        },
+        "blogPost": [
+            {
+                "@type": "BlogPosting",
+                "headline": "Claude Managed Agents Just Launched. Here's What It Actually Means for Small Businesses.",
+                "datePublished": "2026-04-08",
+                "url": "https://automatyn.co/blog/claude-managed-agents-what-it-means-2026.html"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "Can You Really Make Money with AI in 2026? An Honest Breakdown",
+                "datePublished": "2026-04-08",
+                "url": "https://automatyn.co/blog/can-you-really-make-money-with-ai-2026.html"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "How to Automate Your Business with AI Bots in 2026",
+                "datePublished": "2026-04-05",
+                "url": "https://automatyn.co/blog/how-to-automate-business-ai-bots-2026.html"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "What is OpenClaw? Why Every Business Needs It in 2026",
+                "datePublished": "2026-04-04",
+                "url": "https://automatyn.co/blog/what-is-openclaw-why-every-business-needs-it-2026.html"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "5 Ways to Make Passive Income with AI Agents in 2026",
+                "datePublished": "2026-04-02",
+                "url": "https://automatyn.co/blog/passive-income-ai-agents-2026.html"
+            }
+        ]
+    }
+    </script>
+
+    <style>
+        * { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Cabinet Grotesk', 'DM Sans', sans-serif; color: #ffffff; }
+        body { background: #030303; color: #ffffff; }
+        .hero-gradient { background: #030303; position: relative; overflow: hidden; }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at top, rgba(34, 211, 238, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .cta-button {
+            background: #10b981;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        .cta-button:hover { background: #059669; transform: translateY(-2px); }
+        .post-card {
+            background: rgba(17, 17, 17, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: block;
+            text-decoration: none;
+        }
+        .post-card:hover {
+            border-color: rgba(34, 211, 238, 0.3);
+            transform: translateY(-4px);
+        }
+        .post-card img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+        .post-card .content { padding: 1.5rem; }
+        .post-card .tag { color: #22d3ee; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        .post-card h2 {
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.35;
+            margin: 0.5rem 0 0.75rem 0;
+            transition: color 0.2s;
+        }
+        .post-card:hover h2 { color: #67e8f9; }
+        .post-card p { color: #a1a1aa; font-size: 0.9rem; line-height: 1.6; margin-bottom: 1rem; }
+        .post-card .meta { color: #71717a; font-size: 0.75rem; }
+    </style>
+</head>
+<body class="hero-gradient">
+    <!-- Nav -->
+    <nav class="border-b border-zinc-900 px-6 py-5">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-white" style="font-family: 'Cabinet Grotesk', sans-serif;">Automatyn<span style="color:#22d3ee;">.</span></a>
+            <div class="flex gap-6 items-center text-sm text-zinc-400">
+                <a href="/" class="hover:text-white">Home</a>
+                <a href="/blog/" class="text-white">Blog</a>
+                <a href="/#pricing" class="hover:text-white">Pricing</a>
+                <a href="https://calendly.com/patricksson/30min" class="cta-button">Book Free Call</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="px-6 py-20 max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6" style="font-family: 'Cabinet Grotesk', sans-serif;">The <span style="color:#22d3ee;">Automatyn</span> Blog</h1>
+        <p class="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto">Honest takes on AI agents, automation, and how small businesses actually make money with AI in 2026. No fluff. No hype. Real mechanics.</p>
+    </header>
+
+    <!-- Posts grid -->
+    <main class="px-6 pb-20 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Post 1: Claude Managed Agents -->
+            <a href="/blog/claude-managed-agents-what-it-means-2026.html" class="post-card">
+                <img src="/blog/images/ai-agent-vs-chatbot.jpg" alt="Claude Managed Agents analysis" loading="lazy">
+                <div class="content">
+                    <span class="tag">News Analysis</span>
+                    <h2>Claude Managed Agents Just Launched. What It Means for Small Businesses.</h2>
+                    <p>Anthropic rolled out a fully managed agent platform today. Here's what actually changes for small businesses, and what doesn't.</p>
+                    <div class="meta">April 8, 2026 · 7 min read</div>
+                </div>
+            </a>
+
+            <!-- Post 2: Can You Really Make Money -->
+            <a href="/blog/can-you-really-make-money-with-ai-2026.html" class="post-card">
+                <img src="/blog/images/business-automation-2026.jpg" alt="Honest breakdown of making money with AI" loading="lazy">
+                <div class="content">
+                    <span class="tag">Honest Breakdown</span>
+                    <h2>Can You Really Make Money with AI in 2026? An Honest Breakdown</h2>
+                    <p>Most articles on this topic are written by people selling courses. This one isn't. Real numbers, real failures, and what actually works.</p>
+                    <div class="meta">April 8, 2026 · 8 min read</div>
+                </div>
+            </a>
+
+            <!-- Post 3: How to Automate Your Business -->
+            <a href="/blog/how-to-automate-business-ai-bots-2026.html" class="post-card">
+                <img src="/blog/images/business-automation-2026.jpg" alt="How to automate your business with AI bots" loading="lazy">
+                <div class="content">
+                    <span class="tag">Step-by-Step Guide</span>
+                    <h2>How to Automate Your Business with AI Bots — A Step-by-Step Guide</h2>
+                    <p>The practical playbook for automating customer messages, lead qualification, and operations with AI agents. No tech jargon.</p>
+                    <div class="meta">April 5, 2026 · 10 min read</div>
+                </div>
+            </a>
+
+            <!-- Post 4: What is OpenClaw -->
+            <a href="/blog/what-is-openclaw-why-every-business-needs-it-2026.html" class="post-card">
+                <img src="/blog/images/openclaw-hero.jpg" alt="What is OpenClaw" loading="lazy">
+                <div class="content">
+                    <span class="tag">OpenClaw Explained</span>
+                    <h2>What is OpenClaw? Why Every Business Needs It in 2026</h2>
+                    <p>OpenClaw is the open-source AI agent framework that runs your business on autopilot. Here's what it does, who it's for, and why it matters.</p>
+                    <div class="meta">April 4, 2026 · 9 min read</div>
+                </div>
+            </a>
+
+            <!-- Post 5: Passive Income -->
+            <a href="/blog/passive-income-ai-agents-2026.html" class="post-card">
+                <img src="/blog/images/hero.jpg" alt="5 ways to make passive income with AI agents" loading="lazy">
+                <div class="content">
+                    <span class="tag">Passive Income</span>
+                    <h2>5 Ways to Make Passive Income with AI Agents in 2026</h2>
+                    <p>Five proven models for building automated revenue streams with AI agents. From customer support bots to lead generation.</p>
+                    <div class="meta">April 2, 2026 · 9 min read</div>
+                </div>
+            </a>
+
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="mt-20 text-center max-w-2xl mx-auto p-8 rounded-2xl" style="background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.2);">
+            <h2 class="text-3xl font-bold mb-4" style="font-family: 'Cabinet Grotesk', sans-serif;">Want the Real Thing, Not Just a Blog Post?</h2>
+            <p class="text-zinc-400 mb-6">I set up AI agents for small businesses in 2 hours, not 2 months. One-time cost, you own it, no monthly SaaS lock-in.</p>
+            <a href="https://calendly.com/patricksson/30min" class="cta-button" style="font-size: 1rem; padding: 1rem 2rem;">Book Your Free 15-Min Call →</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-900 px-6 py-12 mt-16">
+        <div class="max-w-5xl mx-auto text-center">
+            <p class="text-zinc-500 text-sm">© 2026 <a href="/" style="color:#22d3ee;">Automatyn</a>. AI agent setups for small businesses.</p>
+        </div>
+    </footer>
+</body>
+</html>
