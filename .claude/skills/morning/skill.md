@@ -8,6 +8,15 @@ user_invocable: true
 
 Run the full daily marketing automation check and content production. Do NOT ask for permission on any step. Execute everything and report results at the end.
 
+## Step 0: Recap of Last /evening
+
+Read `/home/marketingpatpat/openclaw/social-posts/session-log.md` and find the most recent `/evening` entry. Print a brief recap:
+```
+RECAP FROM LAST /evening:
+  [summary of what was done: replies posted, stats, carousel prepped, triggers status]
+```
+If no evening entry exists, skip and note "No previous evening session found."
+
 ## Step 1: Check All Triggers
 
 Use the RemoteTrigger tool (load via ToolSearch first) to check all 3 triggers:
@@ -192,3 +201,19 @@ Viral shot: [what was posted + trending topic used]
 Standalone tweet: [what was posted]
 Next actions: [run /afternoon later today]
 ```
+
+## Step 10: Write Session Log
+
+Append to `/home/marketingpatpat/openclaw/social-posts/session-log.md`:
+```
+### /morning — [DATE] [TIME UTC]
+- Triggers: [status of all 3]
+- Content posted: [6 tweets / LinkedIn / Dev.to if manual, or "trigger handled"]
+- TikTok: [carousel generated + pushed to inbox, or "skipped"]
+- Replies: [count] to [@handle1, @handle2, ...]
+- Viral shot: [posted / text summary]
+- Standalone tweet: [posted / text summary]
+- Impressions today so far: [if available]
+- Followers: [current count]
+```
+Then `git add social-posts/ && git commit -m "log: /morning session" && git push origin main`

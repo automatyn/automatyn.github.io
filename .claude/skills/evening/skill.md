@@ -8,6 +8,15 @@ user_invocable: true
 
 End-of-day wrap-up. Final engagement, stats, and prep for tomorrow. Do NOT ask for permission. Execute everything and report.
 
+## Step 0: Recap of Last /afternoon
+
+Read `/home/marketingpatpat/openclaw/social-posts/session-log.md` and find the most recent `/afternoon` entry. Print a brief recap:
+```
+RECAP FROM LAST /afternoon:
+  [summary: trigger status, replies count, TikTok delta, trending topics]
+```
+If no afternoon entry exists, skip and note "No previous afternoon session found."
+
 ## Step 1: Scan Trending Topics + Reply to 7 Tweets
 
 **TRENDING SCAN (do this BEFORE writing any replies):**
@@ -159,3 +168,18 @@ PRIORITY REMINDER:
   2. Hit X monetization (500 Premium followers + 5M impressions)
   Every reply, tweet, and viral shot serves both goals.
 ```
+
+## Step 7: Write Session Log
+
+Append to `/home/marketingpatpat/openclaw/social-posts/session-log.md`:
+```
+### /evening — [DATE] [TIME UTC]
+- Replies: [count] to [@handle1, @handle2, ...]
+- TikTok stats: [followers, total views, total likes]
+- X stats: [followers, 3M impressions estimate]
+- Tomorrow's carousel: [which hook, status]
+- Triggers: [all 3 status + next fire times]
+- Total replies today: [sum from all 3 sessions via reply-log.md]
+- Monetization: [followers]/500, [impressions]/5M
+```
+Then `git add social-posts/ && git commit -m "log: /evening session" && git push origin main`

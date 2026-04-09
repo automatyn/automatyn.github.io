@@ -8,6 +8,15 @@ user_invocable: true
 
 Midday engagement and monitoring run. Do NOT ask for permission. Execute everything and report.
 
+## Step 0: Recap of Last /morning
+
+Read `/home/marketingpatpat/openclaw/social-posts/session-log.md` and find the most recent `/morning` entry. Print a brief recap:
+```
+RECAP FROM LAST /morning:
+  [summary: triggers checked, content posted, TikTok carousel, replies count, viral shot, tweet]
+```
+If no morning entry exists, skip and note "No previous morning session found."
+
 ## Step 1: Check Content Machine Trigger
 
 The Content Machine trigger fires at 14:00 UTC daily. Use RemoteTrigger tool (load via ToolSearch) to check trigger `trig_01VCuzhEoftowx3adqtibsP5`:
@@ -85,3 +94,15 @@ Replies posted: [count + handles]
 TikTok delta: [any view/like/follower changes]
 Next actions: [run /evening later today]
 ```
+
+## Step 5: Write Session Log
+
+Append to `/home/marketingpatpat/openclaw/social-posts/session-log.md`:
+```
+### /afternoon — [DATE] [TIME UTC]
+- Content Machine trigger: [fired / failed / re-enabled]
+- Replies: [count] to [@handle1, @handle2, ...]
+- TikTok delta: [any changes]
+- Trending topics used: [list]
+```
+Then `git add social-posts/ && git commit -m "log: /afternoon session" && git push origin main`
