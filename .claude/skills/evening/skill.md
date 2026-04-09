@@ -75,11 +75,14 @@ Wait 5 seconds, then proceed.
 For EACH reply:
 1. Connect to Chrome via CDP: `p.chromium.connect_over_cdp("http://127.0.0.1:18800")`
 2. Navigate to tweet URL
-3. Grant clipboard: CDP `Browser.grantPermissions` with `clipboardReadWrite`
-4. Click reply box `[data-testid="tweetTextarea_0"]`
-5. Paste via clipboard + Ctrl+V
-6. Click `[data-testid="tweetButtonInline"]` to post
-7. Append to reply-log.md
+3. **CRITICAL SAFETY CHECK: After page loads, verify `page.url` still contains `/status/`. If URL contains `/compose/` or redirected away, SKIP immediately. Do NOT type anything.**
+4. Grant clipboard: CDP `Browser.grantPermissions` with `clipboardReadWrite`
+5. Click reply box using ONLY `[data-testid="tweetTextarea_0"]`. No generic fallbacks.
+6. Paste via clipboard + Ctrl+V
+7. Click `[data-testid="tweetButtonInline"]` to post. No generic fallbacks.
+8. Append to reply-log.md
+
+**NEVER type into a compose box. NEVER post a new tweet when trying to reply.**
 
 **ERROR RECOVERY:**
 - CDP connection fails → restart Chrome, wait 5s, retry once

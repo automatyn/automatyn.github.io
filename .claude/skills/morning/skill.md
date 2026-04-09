@@ -149,11 +149,14 @@ Wait 5 seconds, then proceed.
 For EACH reply attempt:
 1. Connect to Chrome via CDP: `p.chromium.connect_over_cdp("http://127.0.0.1:18800")`
 2. Navigate to tweet URL
-3. Grant clipboard: CDP `Browser.grantPermissions` with `clipboardReadWrite`
-4. Click reply box `[data-testid="tweetTextarea_0"]`
-5. Paste via clipboard + Ctrl+V
-6. Click `[data-testid="tweetButtonInline"]` to post
-7. Append to reply-log.md
+3. **CRITICAL SAFETY CHECK: After page loads, verify `page.url` still contains `/status/`. If the URL contains `/compose/` or redirected away from the original tweet, the tweet doesn't exist or is restricted. IMMEDIATELY skip this tweet, close the page, do NOT type anything.**
+4. Grant clipboard: CDP `Browser.grantPermissions` with `clipboardReadWrite`
+5. Click reply box using ONLY `[data-testid="tweetTextarea_0"]` selector. Do NOT fall back to generic `[contenteditable="true"]` or `[role="textbox"]` because those might match the compose page textbox instead of a reply box.
+6. Paste via clipboard + Ctrl+V
+7. Click `[data-testid="tweetButtonInline"]` to post. Do NOT fall back to generic button text matching.
+8. Append to reply-log.md
+
+**NEVER type into a compose box. NEVER post a new tweet when trying to reply. If anything looks wrong, skip and move on.**
 
 **ERROR RECOVERY (apply to every Playwright step):**
 - If CDP connection fails → restart Chrome (command above), wait 5s, retry once
