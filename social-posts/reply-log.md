@@ -15,3 +15,15 @@ Format: `- [DATE] | @handle | status_url | first 60 chars of reply`
 - 2026-04-09 | @2sush | https://x.com/2sush/status/2042282881050165500 | AI agents aren't smarter than humans. They're faster at doin
 - 2026-04-09 | @Franc0Fernand0 | https://x.com/Franc0Fernand0/status/2042272460037325259 | This applies to AI agents too. The people charging $800 to s
 - 2026-04-09 | @kalashvasaniya | https://x.com/kalashvasaniya/status/2042093898101587987 | Pick the one idea where someone is already in pain today. No
+- 2026-04-09 | @CBSMiami | https://x.com/CBSMiami/status/2042340044904562746 | This investigation isn't about the model. It's about what th
+- 2026-04-09 | @AGJamesUthmeier | https://x.com/AGJamesUthmeier/status/2042258122788102313 | The problem isn't the AI. It's that nobody wrote the rules
+- 2026-04-09 | @shiri_shh | https://x.com/shiri_shh/status/2042316005117215089 | OpenAI didn't launch a $100 plan because they believe in it
+- 2026-04-09 | @sama | https://x.com/sama/status/2042342572958630332 | [A/B TEST - CONVERSATION] Genuine question: what percentage of Codex users
+- 2026-04-09 | @Shopify | https://x.com/Shopify/status/2042335627862032754 | [A-CONVERSATION] Honest question: how many store owners will use this vs
+- 2026-04-09 | @kapilansh_twt | https://x.com/kapilansh_twt/status/2042114619200958946 | [A-CONVERSATION] What do all of these have in common? The customer can't
+- 2026-04-09 | @_The_Prophet__ | https://x.com/_The_Prophet__/status/2042336404186021971 | [A-CONVERSATION] So what happens to the person whose entire job was exec
+- 2026-04-09 | @trq212 | https://x.com/trq212/status/2042335178388103559 | [A-CONVERSATION] How many people do you think will read this, nod, and s
+- 2026-04-09 | @NoahRyanCo | https://x.com/NoahRyanCo/status/2042273631225409991 | [B-PUNCHLINE] The same energy applies to AI tools. Every chatbot plat
+- 2026-04-09 | @cb_doge | https://x.com/cb_doge/status/2042283512246780387 | [B-PUNCHLINE] The scariest part of AI isn't what the companies are do
+- 2026-04-09 | @yacineMTB | https://x.com/yacineMTB/status/2042248741315305509 | [B-PUNCHLINE] They don't want AI regulated because it's dangerous. Th
+- 2026-04-09 | @Cointelegraph | https://x.com/Cointelegraph/status/2042357062550569021 | [A-CONVERSATION] The tool matters less than what you told it
