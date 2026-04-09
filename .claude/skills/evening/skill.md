@@ -60,11 +60,23 @@ Skip: ads, crypto, pure memes, tweets <100 chars, tweets older than 48 hours, an
 6. Click `[data-testid="tweetButtonInline"]` to post
 7. Append to reply-log.md
 
-## Step 2: Full Daily Stats
+## Step 2: Full Daily Stats + Monetization Tracking
+
+**X MONETIZATION PROGRESS (CRITICAL — check every evening):**
+Connect to Chrome via Playwright CDP. Navigate to https://x.com/i/account_analytics
+1. Click "3M" button to see 3-month view
+2. Screenshot and read the total impression count
+3. Also check follower count via fxtwitter: `curl -s "https://api.fxtwitter.com/patrickssons"`
+4. Report progress toward:
+   - 500 Premium followers (target)
+   - 5,000,000 impressions in 3 months (target)
+   - Daily impression rate vs required ~62,000/day
+   - Days remaining in current 3-month window
+   - Projected date to hit 5M at current rate (be honest, even if it's far away)
 
 **TikTok:**
 Run yt-dlp --flat-playlist --dump-json "https://www.tiktok.com/@realnataliana"
-Report: total videos, followers, total likes, per-video view counts. Compare to yesterday if data exists in memory.
+Report: total videos, followers, total likes, per-video view counts.
 
 **X/Twitter:**
 Check Postiz API for all posts from today:
@@ -134,8 +146,16 @@ TOMORROW PREP:
   TikTok carousel: [which hook, status]
   Triggers: [all enabled Y/N]
 
+MONETIZATION PROGRESS:
+  Followers: [current] / 500 Premium target
+  3M impressions: [current] / 5,000,000 target
+  Daily avg impressions: [current] / 62,000 needed
+  Projected milestone date: [at current rate]
+  Top performing tweet today: [which one + impression count if visible]
+
 PRIORITY REMINDER:
-  You need a paying client. Every reply, every tweet, every blog post
-  exists to drive someone to automatyn.co and book a call.
-  The metric that matters: DMs received + calls booked.
+  Two parallel goals:
+  1. Get a paying client (DMs + calls booked via automatyn.co)
+  2. Hit X monetization (500 Premium followers + 5M impressions)
+  Every reply, tweet, and viral shot serves both goals.
 ```

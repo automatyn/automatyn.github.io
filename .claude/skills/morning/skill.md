@@ -134,31 +134,61 @@ Skip: ads, crypto, pure memes with no hook, tweets with <100 chars (low engageme
 6. Click `[data-testid="tweetButtonInline"]` to post
 7. Append to reply-log.md
 
-## Step 7: Post 1 Fresh Standalone Tweet
+## Step 7: VIRAL SHOT — 1 Tweet Engineered for 50K+ Impressions
 
-Write and post 1 standalone tweet. Rules:
+This is NOT a normal tweet. This is a calculated attempt at maximum virality. Different rules.
+
+**VIRAL SHOT FORMULA:**
+1. Check the trending topics you scanned in Step 6
+2. Pick the ONE trend with the most natural bridge to AI/automation/small business
+3. Write a tweet that:
+   - Piggybacks on the trending keyword (X boosts tweets mentioning trending terms)
+   - Is MAXIMALLY CONTROVERSIAL within that topic (disagree-ers quote-tweet, multiplying reach)
+   - Under 200 chars (short = more retweets)
+   - Strong opinion, not a question (opinions get quote-tweeted, questions get ignored)
+   - Formula: [trending topic] + [contrarian take that makes people uncomfortable] + [one-liner punchline]
+4. If NO trend bridges to AI/business, use evergreen viral angles:
+   - "MRR is overrated"
+   - "Most AI startups are wrappers"
+   - "Hiring a VA in 2026 is financial illiteracy"
+   - "Your chatbot fails because nobody wrote the rules"
+   - "The 9-5 isn't the problem, your side project is"
+5. Post via Postiz with type:"now" — immediate, not scheduled. Viral shots must ride the trend window.
+6. DO NOT post within 10 minutes of the last reply
+7. DO NOT be controversial about wars, politics, religion, or personal attacks. Be controversial about business, AI, work culture, and "make money online"
+
+**GOAL: 50K+ impressions. Most will get 500-2000. One in ten breaks through. That's how you hit 5M in 3 months.**
+
+## Step 8: Post 1 Regular Standalone Tweet
+
+Write and post 1 more standalone tweet (separate from the viral shot). Rules:
 - Under 200 chars
 - Not a duplicate of anything in last 7 days (check Postiz API first)
-- MAXIMUM CONTROVERSY. The tweet must be provocative enough to get angry replies, quote tweets, and debate. Controversy drives reach on X.
-- Optimised for views, followers, and conversions to Automatyn
-- Bridge style: contrarian insight about AI agents that challenges what people believe. Formula: [thing most people think] + [why they're wrong] + [implication that makes them uncomfortable]
+- MAXIMUM CONTROVERSY optimised for views, followers, and conversions
+- Bridge style: contrarian insight about AI agents for small businesses
 - Target audience: small business owners + indie hackers + side hustlers
-- The tweet should make people think "wait, is he right?" — not just agree or just disagree
-- DO NOT post within 10 minutes of any other tweet
-- DO NOT be controversial about wars, politics, religion, or personal attacks. Be controversial about business, AI, work culture, and the "make money online" space
+- DO NOT post within 10 minutes of the viral shot
+- DO NOT be controversial about wars, politics, religion, or personal attacks
 
-## Step 8: Report
+## Step 9: Report
 
 Print a summary:
 ```
 MORNING REPORT — [DATE]
 ========================
+MONETIZATION PROGRESS:
+  Target: 500 Premium followers + 5M impressions (3 months)
+  Current followers: [check via fxtwitter API]
+  Estimated 3M impressions: [check analytics page]
+  Daily impression target: ~62,000/day
+
 Triggers: [enabled/disabled status of all 3]
 Overnight content: [what committed]
 Manual content: [what I posted if triggers failed]
 TikTok carousel: [which hook, pushed to inbox]
 TikTok stats: [followers, views, likes]
 Replies posted: [count + handles]
+Viral shot: [what was posted + trending topic used]
 Standalone tweet: [what was posted]
 Next actions: [run /afternoon later today]
 ```
