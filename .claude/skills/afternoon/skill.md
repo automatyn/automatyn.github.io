@@ -47,13 +47,16 @@ Before writing ANY reply, read the reply log at `/home/marketingpatpat/openclaw/
 - Format: `- [DATE] | @handle | status_url | first 60 chars of your reply`
 
 **REPLY SELECTION (pick 7):**
-Filter for tweets relevant to Automatyn's mission:
-- AI agents, chatbots, automation
-- Small business struggles (DMs, customer support, hiring VAs)
-- Side hustles, passive income, indie hacking
-- AI industry news (model launches, tool comparisons)
-- "Who's building X" or "drop your link" threads
-- Hot takes about work culture, 9-5, entrepreneurship
+
+PRIORITY TARGETS (replies drive 500x more impressions than original tweets):
+- TIER 1 (HIGHEST PRIORITY): Viral tweets about remote jobs, quitting 9-5, making money, side income, "I quit my job", work from home, passive income, freelancing. One reply on a trending jobs tweet got 11K impressions on Apr 6.
+- TIER 2: AI agents, chatbots, automation, AI replacing jobs, AI industry news
+- TIER 3: Small business struggles, indie hacking
+- TIER 4: "Who's building X" or "drop your link" threads
+
+Also search X for: "remote work", "quit my job", "side hustle", "passive income", "making money online", "AI jobs".
+
+PRIORITY: big accounts (50K+ followers) with fresh tweets (under 1 hour).
 
 Skip: ads, crypto, pure memes, tweets <100 chars, tweets older than 2 hours, anyone already replied to today. FRESHNESS IS CRITICAL — prioritize tweets under 1 hour old. Sort by newest first.
 

@@ -114,13 +114,16 @@ Before writing ANY reply, read the reply log at `/home/marketingpatpat/openclaw/
 - After posting each reply, IMMEDIATELY append to the log file
 
 **REPLY SELECTION (pick 7):**
-Filter feed tweets for relevance to Automatyn's mission. Reply-worthy tweets are about:
-- AI agents, chatbots, automation
-- Small business struggles (DMs, customer support, hiring VAs)
-- Side hustles, passive income, indie hacking
-- AI industry news (model launches, tool comparisons)
-- "Who's building X" or "drop your link" threads
-- Hot takes about work culture, 9-5, entrepreneurship
+
+PRIORITY TARGETS (these drive 500x more impressions than original tweets):
+- TIER 1 (reply to these FIRST): Viral tweets about remote jobs, quitting 9-5, making money, side income, "I quit my job", work from home, passive income, freelancing. These are the highest impression bridges. The Apr 6 spike (11K impressions from ONE reply) came from a trending remote jobs tweet.
+- TIER 2: AI agents, chatbots, automation, AI replacing jobs, AI industry news (model launches, tool comparisons)
+- TIER 3: Small business struggles (DMs, customer support, hiring VAs), indie hacking
+- TIER 4: "Who's building X" or "drop your link" threads, hot takes about work culture
+
+Also search X for trending keywords: "remote work", "quit my job", "side hustle", "passive income", "making money online", "AI jobs". These trending topics get massive reach.
+
+PRIORITY: big accounts (50K+ followers) with fresh tweets (under 1 hour). One reply on a 100K follower account's viral tweet about jobs = more impressions than 100 original tweets.
 
 Skip: ads, crypto, pure memes with no hook, tweets with <100 chars (low engagement potential), tweets older than 2 hours. FRESHNESS IS CRITICAL — 80% of reply impressions happen in the first 30 minutes. Prioritize tweets under 1 hour old. Sort by newest first.
 
