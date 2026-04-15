@@ -3,6 +3,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { provisionAgent, updateAgent, getAgent, DATA_DIR } = require('./provision');
+const { startPairingCode, startQrPairing, checkPairingStatus, isWhatsAppConnected } = require('./whatsapp');
 const fs = require('fs');
 const path = require('path');
 
@@ -289,10 +290,12 @@ app.get('/api/agent/:id/status', auth, (req, res) => {
   });
 });
 
+// Old /api/agent/:id/qr endpoint removed — use /api/agent/:id/whatsapp/qr or /whatsapp/pair instead
+
 // ============================================================
-// GET /api/agent/:id/qr — WhatsApp QR code
+// POST /api/agent/:id/whatsapp/pair — Start WhatsApp pairing (phone code)
 // ============================================================
-app.get('/api/agent/:id/qr', auth, (req, res) => {
+app.post('/api/agent/:id/whatsapp/pair', auth, async (req, res) => {
   if (req.params.id !== req.agentId) {
     return res.status(403).json({ error: 'Access denied' });
   }
@@ -302,37 +305,69 @@ app.get('/api/agent/:id/qr', auth, (req, res) => {
     return res.status(404).json({ error: 'Agent not found' });
   }
 
-  // WhatsApp QR code lives in the OpenClaw session directory
-  // The exact path depends on OpenClaw's WhatsApp implementation
-  // For now, return instructions for manual QR scanning
-  const agentDir = path.join(require('os').homedir(), '.openclaw', 'agents', req.params.id);
-  const sessionDir = path.join(agentDir, 'sessions');
-
-  // Check for QR code file (OpenClaw stores these in session data)
-  // This will need to be adjusted based on how OpenClaw exposes WhatsApp QR
-  const qrPaths = [
-    path.join(sessionDir, 'whatsapp-qr.png'),
-    path.join(sessionDir, 'qr.png'),
-    path.join(agentDir, 'whatsapp-qr.png'),
-  ];
-
-  for (const qrPath of qrPaths) {
-    if (fs.existsSync(qrPath)) {
-      return res.sendFile(qrPath);
-    }
+  const phoneNumber = (req.body.phoneNumber || '').trim();
+  if (!phoneNumber) {
+    return res.status(400).json({ error: 'Phone number is required. Format: country code + number (e.g. 447700900000)' });
   }
 
-  // If no QR code file found, the agent needs to be bound to WhatsApp first
-  // and the gateway needs to generate a QR code
-  res.json({
-    status: 'pending',
-    message: 'WhatsApp connection is being set up. The QR code will appear here shortly. If it does not appear within a few minutes, contact support.',
-    instructions: [
-      'Your WhatsApp bot is being configured.',
-      'Once ready, a QR code will appear here.',
-      'Scan it with your WhatsApp Business app to connect.',
-    ],
-  });
+  try {
+    const result = await startPairingCode(req.params.id, phoneNumber);
+    res.json(result);
+  } catch (err) {
+    console.error('WhatsApp pairing error:', err.message);
+    res.status(500).json({ error: err.message || 'Failed to start WhatsApp pairing' });
+  }
+});
+
+// ============================================================
+// GET /api/agent/:id/whatsapp/qr — Start WhatsApp pairing (QR code)
+// ============================================================
+app.get('/api/agent/:id/whatsapp/qr', auth, async (req, res) => {
+  if (req.params.id !== req.agentId) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  const agent = getAgent(req.params.id);
+  if (!agent) {
+    return res.status(404).json({ error: 'Agent not found' });
+  }
+
+  try {
+    const result = await startQrPairing(req.params.id);
+    res.json(result);
+  } catch (err) {
+    console.error('WhatsApp QR error:', err.message);
+    res.status(500).json({ error: err.message || 'Failed to generate QR code' });
+  }
+});
+
+// ============================================================
+// GET /api/agent/:id/whatsapp/status — Check WhatsApp connection
+// ============================================================
+app.get('/api/agent/:id/whatsapp/status', auth, async (req, res) => {
+  if (req.params.id !== req.agentId) {
+    return res.status(403).json({ error: 'Access denied' });
+  }
+
+  try {
+    const status = await checkPairingStatus(req.params.id);
+    // Also update agent metadata if newly connected
+    if (status.connected) {
+      const metaPath = path.join(DATA_DIR, `${req.params.id}.json`);
+      if (fs.existsSync(metaPath)) {
+        const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+        if (!meta.whatsappConnected) {
+          meta.whatsappConnected = true;
+          meta.updatedAt = new Date().toISOString();
+          fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2));
+        }
+      }
+    }
+    res.json(status);
+  } catch (err) {
+    console.error('WhatsApp status error:', err.message);
+    res.status(500).json({ error: err.message || 'Failed to check status' });
+  }
 });
 
 // Health check
