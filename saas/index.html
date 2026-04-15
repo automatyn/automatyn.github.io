@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030303'/><text x='50' y='68' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='65' fill='%2322d3ee'>A</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI WhatsApp Bot for Your Business | Automatyn</title>
+    <meta name="description" content="Get an AI-powered WhatsApp bot for your business in under 10 minutes. Handles bookings, pricing questions, and customer support 24/7. Free tier available.">
+    <meta property="og:title" content="AI WhatsApp Bot for Your Business | Automatyn">
+    <meta property="og:description" content="Get an AI-powered WhatsApp bot for your business in under 10 minutes. Free tier available.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://automatyn.co/saas/">
+    <link rel="canonical" href="https://automatyn.co/saas/">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Cabinet Grotesk', 'DM Sans', sans-serif; }
+        :root {
+            --accent: #22d3ee;
+            --bg-dark: #030303;
+            --bg-card: #0a0a0a;
+            --cta-green: #10b981;
+        }
+        body { background: var(--bg-dark); color: #ffffff; }
+        .hero-gradient {
+            background: #030303;
+            position: relative;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse at top, rgba(34, 211, 238, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom right, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.2s;
+        }
+        .pricing-card:hover {
+            border-color: rgba(34, 211, 238, 0.3);
+        }
+        .pricing-card.featured {
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.1);
+        }
+        .cta-button {
+            background: var(--cta-green);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.85rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .cta-button:hover { background: #059669; transform: translateY(-2px); }
+        .cta-outline {
+            background: transparent;
+            border: 1px solid rgba(34, 211, 238, 0.4);
+            color: var(--accent);
+            padding: 0.85rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.2s;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .cta-outline:hover { background: rgba(34, 211, 238, 0.1); }
+        .check-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .check-icon { color: var(--accent); font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+        .step-number {
+            width: 48px; height: 48px;
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; color: var(--accent); font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="hero-gradient">
+    <!-- Nav -->
+    <nav class="border-b border-zinc-900 px-6 py-5">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="https://automatyn.co" class="text-2xl font-bold text-white" style="font-family: 'Cabinet Grotesk', sans-serif;">Automatyn<span style="color:#22d3ee;">.</span></a>
+            <div class="flex gap-6 items-center text-sm text-zinc-400">
+                <a href="https://automatyn.co" class="hover:text-white">Home</a>
+                <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
+                <a href="#pricing" class="hover:text-white">Pricing</a>
+                <a href="/saas/signup.html" class="cta-button text-sm" style="padding: 0.5rem 1.2rem;">Start Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="px-6 pt-20 pb-16 max-w-4xl mx-auto text-center relative z-10">
+        <h1 class="text-4xl md:text-6xl font-bold text-white leading-tight mb-6" style="font-family: 'Cabinet Grotesk', sans-serif;">Your AI receptionist on <span style="color:#22d3ee;">WhatsApp</span></h1>
+        <p class="text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto mb-10">Fill in a form about your business. Get a working WhatsApp bot in under 10 minutes. It answers customer questions, handles bookings, and works 24/7. No coding. No flow building.</p>
+        <div class="flex gap-4 justify-center flex-wrap">
+            <a href="/saas/signup.html" class="cta-button text-lg" style="padding: 1rem 2.5rem;">Start Free</a>
+            <a href="#how-it-works" class="cta-outline text-lg" style="padding: 1rem 2.5rem;">See How It Works</a>
+        </div>
+        <p class="text-zinc-500 text-sm mt-4">No credit card required. Free tier includes 50 conversations/month.</p>
+    </header>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="px-6 py-20 max-w-4xl mx-auto relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-16" style="font-family: 'Cabinet Grotesk', sans-serif;">Live in 10 minutes. Seriously.</h2>
+        <div class="space-y-8">
+            <div class="flex gap-6 items-start">
+                <div class="step-number">1</div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">Tell us about your business</h3>
+                    <p class="text-zinc-400">Fill in a simple form: your business name, what you do, your services and prices, your hours, and any policies. Takes 5 minutes.</p>
+                </div>
+            </div>
+            <div class="flex gap-6 items-start">
+                <div class="step-number">2</div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">AI creates your bot</h3>
+                    <p class="text-zinc-400">Our AI instantly builds a WhatsApp bot that knows your business inside out. It can answer pricing questions, handle bookings, and respond to common enquiries in your tone.</p>
+                </div>
+            </div>
+            <div class="flex gap-6 items-start">
+                <div class="step-number">3</div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">Scan a QR code</h3>
+                    <p class="text-zinc-400">Open WhatsApp Business on your phone and scan the QR code we give you. That is it. Your bot is live and answering messages.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What It Does -->
+    <section class="px-6 py-16 max-w-5xl mx-auto relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12" style="font-family: 'Cabinet Grotesk', sans-serif;">What your bot handles</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">💬</div>
+                <h3 class="text-lg font-bold mb-2">Customer questions</h3>
+                <p class="text-zinc-400 text-sm">Answers pricing, availability, hours, location, and service questions instantly. No more repeating the same info 20 times a day.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">📅</div>
+                <h3 class="text-lg font-bold mb-2">Bookings</h3>
+                <p class="text-zinc-400 text-sm">Walks customers through booking: what service, when, their details. Confirms everything in the chat. You see it in your calendar.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">🌙</div>
+                <h3 class="text-lg font-bold mb-2">After-hours messages</h3>
+                <p class="text-zinc-400 text-sm">Works while you sleep. The message that comes in at 11pm gets answered in 2 seconds instead of sitting until morning.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">🔄</div>
+                <h3 class="text-lg font-bold mb-2">Cancellations</h3>
+                <p class="text-zinc-400 text-sm">Handles rescheduling and cancellations automatically. Communicates your policies clearly.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">🧠</div>
+                <h3 class="text-lg font-bold mb-2">Knows its limits</h3>
+                <p class="text-zinc-400 text-sm">When it cannot answer something, it tells the customer a team member will follow up and notifies you. No wrong answers, ever.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="text-3xl mb-4">✏️</div>
+                <h3 class="text-lg font-bold mb-2">Easy to update</h3>
+                <p class="text-zinc-400 text-sm">Changed your prices? New opening hours? Update your bot in your dashboard. Changes go live instantly.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="px-6 py-20 max-w-5xl mx-auto relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-4" style="font-family: 'Cabinet Grotesk', sans-serif;">Simple pricing</h2>
+        <p class="text-zinc-400 text-center mb-12 max-w-xl mx-auto">Start free. Upgrade when you need more. No contracts, cancel any time.</p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- Free -->
+            <div class="pricing-card">
+                <h3 class="text-lg font-bold mb-1">Free</h3>
+                <p class="text-zinc-500 text-sm mb-4">Try it out</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold">$0</span>
+                    <span class="text-zinc-500">/month</span>
+                </div>
+                <div class="space-y-3 mb-8">
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">50 conversations/month</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">AI-powered responses</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">WhatsApp connection</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Dashboard to edit bot</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">No credit card required</span></div>
+                </div>
+                <a href="/saas/signup.html?plan=free" class="cta-outline w-full text-center block">Start Free</a>
+            </div>
+
+            <!-- Starter (Featured) -->
+            <div class="pricing-card featured">
+                <div class="flex justify-between items-start mb-1">
+                    <h3 class="text-lg font-bold">Starter</h3>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full" style="background: rgba(34, 211, 238, 0.15); color: #22d3ee;">POPULAR</span>
+                </div>
+                <p class="text-zinc-500 text-sm mb-4">Growing businesses</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold">$39</span>
+                    <span class="text-zinc-500">/month</span>
+                </div>
+                <div class="space-y-3 mb-8">
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">500 conversations/month</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">AI-powered responses</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">WhatsApp connection</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Dashboard to edit bot</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Priority support</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">No "Powered by" badge</span></div>
+                </div>
+                <a href="/saas/signup.html?plan=starter" class="cta-button w-full text-center block">Get Started</a>
+            </div>
+
+            <!-- Pro -->
+            <div class="pricing-card">
+                <h3 class="text-lg font-bold mb-1">Pro</h3>
+                <p class="text-zinc-500 text-sm mb-4">High volume</p>
+                <div class="mb-6">
+                    <span class="text-4xl font-bold">$99</span>
+                    <span class="text-zinc-500">/month</span>
+                </div>
+                <div class="space-y-3 mb-8">
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Unlimited conversations</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">AI-powered responses</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">WhatsApp connection</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Dashboard to edit bot</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Priority support</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">No "Powered by" badge</span></div>
+                    <div class="check-item"><span class="check-icon">✓</span><span class="text-zinc-300 text-sm">Custom bot personality</span></div>
+                </div>
+                <a href="/saas/signup.html?plan=pro" class="cta-outline w-full text-center block">Get Started</a>
+            </div>
+        </div>
+
+        <p class="text-zinc-500 text-sm text-center mt-8">All plans include setup in under 10 minutes. No coding required. Cancel any time.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="px-6 py-16 max-w-3xl mx-auto relative z-10">
+        <h2 class="text-3xl font-bold text-center mb-12" style="font-family: 'Cabinet Grotesk', sans-serif;">Common questions</h2>
+        <div class="space-y-6">
+            <details class="group" open>
+                <summary class="text-lg font-bold cursor-pointer hover:text-cyan-400 transition list-none flex justify-between items-center">
+                    Do I need technical skills?
+                    <span class="text-zinc-500 group-open:rotate-45 transition-transform text-2xl">+</span>
+                </summary>
+                <p class="text-zinc-400 mt-3 leading-relaxed">No. You fill in a form with your business details and the AI does the rest. If you can type your business name, services, and hours, you can set this up.</p>
+            </details>
+            <div class="border-b border-zinc-800"></div>
+            <details class="group">
+                <summary class="text-lg font-bold cursor-pointer hover:text-cyan-400 transition list-none flex justify-between items-center">
+                    Can I use my existing WhatsApp number?
+                    <span class="text-zinc-500 group-open:rotate-45 transition-transform text-2xl">+</span>
+                </summary>
+                <p class="text-zinc-400 mt-3 leading-relaxed">Yes. You connect your existing WhatsApp Business number by scanning a QR code. No need to change your number.</p>
+            </details>
+            <div class="border-b border-zinc-800"></div>
+            <details class="group">
+                <summary class="text-lg font-bold cursor-pointer hover:text-cyan-400 transition list-none flex justify-between items-center">
+                    What happens when the bot cannot answer something?
+                    <span class="text-zinc-500 group-open:rotate-45 transition-transform text-2xl">+</span>
+                </summary>
+                <p class="text-zinc-400 mt-3 leading-relaxed">It tells the customer that a team member will follow up and asks for their contact details. You get notified. No wrong answers, ever.</p>
+            </details>
+            <div class="border-b border-zinc-800"></div>
+            <details class="group">
+                <summary class="text-lg font-bold cursor-pointer hover:text-cyan-400 transition list-none flex justify-between items-center">
+                    What types of businesses use this?
+                    <span class="text-zinc-500 group-open:rotate-45 transition-transform text-2xl">+</span>
+                </summary>
+                <p class="text-zinc-400 mt-3 leading-relaxed">Any business that gets customer messages on WhatsApp. Salons, restaurants, plumbers, dentists, gyms, cleaners, tutors, photographers, and dozens more. If customers message you, the bot can handle it.</p>
+            </details>
+            <div class="border-b border-zinc-800"></div>
+            <details class="group">
+                <summary class="text-lg font-bold cursor-pointer hover:text-cyan-400 transition list-none flex justify-between items-center">
+                    Can I cancel any time?
+                    <span class="text-zinc-500 group-open:rotate-45 transition-transform text-2xl">+</span>
+                </summary>
+                <p class="text-zinc-400 mt-3 leading-relaxed">Yes. No contracts, no commitments. Cancel from your billing portal and your subscription ends at the end of the billing period. The free tier has no billing at all.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="px-6 py-20 max-w-2xl mx-auto text-center relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4" style="font-family: 'Cabinet Grotesk', sans-serif;">Stop missing messages</h2>
+        <p class="text-zinc-400 mb-8 text-lg">Every message you miss is a customer you lose. Set up your WhatsApp bot in 10 minutes and never miss another one.</p>
+        <a href="/saas/signup.html" class="cta-button text-lg" style="padding: 1rem 3rem;">Start Free Now</a>
+        <p class="text-zinc-500 text-sm mt-4">No credit card. No coding. Live in 10 minutes.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-zinc-900 py-12 px-6 text-center text-zinc-500 text-sm">
+        <p>&copy; 2026 Automatyn. All rights reserved.</p>
+        <div class="flex gap-6 justify-center mt-4">
+            <a href="https://automatyn.co" class="hover:text-white">Home</a>
+            <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
+            <a href="#pricing" class="hover:text-white">Pricing</a>
+            <a href="https://automatyn.co/terms.html" class="hover:text-white">Terms</a>
+            <a href="https://automatyn.co/privacy.html" class="hover:text-white">Privacy</a>
+        </div>
+        <p class="mt-4">Need a custom setup instead? <a href="https://automatyn.co/#pricing" style="color:#22d3ee;">Talk to us</a></p>
+    </footer>
+</body>
+</html>

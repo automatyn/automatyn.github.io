@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23030303'/><text x='50' y='68' text-anchor='middle' font-family='sans-serif' font-weight='800' font-size='65' fill='%2322d3ee'>A</text></svg>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Automatyn</title>
+    <meta name="robots" content="noindex">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Cabinet Grotesk', 'DM Sans', sans-serif; }
+        :root { --accent: #22d3ee; --bg-dark: #030303; --bg-card: #0a0a0a; --cta-green: #10b981; }
+        body { background: var(--bg-dark); color: #ffffff; }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+        .tab-btn {
+            padding: 0.6rem 1.5rem; border-radius: 9999px; font-weight: 600;
+            font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+            background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #a1a1aa;
+        }
+        .tab-btn.active { background: rgba(34, 211, 238, 0.1); border-color: rgba(34, 211, 238, 0.4); color: var(--accent); }
+        .tab-btn:hover { border-color: rgba(255,255,255,0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .form-input {
+            width: 100%; padding: 0.75rem 1rem;
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.75rem; color: #ffffff; font-size: 1rem;
+            font-family: 'DM Sans', sans-serif; transition: border-color 0.2s;
+        }
+        .form-input:focus { outline: none; border-color: rgba(34, 211, 238, 0.5); }
+        .form-input::placeholder { color: #71717a; }
+        textarea.form-input { min-height: 80px; resize: vertical; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .cta-button {
+            background: var(--cta-green); color: #ffffff; padding: 0.75rem 2rem;
+            border-radius: 9999px; font-weight: 700; border: none; cursor: pointer;
+            font-size: 0.95rem; transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+        }
+        .cta-button:hover { background: #059669; }
+        .cta-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .status-dot.connected { background: #10b981; }
+        .status-dot.disconnected { background: #ef4444; }
+        .status-dot.pending { background: #f59e0b; }
+        .usage-bar-bg { background: rgba(255,255,255,0.06); border-radius: 9999px; height: 8px; overflow: hidden; }
+        .usage-bar { background: var(--accent); height: 100%; border-radius: 9999px; transition: width 0.3s; }
+        .usage-bar.warning { background: #f59e0b; }
+        .usage-bar.danger { background: #ef4444; }
+        .save-toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: var(--cta-green); color: white; padding: 0.75rem 2rem;
+            border-radius: 9999px; font-weight: 600; font-size: 0.9rem;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+        }
+        .save-toast.visible { opacity: 1; }
+        .qr-placeholder {
+            width: 280px; height: 280px; background: rgba(255,255,255,0.03);
+            border: 2px dashed rgba(255,255,255,0.1); border-radius: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Nav -->
+    <nav class="border-b border-zinc-900 px-6 py-5">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="https://automatyn.co" class="text-2xl font-bold text-white" style="font-family: 'Cabinet Grotesk', sans-serif;">Automatyn<span style="color:#22d3ee;">.</span></a>
+            <div class="flex gap-4 items-center text-sm">
+                <span class="text-zinc-500" id="nav-business-name">Loading...</span>
+                <span class="status-dot pending" id="nav-status-dot"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="px-6 py-8 max-w-3xl mx-auto">
+        <!-- Auth Error -->
+        <div class="card text-center py-12" id="auth-error" style="display: none;">
+            <h2 class="text-2xl font-bold mb-3">Access denied</h2>
+            <p class="text-zinc-400 mb-6">Your session has expired or the link is invalid.</p>
+            <a href="/saas/signup.html" class="cta-button" style="display: inline-block; text-decoration: none;">Create a New Bot</a>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboard-content" style="display: none;">
+            <h1 class="text-2xl font-bold mb-6" id="dashboard-title">Dashboard</h1>
+
+            <!-- Tabs -->
+            <div class="flex gap-3 mb-8 flex-wrap">
+                <button class="tab-btn active" onclick="showTab('setup')">Setup</button>
+                <button class="tab-btn" onclick="showTab('settings')">Settings</button>
+                <button class="tab-btn" onclick="showTab('usage')">Usage</button>
+            </div>
+
+            <!-- Setup Tab -->
+            <div class="tab-content active" id="tab-setup">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-2">Connect WhatsApp</h2>
+                    <p class="text-zinc-400 mb-6">Scan the QR code below with your WhatsApp Business app to connect your bot.</p>
+
+                    <div id="qr-container">
+                        <div class="qr-placeholder" id="qr-placeholder">
+                            <div class="text-center">
+                                <div class="text-4xl mb-3">📱</div>
+                                <p class="text-zinc-500 text-sm">QR code loading...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="qr-instructions" class="mt-6 text-sm text-zinc-400 space-y-2">
+                        <p><strong class="text-white">How to connect:</strong></p>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li>Open WhatsApp Business on your phone</li>
+                            <li>Go to Settings > Linked Devices</li>
+                            <li>Tap "Link a Device"</li>
+                            <li>Point your phone at the QR code above</li>
+                        </ol>
+                    </div>
+
+                    <div id="connected-status" style="display: none;" class="mt-6 p-4 rounded-xl" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <div class="flex items-center gap-3">
+                            <span class="status-dot connected"></span>
+                            <span class="text-green-400 font-bold">WhatsApp Connected</span>
+                        </div>
+                        <p class="text-zinc-400 text-sm mt-2">Your bot is live and responding to messages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="tab-settings">
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-6">Edit Bot Details</h2>
+                    <p class="text-zinc-400 text-sm mb-6">Changes take effect immediately. Your bot will use the updated information for all new conversations.</p>
+
+                    <form id="settings-form">
+                        <div class="mb-5">
+                            <label class="form-label" for="s-businessName">Business name</label>
+                            <input type="text" id="s-businessName" class="form-input">
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-industry">Industry</label>
+                            <input type="text" id="s-industry" class="form-input" disabled style="opacity: 0.5;">
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-services">Services</label>
+                            <textarea id="s-services" class="form-input"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-prices">Pricing</label>
+                            <textarea id="s-prices" class="form-input"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-hours">Business hours</label>
+                            <textarea id="s-hours" class="form-input"></textarea>
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-location">Location</label>
+                            <input type="text" id="s-location" class="form-input">
+                        </div>
+                        <div class="mb-5">
+                            <label class="form-label" for="s-policies">Policies</label>
+                            <textarea id="s-policies" class="form-input"></textarea>
+                        </div>
+
+                        <button type="submit" class="cta-button" id="save-btn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Usage Tab -->
+            <div class="tab-content" id="tab-usage">
+                <div class="card mb-6">
+                    <h2 class="text-xl font-bold mb-4">This Month</h2>
+                    <div class="flex justify-between items-end mb-2">
+                        <span class="text-zinc-400 text-sm">Conversations</span>
+                        <span class="text-sm"><span id="usage-count" class="text-white font-bold">0</span> / <span id="usage-limit" class="text-zinc-400">50</span></span>
+                    </div>
+                    <div class="usage-bar-bg">
+                        <div class="usage-bar" id="usage-bar" style="width: 0%"></div>
+                    </div>
+                    <p class="text-zinc-500 text-xs mt-2">Resets on <span id="usage-reset">the 1st of next month</span></p>
+                </div>
+
+                <div class="card">
+                    <h2 class="text-xl font-bold mb-4">Your Plan</h2>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-lg font-bold" id="plan-name">Free</p>
+                            <p class="text-zinc-400 text-sm" id="plan-detail">50 conversations/month</p>
+                        </div>
+                        <a href="/saas/#pricing" class="tab-btn" style="text-decoration: none;" id="upgrade-btn">Upgrade</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="save-toast" id="save-toast">Changes saved</div>
+
+    <script>
+        const API_URL = 'https://api.automatyn.co';
+        // const API_URL = 'http://localhost:3001';
+
+        let token = null;
+        let agentId = null;
+        let agentData = null;
+
+        // Get auth from URL params or localStorage
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            token = params.get('token') || localStorage.getItem('automatyn_token');
+            agentId = params.get('agent') || localStorage.getItem('automatyn_agent');
+
+            if (token && agentId) {
+                localStorage.setItem('automatyn_token', token);
+                localStorage.setItem('automatyn_agent', agentId);
+                // Clean URL
+                if (params.has('token')) {
+                    window.history.replaceState({}, '', '/saas/dashboard.html?agent=' + agentId);
+                }
+                loadAgent();
+            } else {
+                showAuthError();
+            }
+        }
+
+        function showAuthError() {
+            document.getElementById('auth-error').style.display = 'block';
+        }
+
+        async function loadAgent() {
+            try {
+                const res = await fetch(API_URL + '/api/agent/' + agentId, {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                });
+
+                if (!res.ok) {
+                    showAuthError();
+                    return;
+                }
+
+                agentData = await res.json();
+                renderDashboard();
+                loadStatus();
+            } catch (err) {
+                showAuthError();
+            }
+        }
+
+        function renderDashboard() {
+            document.getElementById('dashboard-content').style.display = 'block';
+            document.getElementById('dashboard-title').textContent = agentData.businessName + ' Dashboard';
+            document.getElementById('nav-business-name').textContent = agentData.businessName;
+
+            // Populate settings form
+            document.getElementById('s-businessName').value = agentData.businessName || '';
+            document.getElementById('s-industry').value = agentData.industry || '';
+            document.getElementById('s-services').value = agentData.services || '';
+            document.getElementById('s-prices').value = agentData.prices || '';
+            document.getElementById('s-hours').value = agentData.hours || '';
+            document.getElementById('s-location').value = agentData.location || '';
+            document.getElementById('s-policies').value = agentData.policies || '';
+        }
+
+        async function loadStatus() {
+            try {
+                const res = await fetch(API_URL + '/api/agent/' + agentId + '/status', {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                });
+                if (!res.ok) return;
+                const status = await res.json();
+
+                // Update status dot
+                const dot = document.getElementById('nav-status-dot');
+                if (status.connected) {
+                    dot.className = 'status-dot connected';
+                    document.getElementById('qr-placeholder').style.display = 'none';
+                    document.getElementById('qr-instructions').style.display = 'none';
+                    document.getElementById('connected-status').style.display = 'block';
+                } else {
+                    dot.className = 'status-dot pending';
+                    loadQR();
+                }
+
+                // Update usage
+                const count = status.conversationCount || 0;
+                const limit = status.conversationLimit || 50;
+                const isUnlimited = limit === -1;
+
+                document.getElementById('usage-count').textContent = count;
+                document.getElementById('usage-limit').textContent = isUnlimited ? '∞' : limit;
+
+                if (!isUnlimited) {
+                    const pct = Math.min((count / limit) * 100, 100);
+                    const bar = document.getElementById('usage-bar');
+                    bar.style.width = pct + '%';
+                    if (pct > 90) bar.classList.add('danger');
+                    else if (pct > 70) bar.classList.add('warning');
+                }
+
+                if (status.resetDate) {
+                    const d = new Date(status.resetDate);
+                    document.getElementById('usage-reset').textContent = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+                }
+
+                // Update plan info
+                const planNames = { free: 'Free', starter: 'Starter', pro: 'Pro' };
+                const planDetails = { free: '50 conversations/month', starter: '500 conversations/month', pro: 'Unlimited conversations' };
+                document.getElementById('plan-name').textContent = planNames[status.plan] || 'Free';
+                document.getElementById('plan-detail').textContent = planDetails[status.plan] || '50 conversations/month';
+
+                if (status.plan === 'pro') {
+                    document.getElementById('upgrade-btn').style.display = 'none';
+                }
+            } catch (err) {
+                console.error('Status load failed:', err);
+            }
+        }
+
+        async function loadQR() {
+            try {
+                const res = await fetch(API_URL + '/api/agent/' + agentId + '/qr', {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                });
+
+                if (res.headers.get('content-type')?.includes('image')) {
+                    const blob = await res.blob();
+                    const url = URL.createObjectURL(blob);
+                    const placeholder = document.getElementById('qr-placeholder');
+                    placeholder.innerHTML = '<img src="' + url + '" alt="WhatsApp QR Code" style="width:280px;height:280px;border-radius:0.5rem;">';
+                } else {
+                    const data = await res.json();
+                    const placeholder = document.getElementById('qr-placeholder');
+                    placeholder.innerHTML = '<div class="text-center"><div class="text-4xl mb-3">⏳</div><p class="text-zinc-500 text-sm">' + (data.message || 'QR code will appear here shortly.') + '</p></div>';
+                }
+            } catch (err) {
+                console.error('QR load failed:', err);
+            }
+        }
+
+        function showTab(name) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Settings form
+        document.getElementById('settings-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('save-btn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                const res = await fetch(API_URL + '/api/agent/' + agentId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                    body: JSON.stringify({
+                        businessName: document.getElementById('s-businessName').value.trim(),
+                        services: document.getElementById('s-services').value.trim(),
+                        prices: document.getElementById('s-prices').value.trim(),
+                        hours: document.getElementById('s-hours').value.trim(),
+                        location: document.getElementById('s-location').value.trim(),
+                        policies: document.getElementById('s-policies').value.trim(),
+                    }),
+                });
+
+                if (res.ok) {
+                    const toast = document.getElementById('save-toast');
+                    toast.classList.add('visible');
+                    setTimeout(() => toast.classList.remove('visible'), 2000);
+                    // Refresh data
+                    const data = await res.json();
+                    if (data.agent) agentData = data.agent;
+                    document.getElementById('dashboard-title').textContent = agentData.businessName + ' Dashboard';
+                    document.getElementById('nav-business-name').textContent = agentData.businessName;
+                }
+            } catch (err) {
+                alert('Failed to save. Please try again.');
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Save Changes';
+        });
+
+        init();
+    </script>
+</body>
+</html>

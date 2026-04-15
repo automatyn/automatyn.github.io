@@ -199,7 +199,7 @@ function generateIndustryPage(ind) {
             <div class="flex gap-6 items-center text-sm text-zinc-400">
                 <a href="https://automatyn.co" class="hover:text-white">Home</a>
                 <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
-                <a href="https://automatyn.co/#pricing" class="hover:text-white">Pricing</a>
+                <a href="https://automatyn.co/saas/" class="hover:text-white">Pricing</a>
                 <a href="https://calendly.com/patricksson/30min" class="cta-button text-sm" style="padding: 0.6rem 1.2rem;">Book Free Call</a>
             </div>
         </div>
@@ -275,7 +275,7 @@ function generateIndustryPage(ind) {
         </table>
 
         <div class="inline-cta">
-            <p style="margin:0;">Run a ${ind.service} business? <a href="https://automatyn.co/#pricing">Try Automatyn free</a>. Tell it your services, prices, and hours. Your WhatsApp bot is live in under 10 minutes.</p>
+            <p style="margin:0;">Run a ${ind.service} business? <a href="https://automatyn.co/saas/">Try Automatyn free</a>. Tell it your services, prices, and hours. Your WhatsApp bot is live in under 10 minutes.</p>
         </div>
 
         <h2>How Much Does This Cost?</h2>
@@ -356,7 +356,7 @@ function generateIndustryPage(ind) {
         <p>WhatsApp allows business-specific chatbots (FAQ, booking, customer support). What they restrict is general-purpose AI bots that are not tied to a real business. As a ${ind.slug.replace(/-/g, ' ')} using a bot for your actual ${ind.service} business, you are within their guidelines.</p>
 
         <div class="inline-cta">
-            <p style="margin:0;">Ready to stop missing messages? <a href="https://automatyn.co/#pricing">Start with Automatyn's free tier</a>. Your ${ind.service} WhatsApp bot is live in minutes, not weeks.</p>
+            <p style="margin:0;">Ready to stop missing messages? <a href="https://automatyn.co/saas/">Start with Automatyn's free tier</a>. Your ${ind.service} WhatsApp bot is live in minutes, not weeks.</p>
         </div>
 
         <h2>Related Guides</h2>
@@ -391,7 +391,7 @@ function generateIndustryPage(ind) {
         <div class="flex gap-6 justify-center mt-4">
             <a href="https://automatyn.co" class="hover:text-white">Home</a>
             <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
-            <a href="https://automatyn.co/#pricing" class="hover:text-white">Pricing</a>
+            <a href="https://automatyn.co/saas/" class="hover:text-white">Pricing</a>
         </div>
     </footer>
 </body>
@@ -505,7 +505,7 @@ function generateCityPage(city) {
             <div class="flex gap-6 items-center text-sm text-zinc-400">
                 <a href="https://automatyn.co" class="hover:text-white">Home</a>
                 <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
-                <a href="https://automatyn.co/#pricing" class="hover:text-white">Pricing</a>
+                <a href="https://automatyn.co/saas/" class="hover:text-white">Pricing</a>
                 <a href="https://calendly.com/patricksson/30min" class="cta-button text-sm" style="padding: 0.6rem 1.2rem;">Book Free Call</a>
             </div>
         </div>
@@ -580,7 +580,7 @@ function generateCityPage(city) {
         <p>If customers message you on WhatsApp, a chatbot can handle most of those conversations automatically.</p>
 
         <div class="inline-cta">
-            <p style="margin:0;">Based in ${city.name}? <a href="https://automatyn.co/#pricing">Try Automatyn free</a>. Tell it your business details and have a WhatsApp bot live in under 10 minutes.</p>
+            <p style="margin:0;">Based in ${city.name}? <a href="https://automatyn.co/saas/">Try Automatyn free</a>. Tell it your business details and have a WhatsApp bot live in under 10 minutes.</p>
         </div>
 
         <h2>How Much Does It Cost?</h2>
@@ -638,7 +638,7 @@ function generateCityPage(city) {
         <p>The customer booked in under a minute. You woke up to a confirmed appointment in your calendar. That is the difference a WhatsApp bot makes.</p>
 
         <div class="inline-cta">
-            <p style="margin:0;">Ready to stop missing ${city.name} customers? <a href="https://automatyn.co/#pricing">Start free with Automatyn</a>. No credit card, no contract, no code.</p>
+            <p style="margin:0;">Ready to stop missing ${city.name} customers? <a href="https://automatyn.co/saas/">Start free with Automatyn</a>. No credit card, no contract, no code.</p>
         </div>
 
         <h2>Common Questions</h2>
@@ -684,7 +684,7 @@ function generateCityPage(city) {
         <div class="flex gap-6 justify-center mt-4">
             <a href="https://automatyn.co" class="hover:text-white">Home</a>
             <a href="https://automatyn.co/blog/" class="hover:text-white">Blog</a>
-            <a href="https://automatyn.co/#pricing" class="hover:text-white">Pricing</a>
+            <a href="https://automatyn.co/saas/" class="hover:text-white">Pricing</a>
         </div>
     </footer>
 </body>
