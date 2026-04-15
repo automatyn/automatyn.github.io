@@ -21,7 +21,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
 
     <!-- JSON-LD: Blog schema -->
@@ -121,8 +121,9 @@
     </script>
 
     <style>
-        * { font-family: 'DM Sans', sans-serif; }
-        h1, h2, h3, h4 { font-family: 'Cabinet Grotesk', 'DM Sans', sans-serif; color: #ffffff; }
+        *, body, p, span, li, td, th, input, button, a, label, summary, details { font-family: 'DM Sans', sans-serif !important; }
+        h1, h2, h3, h4, h5, h6, .font-bold, .font-semibold, .font-extrabold { font-family: 'Cabinet Grotesk', 'Sora', sans-serif !important; color: #ffffff; }
+        nav a { font-family: 'DM Sans', sans-serif !important; }
         body { background: #030303; color: #ffffff; }
         .hero-gradient { background: #030303; position: relative; }
         .hero-gradient::before {
@@ -182,12 +183,12 @@
     <!-- Nav -->
     <nav class="border-b border-zinc-900 px-6 py-5">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-white" style="font-family: 'Cabinet Grotesk', sans-serif;">Automatyn<span style="color:#22d3ee;">.</span></a>
+            <a href="/" class="text-2xl font-extrabold text-white" style="font-family: 'Cabinet Grotesk', sans-serif !important; letter-spacing: -0.04em;">Automatyn<span style="color:#22d3ee;">.</span></a>
             <div class="flex gap-6 items-center text-sm text-zinc-400">
                 <a href="/" class="hover:text-white">Home</a>
                 <a href="/blog/" class="text-white">Blog</a>
                 <a href="/#pricing" class="hover:text-white">Pricing</a>
-                <a href="https://calendly.com/patricksson/30min" class="cta-button">Book Free Call</a>
+                <a href="/register.html" class="cta-button">Start Free</a>
             </div>
         </div>
     </nav>
@@ -455,16 +456,16 @@
 
         <!-- Bottom CTA -->
         <div class="mt-20 text-center max-w-2xl mx-auto p-8 rounded-2xl" style="background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.2);">
-            <h2 class="text-3xl font-bold mb-4" style="font-family: 'Cabinet Grotesk', sans-serif;">Want the Real Thing, Not Just a Blog Post?</h2>
-            <p class="text-zinc-400 mb-6">I set up AI agents for small businesses in 2 hours, not 2 months. One-time cost, you own it, no monthly SaaS lock-in.</p>
-            <a href="https://calendly.com/patricksson/30min" class="cta-button" style="font-size: 1rem; padding: 1rem 2rem;">Book Your Free 15-Min Call →</a>
+            <h2 class="text-3xl font-bold mb-4" style="font-family: 'Cabinet Grotesk', 'Sora', sans-serif !important;">Ready to Stop Missing Messages?</h2>
+            <p class="text-zinc-400 mb-6">Set up your AI WhatsApp receptionist in 10 minutes. Free plan included. No credit card required.</p>
+            <a href="/register.html" class="cta-button" style="font-size: 1rem; padding: 1rem 2rem;">Start Free →</a>
         </div>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-zinc-900 px-6 py-12 mt-16">
         <div class="max-w-5xl mx-auto text-center">
-            <p class="text-zinc-500 text-sm">© 2026 <a href="/" style="color:#22d3ee;">Automatyn</a>. AI agent setups for small businesses.</p>
+            <p class="text-zinc-500 text-sm">© 2026 <a href="/" style="color:#22d3ee;">Automatyn</a>. AI receptionist for small businesses.</p>
         </div>
     </footer>
 </body>
