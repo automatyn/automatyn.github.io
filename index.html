@@ -381,6 +381,7 @@
                     <a href="#case-study" class="text-gray-400 hover:text-white transition text-sm font-medium">Case Study</a>
                     <a href="#process" class="text-gray-400 hover:text-white transition text-sm font-medium">Process</a>
                     <a href="#blog" class="text-gray-400 hover:text-white transition text-sm font-medium">Blog</a>
+                    <a href="#try-demo" class="text-purple-400 hover:text-purple-300 transition text-sm font-medium">Try Demo</a>
                     <a href="#contact" class="cta-primary text-white px-5 py-2 rounded-lg hover:opacity-90 transition text-sm font-medium shadow-md neon-glow">Book Free Call</a>
                 </div>
                 <div class="md:hidden flex items-center gap-3">
@@ -430,8 +431,8 @@
                     <a href="#contact" class="cta-primary text-white px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 text-lg">
                         Book Free 15-Min Call
                     </a>
-                    <a href="#pricing" class="bg-transparent text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/5 transition border border-white/10 flex items-center justify-center gap-2">
-                        See Pricing
+                    <a href="#try-demo" class="px-8 py-4 rounded-xl font-semibold flex items-center justify-center gap-2 text-lg text-white hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);">
+                        Try AI Demo
                     </a>
                 </div>
 
@@ -665,6 +666,44 @@
                         <button type="submit" class="cta-primary text-white px-6 py-3 rounded-xl font-semibold text-sm whitespace-nowrap hover:opacity-90 transition w-full sm:w-auto">Get Free Guide</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Try the AI Demo — Email-Gated -->
+    <section id="try-demo" class="py-16 px-4 bg-black relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-purple-950/10 to-transparent pointer-events-none"></div>
+        <div class="max-w-3xl mx-auto relative z-10 text-center">
+            <div class="inline-flex items-center gap-2 bg-purple-950/30 border border-purple-500/20 px-4 py-2 rounded-full mb-6">
+                <span class="w-2 h-2 bg-purple-400 rounded-full pulse" aria-hidden="true"></span>
+                <span class="text-sm font-medium text-purple-300">Live Demo</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Try It Yourself in 30 Seconds</h2>
+            <p class="text-lg text-gray-400 mb-8">See how an AI receptionist handles real customer inquiries for salons, dental offices, restaurants, and more. Enter your email and we'll send you a link to chat with our demo bot on Telegram.</p>
+
+            <!-- Email gate form -->
+            <div id="demo-form-container">
+                <form id="demo-email-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
+                    <input id="demo-email" type="email" placeholder="Your work email" required class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50" autocomplete="email">
+                    <button type="submit" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);">Get Demo Link</button>
+                </form>
+                <p class="text-gray-600 text-xs">No spam. Just a Telegram link so you can test the bot instantly.</p>
+            </div>
+
+            <!-- Success state (hidden by default) -->
+            <div id="demo-success" class="hidden">
+                <div class="bg-gradient-to-br from-purple-950/30 to-blue-950/20 border border-purple-500/20 rounded-2xl p-8 max-w-md mx-auto">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #a855f7, #3b82f6);">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Your demo is ready!</h3>
+                    <p class="text-gray-400 text-sm mb-6">Chat with our AI receptionist on Telegram. Pick any business type and watch it handle bookings, FAQs, and customer inquiries.</p>
+                    <a href="https://t.me/automatyn_demo_bot" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-lg hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                        Open Demo on Telegram
+                    </a>
+                    <p class="text-gray-600 text-xs mt-4">15 messages included. Try asking to book a haircut or schedule a dental cleaning!</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1427,6 +1466,27 @@
                 // Show success with download link
                 const form = this;
                 form.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-glow"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-xl font-bold text-white mb-2">Download Your Guide</h3><p class="text-gray-400 mb-4">We\'ve also sent a copy to ' + email + '</p><a href="https://automatyn.co/openclaw-hardware-guide-2026.pdf" download class="inline-flex items-center gap-2 cta-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Download PDF Guide</a></div>';
+            }
+        });
+    </script>
+
+    <!-- Demo Email Gate Handler -->
+    <script>
+        document.getElementById('demo-email-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var email = document.getElementById('demo-email').value.trim();
+            if (email && email.includes('@')) {
+                // Submit to Brevo
+                var brevoForm = new FormData();
+                brevoForm.append('EMAIL', email);
+                fetch('https://e9b2bb57.sibforms.com/serve/MUIFALDsXgfDHOTeA8JiA_g-QJ1jfIUjYuMe7YrKSfvdtBIrlSCW50LHlMrijNr0c8KjVPsfByI0MCvu4CPuCDptgLQP1kThFWMWVkziKV1NVj3aakOCytMANNUzoSo0cXpQfY9axzNjUv5stXp9idge-nkrZEFkffV9695AcEv8dnRgIJSoWD_bwUhn_U6FUa8epyskx9C2lAdMAg==', {
+                    method: 'POST',
+                    body: brevoForm,
+                    mode: 'no-cors'
+                }).catch(function() {});
+                // Show success
+                document.getElementById('demo-form-container').classList.add('hidden');
+                document.getElementById('demo-success').classList.remove('hidden');
             }
         });
     </script>
