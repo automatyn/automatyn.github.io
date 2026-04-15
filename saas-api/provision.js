@@ -15,13 +15,13 @@ if (!fs.existsSync(DATA_DIR)) {
 }
 
 function generateAgentId(businessName) {
-  const slug = businessName
+  const slug = (businessName || '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 30);
   const suffix = crypto.randomBytes(3).toString('hex');
-  return `biz-${slug}-${suffix}`;
+  return slug ? `biz-${slug}-${suffix}` : `biz-${suffix}`;
 }
 
 function renderTemplate(template, data) {
@@ -59,52 +59,34 @@ function provisionAgent(agentData) {
   // Create workspace directory
   fs.mkdirSync(workspaceDir, { recursive: true });
 
-  // Write SOUL.md
-  const soulContent = generateSoulMd(agentData);
-  fs.writeFileSync(path.join(workspaceDir, 'SOUL.md'), soulContent);
-
-  // Write auth profile (use the default Google API key)
-  const authProfile = {
-    version: 1,
-    profiles: {
-      'google:default': {
-        type: 'api_key',
-        provider: 'google',
-        key: process.env.GEMINI_API_KEY || '',
-      },
-    },
-    usageStats: {},
-  };
-
   const agentDir = path.join(workspaceDir, 'agent');
   fs.mkdirSync(agentDir, { recursive: true });
-  fs.writeFileSync(
-    path.join(agentDir, 'auth-profiles.json'),
-    JSON.stringify(authProfile, null, 2)
-  );
 
-  // Add agent directly to openclaw.json (bypasses CLI SHA race condition with gateway)
-  const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
-  const alreadyExists = config.agents.list.some(a => a.id === agentId);
-  if (!alreadyExists) {
-    const emoji = getIndustryEmoji(agentData.industry);
-    config.agents.list.push({
-      id: agentId,
-      name: agentData.businessName,
-      workspace: workspaceDir,
-      agentDir: agentDir,
-      model: 'google/gemini-2.5-flash',
-      identity: { name: agentData.businessName, emoji },
-    });
-    config.meta.lastTouchedAt = new Date().toISOString();
-    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
+  // Only set up the full agent if business details are provided
+  if (agentData.businessName) {
+    // Write SOUL.md
+    const soulContent = generateSoulMd(agentData);
+    fs.writeFileSync(path.join(workspaceDir, 'SOUL.md'), soulContent);
 
-    // Signal gateway to reload config
-    try {
-      execSync('openclaw gateway reload', { timeout: 10000, stdio: 'pipe' });
-    } catch (err) {
-      console.error('Warning: gateway reload failed (will pick up on next restart):', err.message);
-    }
+    // Write auth profile (use the default Google API key)
+    const authProfile = {
+      version: 1,
+      profiles: {
+        'google:default': {
+          type: 'api_key',
+          provider: 'google',
+          key: process.env.GEMINI_API_KEY || '',
+        },
+      },
+      usageStats: {},
+    };
+    fs.writeFileSync(
+      path.join(agentDir, 'auth-profiles.json'),
+      JSON.stringify(authProfile, null, 2)
+    );
+
+    // Add agent directly to openclaw.json (bypasses CLI SHA race condition with gateway)
+    registerAgentInConfig(agentId, agentData.businessName, agentData.industry, workspaceDir, agentDir);
   }
 
   // Save agent metadata
@@ -135,6 +117,30 @@ function provisionAgent(agentData) {
   return metadata;
 }
 
+function registerAgentInConfig(agentId, businessName, industry, workspaceDir, agentDir) {
+  const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
+  const alreadyExists = config.agents.list.some(a => a.id === agentId);
+  if (!alreadyExists) {
+    const emoji = getIndustryEmoji(industry);
+    config.agents.list.push({
+      id: agentId,
+      name: businessName,
+      workspace: workspaceDir,
+      agentDir: agentDir,
+      model: 'google/gemini-2.5-flash',
+      identity: { name: businessName, emoji },
+    });
+    config.meta.lastTouchedAt = new Date().toISOString();
+    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
+
+    try {
+      execSync('openclaw gateway reload', { timeout: 10000, stdio: 'pipe' });
+    } catch (err) {
+      console.error('Warning: gateway reload failed:', err.message);
+    }
+  }
+}
+
 function updateAgent(agentId, updates) {
   const metaPath = path.join(DATA_DIR, `${agentId}.json`);
   if (!fs.existsSync(metaPath)) {
@@ -151,10 +157,38 @@ function updateAgent(agentId, updates) {
   }
   metadata.updatedAt = new Date().toISOString();
 
-  // Regenerate SOUL.md
   const workspaceDir = path.join(AGENTS_DIR, agentId);
-  const soulContent = generateSoulMd(metadata);
-  fs.writeFileSync(path.join(workspaceDir, 'SOUL.md'), soulContent);
+  const agentDir = path.join(workspaceDir, 'agent');
+
+  // If business name is being set for the first time (onboarding), register with OpenClaw
+  if (metadata.businessName && !fs.existsSync(path.join(workspaceDir, 'SOUL.md'))) {
+    fs.mkdirSync(agentDir, { recursive: true });
+
+    // Write auth profile
+    const authProfile = {
+      version: 1,
+      profiles: {
+        'google:default': {
+          type: 'api_key',
+          provider: 'google',
+          key: process.env.GEMINI_API_KEY || '',
+        },
+      },
+      usageStats: {},
+    };
+    fs.writeFileSync(
+      path.join(agentDir, 'auth-profiles.json'),
+      JSON.stringify(authProfile, null, 2)
+    );
+
+    registerAgentInConfig(agentId, metadata.businessName, metadata.industry, workspaceDir, agentDir);
+  }
+
+  // Regenerate SOUL.md (only if we have business details)
+  if (metadata.businessName) {
+    const soulContent = generateSoulMd(metadata);
+    fs.writeFileSync(path.join(workspaceDir, 'SOUL.md'), soulContent);
+  }
 
   // Save updated metadata
   fs.writeFileSync(metaPath, JSON.stringify(metadata, null, 2));

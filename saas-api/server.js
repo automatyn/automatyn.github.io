@@ -72,7 +72,53 @@ function validateSignup(body) {
 }
 
 // ============================================================
-// POST /api/signup — Create a new agent
+// POST /api/register — Create account (email only, no business details)
+// ============================================================
+app.post('/api/register', (req, res) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  if (!rateLimit(ip, 5, 3600000)) {
+    return res.status(429).json({ error: 'Too many attempts. Try again in an hour.' });
+  }
+
+  const email = (req.body.email || '').trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+
+  try {
+    const plan = req.body.plan || 'free';
+    const metadata = provisionAgent({
+      email,
+      businessName: '',
+      industry: '',
+      services: '',
+      prices: '',
+      hours: '',
+      location: '',
+      policies: '',
+      plan,
+    });
+
+    const token = jwt.sign(
+      { agentId: metadata.agentId, email },
+      jwtSecret,
+      { expiresIn: '365d' }
+    );
+
+    res.json({
+      success: true,
+      agentId: metadata.agentId,
+      token,
+      dashboardUrl: `https://automatyn.co/dashboard.html?agent=${metadata.agentId}&token=${token}&onboarding=true`,
+    });
+  } catch (err) {
+    console.error('Register error:', err);
+    res.status(500).json({ error: 'Failed to create account. Please try again.' });
+  }
+});
+
+// ============================================================
+// POST /api/signup — Create a new agent (legacy, full details)
 // ============================================================
 app.post('/api/signup', (req, res) => {
   const ip = req.ip || req.connection.remoteAddress;
@@ -109,7 +155,7 @@ app.post('/api/signup', (req, res) => {
       success: true,
       agentId: metadata.agentId,
       token,
-      dashboardUrl: `https://automatyn.co/saas/dashboard.html?agent=${metadata.agentId}&token=${token}`,
+      dashboardUrl: `https://automatyn.co/dashboard.html?agent=${metadata.agentId}&token=${token}`,
     });
   } catch (err) {
     console.error('Signup error:', err);
