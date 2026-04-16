@@ -91,40 +91,23 @@
         <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
         <span id="plan-label"></span>
       </div>
-      <h1 class="heading text-2xl sm:text-3xl font-extrabold mb-2">Create your account</h1>
-      <p class="text-sm text-gray-400 mb-7">Free plan. No credit card. Set up in 10 minutes.</p>
+      <h1 class="heading text-2xl sm:text-3xl font-extrabold mb-2">Get your AI receptionist</h1>
+      <p class="text-sm text-gray-400 mb-7">Free plan. No password. No credit card. We'll email you a sign-in link.</p>
 
       <form id="signup-form" class="space-y-5" novalidate>
         <div>
           <label class="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider" for="email">Email address</label>
-          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" inputmode="email" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider" for="password">Password</label>
-          <div class="relative">
-            <input class="field pr-12" id="password" name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="128" placeholder="At least 8 characters" />
-            <button type="button" id="toggle-pw" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-white font-semibold px-2 py-1" aria-label="Show password">Show</button>
-          </div>
-          <div class="flex gap-1 mt-2" id="strength-bar">
-            <div class="strength-seg"></div>
-            <div class="strength-seg"></div>
-            <div class="strength-seg"></div>
-            <div class="strength-seg"></div>
-          </div>
-          <div class="flex justify-between text-xs mt-1.5">
-            <span id="strength-label" class="text-gray-500">8+ characters</span>
-            <span class="text-gray-600">We check against known breaches</span>
-          </div>
+          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" inputmode="email" autofocus />
         </div>
 
         <div id="error-box" class="hidden text-sm text-red-400 bg-red-950/30 border border-red-900/40 rounded-lg px-3 py-2.5"></div>
 
         <button id="submit-btn" type="submit" class="cta-primary w-full text-white py-3.5 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2">
-          <span id="btn-text">Create account</span>
+          <span id="btn-text">Email me a sign-in link</span>
         </button>
 
-        <p class="text-xs text-gray-500 text-center leading-relaxed">By creating an account you agree to our <a class="text-cyan-400 hover:text-cyan-300" href="/terms.html">Terms</a> and <a class="text-cyan-400 hover:text-cyan-300" href="/privacy.html">Privacy Policy</a>.</p>
+        <p class="text-xs text-gray-500 text-center leading-relaxed">By continuing you agree to our <a class="text-cyan-400 hover:text-cyan-300" href="/terms.html">Terms</a> and <a class="text-cyan-400 hover:text-cyan-300" href="/privacy.html">Privacy Policy</a>.</p>
+        <p class="text-xs text-gray-500 text-center">Already have an account? Just enter your email above — we'll sign you in.</p>
       </form>
     </div>
 
@@ -135,18 +118,18 @@
       </div>
       <h2 class="heading text-xl sm:text-2xl font-extrabold mb-3">Check your email</h2>
       <p class="text-gray-400 text-sm sm:text-base mb-6 leading-relaxed">
-        We've sent a verification link to<br>
+        We've sent a sign-in link to<br>
         <strong id="sent-email" class="text-white"></strong>
       </p>
       <div class="bg-white/5 border border-white/10 rounded-xl p-4 mb-6 text-left text-sm text-gray-400 leading-relaxed">
         <p class="text-white font-semibold mb-1">Next step:</p>
         <ol class="list-decimal list-inside space-y-1 text-gray-400">
           <li>Open the email from Automatyn</li>
-          <li>Click the verification link</li>
+          <li>Click the sign-in link</li>
           <li>You'll land on your dashboard</li>
         </ol>
       </div>
-      <div class="text-xs text-gray-500 mb-4">The link expires in 24 hours.</div>
+      <div class="text-xs text-gray-500 mb-4">The link expires in 15 minutes.</div>
       <button id="resend-btn" class="text-sm text-cyan-400 hover:text-cyan-300 font-semibold">Didn't get it? Resend</button>
       <div id="resend-status" class="text-xs text-gray-500 mt-3 hidden"></div>
     </div>
@@ -169,36 +152,6 @@
     document.getElementById('plan-label').textContent = validPlans[plan];
   }
 
-  // Show/hide password
-  const pwInput = document.getElementById('password');
-  document.getElementById('toggle-pw').addEventListener('click', () => {
-    const btn = document.getElementById('toggle-pw');
-    if (pwInput.type === 'password') { pwInput.type = 'text'; btn.textContent = 'Hide'; }
-    else { pwInput.type = 'password'; btn.textContent = 'Show'; }
-  });
-
-  // Password strength indicator
-  const segs = document.querySelectorAll('#strength-bar .strength-seg');
-  const strengthLabel = document.getElementById('strength-label');
-  function assessStrength(pw) {
-    let score = 0;
-    if (pw.length >= 8) score++;
-    if (pw.length >= 12) score++;
-    if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
-    if (/\d/.test(pw) || /[^A-Za-z0-9]/.test(pw)) score++;
-    return Math.min(score, 4);
-  }
-  pwInput.addEventListener('input', () => {
-    const pw = pwInput.value;
-    const score = pw.length === 0 ? 0 : assessStrength(pw);
-    const levels = [['', '8+ characters'], ['on-weak','Weak'], ['on-ok','OK'], ['on-good','Strong'], ['on-strong','Very strong']];
-    segs.forEach((s, i) => {
-      s.className = 'strength-seg' + (i < score && score > 0 ? ' ' + levels[score][0] : '');
-    });
-    strengthLabel.textContent = levels[score][1];
-    strengthLabel.style.color = score >= 3 ? '#10b981' : (score >= 2 ? '#f59e0b' : (score >= 1 ? '#ef4444' : '#737373'));
-  });
-
   const form = document.getElementById('signup-form');
   const btn = document.getElementById('submit-btn');
   const btnText = document.getElementById('btn-text');
@@ -214,33 +167,26 @@
     e.preventDefault();
     hideError();
     const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = pwInput.value;
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email.'); return; }
-    if (password.length < 8) { showError('Password must be at least 8 characters.'); return; }
 
     btn.disabled = true;
-    btnText.innerHTML = '<span class="spin"></span> Creating account…';
+    btnText.innerHTML = '<span class="spin"></span> Sending link…';
 
     try {
-      const res = await fetch(`${API}/api/auth/register`, {
+      const res = await fetch(`${API}/api/auth/magic-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, plan })
+        body: JSON.stringify({ email, plan })
       });
       const data = await res.json();
 
       if (!res.ok) {
         showError(data.error || 'Something went wrong. Please try again.');
         btn.disabled = false;
-        btnText.textContent = 'Create account';
+        btnText.textContent = 'Email me a sign-in link';
         return;
       }
-
-      // Store JWT immediately — allows dashboard access right away once verified
-      if (data.token) localStorage.setItem('automatyn_jwt', data.token);
-      if (data.agentId) localStorage.setItem('automatyn_agent', data.agentId);
-      if (data.email) localStorage.setItem('automatyn_email', data.email);
 
       // Show "check your email" state
       document.getElementById('form-state').classList.add('hidden');
@@ -250,21 +196,21 @@
     } catch (err) {
       showError('Network error. Please check your connection and try again.');
       btn.disabled = false;
-      btnText.textContent = 'Create account';
+      btnText.textContent = 'Email me a sign-in link';
     }
   });
 
-  // Resend verification
+  // Resend magic link
   document.getElementById('resend-btn').addEventListener('click', async () => {
     const email = document.getElementById('sent-email').textContent;
     const rs = document.getElementById('resend-status');
     rs.classList.remove('hidden');
     rs.textContent = 'Sending…';
     try {
-      const res = await fetch(`${API}/api/auth/resend-verification`, {
+      const res = await fetch(`${API}/api/auth/magic-link`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email, plan })
       });
       const data = await res.json();
       rs.textContent = data.message || 'Sent. Check your inbox.';

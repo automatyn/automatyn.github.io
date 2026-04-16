@@ -253,6 +253,127 @@ app.post('/api/auth/login', async (req, res) => {
   });
 });
 
+// POST /api/auth/magic-link — Send one-time sign-in link
+// Creates account if email is new (no password required)
+app.post('/api/auth/magic-link', async (req, res) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  const email = (req.body.email || '').trim().toLowerCase();
+  const plan = ['free', 'starter', 'pro'].includes(req.body.plan) ? req.body.plan : 'free';
+
+  if (!authLib.rateLimit(`magiclink:ip:${ip}`, 10, 3600000)) {
+    return res.status(429).json({ error: 'Too many requests from this IP. Try again later.' });
+  }
+  if (!authLib.rateLimit(`magiclink:email:${email}`, 5, 3600000)) {
+    return res.status(429).json({ error: 'Too many sign-in requests for this email. Try again later.' });
+  }
+
+  if (!authLib.validEmail(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+
+  let user = authLib.getUser(email);
+  let isNewUser = false;
+
+  // If no user, create a shell account on the fly
+  if (!user) {
+    isNewUser = true;
+    try {
+      const metadata = provisionAgent({
+        email, businessName: '', industry: '', services: '', prices: '',
+        hours: '', location: '', policies: '', plan,
+      });
+      user = {
+        email,
+        passwordHash: null, // magic-link users have no password
+        verified: false,
+        agentId: metadata.agentId,
+        plan,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      authLib.setUser(email, user);
+    } catch (err) {
+      console.error('Magic-link account provision failed:', err);
+      return res.status(500).json({ error: 'Failed to start sign-in. Please try again.' });
+    }
+  }
+
+  // Generate one-time token
+  const token = authLib.generateToken();
+  const tokens = authLib.loadMagicLinkTokens();
+  tokens[token] = {
+    email,
+    expiresAt: Date.now() + authLib.MAGIC_LINK_TOKEN_TTL_MS,
+    isNewUser,
+  };
+  authLib.saveMagicLinkTokens(tokens);
+
+  const loginUrl = `${APP_URL}/verify.html?magic=${token}`;
+
+  try {
+    await authLib.sendEmail({
+      to: email,
+      subject: isNewUser ? 'Finish signing up for Automatyn' : 'Your Automatyn sign-in link',
+      htmlContent: authLib.magicLinkEmailHtml(loginUrl, isNewUser),
+    });
+  } catch (err) {
+    console.error('Magic-link email send failed:', err.message);
+    return res.status(500).json({ error: 'Could not send the sign-in email. Please try again.' });
+  }
+
+  res.json({
+    success: true,
+    message: "Check your inbox — we've sent you a link to sign in.",
+    isNewUser,
+  });
+});
+
+// POST /api/auth/magic-link/consume — Exchange one-time token for JWT
+app.post('/api/auth/magic-link/consume', (req, res) => {
+  const token = (req.body.token || '').trim();
+  if (!token) return res.status(400).json({ error: 'Missing sign-in token.' });
+
+  const tokens = authLib.loadMagicLinkTokens();
+  const entry = tokens[token];
+  if (!entry) return res.status(400).json({ error: 'This sign-in link has already been used or is invalid.' });
+  if (entry.expiresAt < Date.now()) {
+    delete tokens[token];
+    authLib.saveMagicLinkTokens(tokens);
+    return res.status(400).json({ error: 'This sign-in link has expired. Please request a new one.' });
+  }
+
+  const user = authLib.getUser(entry.email);
+  if (!user) {
+    delete tokens[token];
+    authLib.saveMagicLinkTokens(tokens);
+    return res.status(404).json({ error: 'Account not found.' });
+  }
+
+  // Magic-link success = email is verified (they own the inbox)
+  if (!user.verified) {
+    user.verified = true;
+    user.verifiedAt = new Date().toISOString();
+  }
+  user.lastLoginAt = new Date().toISOString();
+  user.updatedAt = new Date().toISOString();
+  authLib.setUser(entry.email, user);
+
+  // Consume the token (one-time use)
+  delete tokens[token];
+  authLib.saveMagicLinkTokens(tokens);
+
+  const jwtToken = issueJwt(user);
+  res.json({
+    success: true,
+    token: jwtToken,
+    agentId: user.agentId,
+    email: user.email,
+    verified: true,
+    plan: user.plan || 'free',
+    isNewUser: !!entry.isNewUser,
+  });
+});
+
 // POST /api/auth/verify — Verify email via magic link token
 app.post('/api/auth/verify', (req, res) => {
   const token = (req.body.token || '').trim();

@@ -69,37 +69,42 @@
 
 <main class="pt-32 sm:pt-36 pb-12 px-4 relative z-10 flex justify-center">
   <div class="w-full max-w-md">
-    <div class="glass p-7 sm:p-9 fade-up">
+    <!-- Form card -->
+    <div id="form-state" class="glass p-7 sm:p-9 fade-up">
       <h1 class="heading text-3xl sm:text-4xl font-extrabold mb-2">Welcome back</h1>
-      <p class="text-sm sm:text-base text-gray-400 mb-7">Sign in to your Automatyn dashboard.</p>
+      <p class="text-sm sm:text-base text-gray-400 mb-7">Enter your email — we'll send you a sign-in link. No password needed.</p>
 
       <form id="login-form" class="space-y-5" novalidate>
         <div>
           <label class="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider" for="email">Email</label>
-          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@business.com" inputmode="email" />
-        </div>
-
-        <div>
-          <div class="flex justify-between items-end mb-2">
-            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider" for="password">Password</label>
-            <a href="/forgot-password.html" class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold">Forgot?</a>
-          </div>
-          <div class="relative">
-            <input class="field pr-12" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Your password" />
-            <button type="button" id="toggle-pw" class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-white font-semibold px-2 py-1" aria-label="Show password">Show</button>
-          </div>
+          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@business.com" inputmode="email" autofocus />
         </div>
 
         <div id="error-box" class="hidden text-sm text-red-400 bg-red-950/30 border border-red-900/40 rounded-lg px-3 py-2.5"></div>
 
         <button id="submit-btn" type="submit" class="cta-primary w-full text-white py-3.5 rounded-xl font-semibold text-sm sm:text-base flex items-center justify-center gap-2">
-          <span id="btn-text">Sign in</span>
+          <span id="btn-text">Email me a sign-in link</span>
         </button>
       </form>
 
       <div class="text-center text-xs text-gray-500 mt-6">
-        Protected by industry-standard security. We check against known breaches.
+        No passwords to remember. Link expires in 15 minutes.
       </div>
+    </div>
+
+    <!-- Email sent state -->
+    <div id="sent-state" class="glass p-7 sm:p-9 text-center hidden">
+      <div class="w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto mb-5">
+        <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
+      </div>
+      <h2 class="heading text-xl sm:text-2xl font-extrabold mb-3">Check your email</h2>
+      <p class="text-gray-400 text-sm sm:text-base mb-6 leading-relaxed">
+        We've sent a sign-in link to<br>
+        <strong id="sent-email" class="text-white"></strong>
+      </p>
+      <div class="text-xs text-gray-500 mb-4">The link expires in 15 minutes.</div>
+      <button id="resend-btn" class="text-sm text-cyan-400 hover:text-cyan-300 font-semibold">Didn't get it? Resend</button>
+      <div id="resend-status" class="text-xs text-gray-500 mt-3 hidden"></div>
     </div>
   </div>
 </main>
@@ -109,13 +114,6 @@
     ? 'http://localhost:3001'
     : 'https://api.automatyn.co';
 
-  const pwInput = document.getElementById('password');
-  document.getElementById('toggle-pw').addEventListener('click', () => {
-    const b = document.getElementById('toggle-pw');
-    if (pwInput.type === 'password') { pwInput.type='text'; b.textContent='Hide'; }
-    else { pwInput.type='password'; b.textContent='Show'; }
-  });
-
   const form = document.getElementById('login-form');
   const btn = document.getElementById('submit-btn');
   const btnText = document.getElementById('btn-text');
@@ -124,42 +122,59 @@
   function showError(msg) { errBox.textContent = msg; errBox.classList.remove('hidden'); }
   function hideError() { errBox.classList.add('hidden'); }
 
+  async function sendMagicLink(email) {
+    const res = await fetch(`${API}/api/auth/magic-link`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    return { res, data: await res.json() };
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideError();
     const email = document.getElementById('email').value.trim().toLowerCase();
-    const password = pwInput.value;
 
-    if (!email || !password) { showError('Enter your email and password.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email.'); return; }
 
     btn.disabled = true;
-    btnText.innerHTML = '<span class="spin"></span> Signing in…';
+    btnText.innerHTML = '<span class="spin"></span> Sending link…';
 
     try {
-      const res = await fetch(`${API}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
+      const { res, data } = await sendMagicLink(email);
 
       if (!res.ok) {
-        showError(data.error || 'Sign in failed.');
+        showError(data.error || 'Something went wrong.');
         btn.disabled = false;
-        btnText.textContent = 'Sign in';
+        btnText.textContent = 'Email me a sign-in link';
         return;
       }
 
-      if (data.token) localStorage.setItem('automatyn_jwt', data.token);
-      if (data.agentId) localStorage.setItem('automatyn_agent', data.agentId);
-      if (data.email) localStorage.setItem('automatyn_email', data.email);
-
-      // Redirect to dashboard (banner will prompt for verification if needed)
-      window.location.href = '/dashboard.html';
+      document.getElementById('form-state').classList.add('hidden');
+      document.getElementById('sent-state').classList.remove('hidden');
+      document.getElementById('sent-email').textContent = email;
+      window.scrollTo({ top:0, behavior:'smooth' });
     } catch (err) {
       showError('Network error. Please try again.');
       btn.disabled = false;
-      btnText.textContent = 'Sign in';
+      btnText.textContent = 'Email me a sign-in link';
+    }
+  });
+
+  // Resend magic link
+  document.getElementById('resend-btn').addEventListener('click', async () => {
+    const email = document.getElementById('sent-email').textContent;
+    const rs = document.getElementById('resend-status');
+    rs.classList.remove('hidden');
+    rs.textContent = 'Sending…';
+    try {
+      const { data } = await sendMagicLink(email);
+      rs.textContent = data.message || 'Sent. Check your inbox.';
+      rs.style.color = '#10b981';
+    } catch (e) {
+      rs.textContent = 'Something went wrong. Try again.';
+      rs.style.color = '#ef4444';
     }
   });
 </script>

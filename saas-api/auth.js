@@ -8,12 +8,14 @@ const DATA_DIR = path.join(__dirname, 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const VERIFY_TOKENS_FILE = path.join(DATA_DIR, 'verify-tokens.json');
 const RESET_TOKENS_FILE = path.join(DATA_DIR, 'reset-tokens.json');
+const MAGIC_LINK_TOKENS_FILE = path.join(DATA_DIR, 'magic-link-tokens.json');
 
 const BCRYPT_COST = 12;
 const DUMMY_HASH = '$2b$12$dummyhashfortimingattackpreventionxxxxxxxxxxxxxxxxxxxxxx';
 
 const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const RESET_TOKEN_TTL_MS = 1 * 60 * 60 * 1000; // 1 hour
+const MAGIC_LINK_TOKEN_TTL_MS = 15 * 60 * 1000; // 15 minutes (short-lived, login-specific)
 const UNVERIFIED_OVERWRITE_AFTER_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -54,6 +56,8 @@ function loadVerifyTokens() { return readJson(VERIFY_TOKENS_FILE, {}); }
 function saveVerifyTokens(t) { writeJson(VERIFY_TOKENS_FILE, t); }
 function loadResetTokens() { return readJson(RESET_TOKENS_FILE, {}); }
 function saveResetTokens(t) { writeJson(RESET_TOKENS_FILE, t); }
+function loadMagicLinkTokens() { return readJson(MAGIC_LINK_TOKENS_FILE, {}); }
+function saveMagicLinkTokens(t) { writeJson(MAGIC_LINK_TOKENS_FILE, t); }
 
 // ============ Password breach check (HIBP k-anonymity) ============
 function sha1Upper(str) {
@@ -175,6 +179,26 @@ function resetEmailHtml(resetUrl) {
 </body></html>`;
 }
 
+function magicLinkEmailHtml(loginUrl, isNewUser) {
+  const headline = isNewUser ? 'Welcome to Automatyn' : 'Your sign-in link';
+  const subtext = isNewUser
+    ? 'Click the button below to finish creating your account. Link expires in 15 minutes.'
+    : 'Click the button below to sign in. Link expires in 15 minutes.';
+  const cta = isNewUser ? 'Finish signing up' : 'Sign in';
+  return `<!DOCTYPE html>
+<html><body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #f5f5f5; padding: 40px 20px; margin: 0;">
+  <div style="max-width: 520px; margin: 0 auto; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+    <div style="font-size: 28px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 24px;">Automatyn<span style="color: #22d3ee;">.</span></div>
+    <h1 style="font-size: 22px; font-weight: 700; margin: 0 0 12px; color: #fff;">${headline}</h1>
+    <p style="color: #a1a1aa; line-height: 1.6; margin: 0 0 28px; font-size: 15px;">${subtext}</p>
+    <a href="${loginUrl}" style="display: inline-block; background: linear-gradient(180deg, #10b981 0%, #059669 100%); color: #fff; padding: 14px 32px; border-radius: 9999px; text-decoration: none; font-weight: 700; font-size: 15px;">${cta}</a>
+    <p style="color: #71717a; font-size: 13px; margin: 28px 0 0; line-height: 1.6;">Or copy this link:<br><span style="color: #a1a1aa; word-break: break-all;">${loginUrl}</span></p>
+    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 32px 0;">
+    <p style="color: #52525b; font-size: 12px; margin: 0;">Didn't request this? Ignore the email; no action will be taken.</p>
+  </div>
+</body></html>`;
+}
+
 // ============ Rate limiting ============
 const rateBuckets = new Map();
 function rateLimit(key, max, windowMs) {
@@ -202,10 +226,11 @@ module.exports = {
   loadUsers, saveUsers, getUser, setUser, deleteUser,
   loadVerifyTokens, saveVerifyTokens,
   loadResetTokens, saveResetTokens,
+  loadMagicLinkTokens, saveMagicLinkTokens,
   checkHibp, validEmail, validPassword,
   generateToken, sendEmail,
-  verificationEmailHtml, resetEmailHtml,
+  verificationEmailHtml, resetEmailHtml, magicLinkEmailHtml,
   rateLimit, hashPassword, verifyPassword,
   DUMMY_HASH,
-  VERIFY_TOKEN_TTL_MS, RESET_TOKEN_TTL_MS, UNVERIFIED_OVERWRITE_AFTER_MS,
+  VERIFY_TOKEN_TTL_MS, RESET_TOKEN_TTL_MS, MAGIC_LINK_TOKEN_TTL_MS, UNVERIFIED_OVERWRITE_AFTER_MS,
 };
