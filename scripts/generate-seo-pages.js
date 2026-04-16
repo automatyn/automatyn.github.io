@@ -193,7 +193,14 @@ function generateIndustryPage(ind) {
     </style>
 </head>
 <body class="hero-gradient">
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
+    <!-- Banner -->
+    <div class="urgency-banner text-white text-center py-2.5 px-4 text-sm font-medium fixed top-0 w-full z-[60]" style="background: #0f0f0f; border-bottom: 1px solid rgba(34, 211, 238, 0.15);">
+        <span class="pulse inline-block w-2 h-2 bg-emerald-400 rounded-full mr-2" style="animation: pulse 2s infinite;" aria-hidden="true"></span>
+        <strong class="text-white">Free AI receptionist for your WhatsApp.</strong> Answers customers 24/7. <a href="/register.html" class="underline font-bold ml-1" style="color: #22d3ee;">Start free &rarr;</a>
+    </div>
+    <style>.pulse { animation: pulse 2s infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }</style>
+
+    <nav class="fixed top-[36px] w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -223,7 +230,7 @@ function generateIndustryPage(ind) {
             </div>
         </div>
     </nav>
-    <div class="h-16"></div>
+    <div style="height: 100px;"></div>
 
     <header class="px-6 py-16 max-w-4xl mx-auto">
         <div class="text-zinc-500 text-sm mb-4">April 15, 2026 &middot; Industry Guide &middot; 8 min read</div>
@@ -526,7 +533,14 @@ function generateCityPage(city) {
     </style>
 </head>
 <body class="hero-gradient">
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
+    <!-- Banner -->
+    <div class="urgency-banner text-white text-center py-2.5 px-4 text-sm font-medium fixed top-0 w-full z-[60]" style="background: #0f0f0f; border-bottom: 1px solid rgba(34, 211, 238, 0.15);">
+        <span class="pulse inline-block w-2 h-2 bg-emerald-400 rounded-full mr-2" style="animation: pulse 2s infinite;" aria-hidden="true"></span>
+        <strong class="text-white">Free AI receptionist for your WhatsApp.</strong> Answers customers 24/7. <a href="/register.html" class="underline font-bold ml-1" style="color: #22d3ee;">Start free &rarr;</a>
+    </div>
+    <style>.pulse { animation: pulse 2s infinite; } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }</style>
+
+    <nav class="fixed top-[36px] w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -556,7 +570,7 @@ function generateCityPage(city) {
             </div>
         </div>
     </nav>
-    <div class="h-16"></div>
+    <div style="height: 100px;"></div>
 
     <header class="px-6 py-16 max-w-4xl mx-auto">
         <div class="text-zinc-500 text-sm mb-4">April 15, 2026 &middot; Local Guide &middot; 7 min read</div>
