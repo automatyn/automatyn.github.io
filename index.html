@@ -641,26 +641,6 @@
         </div>
     </section>
 
-    <!-- Self-host path: Hardware Guide + OpenClaw -->
-    <section class="py-10 px-4 bg-black">
-        <div class="max-w-3xl mx-auto">
-            <div class="bg-gradient-to-r from-cyan-950/20 to-emerald-950/20 border border-white/8 rounded-2xl p-6 md:p-8 card-glow">
-                <div class="mb-5 text-center md:text-left">
-                    <div class="inline-flex items-center gap-2 text-xs font-semibold text-cyan-400 uppercase tracking-wider mb-2">
-                        <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
-                        Prefer to self-host?
-                    </div>
-                    <h3 class="text-lg md:text-xl font-bold text-white mb-1">Free OpenClaw Hardware Guide 2026</h3>
-                    <p class="text-sm text-gray-400">Server specs, hosting costs, and setup requirements for running your own AI agent. <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-cyan-400 hover:text-cyan-300 font-semibold">OpenClaw is open source</a> &middot; <a href="mailto:hello@automatyn.co" class="text-cyan-400 hover:text-cyan-300">need setup help?</a></p>
-                </div>
-                <form id="hardware-guide-form" class="flex flex-col sm:flex-row gap-3">
-                    <input id="guide-email" type="email" placeholder="Your email" required class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500/50" autocomplete="email">
-                    <button type="submit" class="cta-primary text-white px-6 py-3 rounded-xl font-semibold text-sm whitespace-nowrap hover:opacity-90 transition">Get Free Guide</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <!-- Try the AI Demo — Email-Gated -->
     <section id="try-demo" class="py-16 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-purple-950/10 to-transparent pointer-events-none"></div>
@@ -920,6 +900,21 @@
                     See full pricing details, FAQ &amp; refund policy
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
+            </div>
+
+            <!-- Self-hosted option: Build Your Own + Hardware Guide -->
+            <div class="mt-12 bg-gradient-to-r from-purple-950/20 to-purple-900/10 rounded-2xl p-8 border border-white/6">
+                <div class="flex flex-col md:flex-row md:items-start gap-6">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white mb-2">Build Your Own AI Agent on Your Own Machine</h3>
+                        <p class="text-gray-400 mb-4">Prefer full control? <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-purple-400 hover:text-purple-300 font-semibold">OpenClaw is open source</a>. Deploy your own AI agent on your own server. Need help setting it up? <a href="mailto:hello@automatyn.co" class="text-cyan-400 hover:text-cyan-300">Talk to us</a>.</p>
+                        <p class="text-sm text-gray-500">Get our <strong class="text-gray-300">free Hardware Guide 2026</strong> — server specs, hosting costs, and setup requirements. Know exactly what you need before you start.</p>
+                    </div>
+                    <form id="hardware-guide-form" class="flex flex-col gap-3 w-full md:w-auto md:min-w-[260px] shrink-0">
+                        <input id="guide-email" type="email" placeholder="Your email" required class="px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50" autocomplete="email">
+                        <button type="submit" class="cta-primary text-white px-6 py-3 rounded-xl font-semibold text-sm whitespace-nowrap hover:opacity-90 transition">Get Free Guide</button>
+                    </form>
+                </div>
             </div>
 
         </div>
