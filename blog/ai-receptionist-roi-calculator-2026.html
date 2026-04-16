@@ -163,7 +163,7 @@
   <!-- TL;DR -->
   <div class="glass rounded-2xl p-6 mb-10 border-l-4 border-cyan-400">
     <h3 class="text-cyan-400 font-bold mb-2 text-sm uppercase tracking-wider">TL;DR</h3>
-    <p class="text-gray-300">If you run a small business and take WhatsApp inquiries, you're almost certainly losing between <strong>£400 and £4,000 per month</strong> to slow replies. A £29/month AI receptionist recovers 85% of that. Break-even is one lead. Scroll down for the calculator.</p>
+    <p class="text-gray-300">If you run a small business and take WhatsApp inquiries, you're almost certainly losing between <strong>£400 and £4,000 per month</strong> to slow replies. A <span class="geo-price">£29</span>/month AI receptionist recovers 85% of that. Break-even is one lead. Scroll down for the calculator.</p>
   </div>
 
   <div class="prose-custom">
@@ -274,7 +274,7 @@
     <p><strong>For most small businesses: yes, easily.</strong> Here's the break-even logic:</p>
 
     <ul>
-      <li>Automatyn costs £29/month.</li>
+      <li>Automatyn costs <span class="geo-price">£29</span>/month.</li>
       <li>If your average job is £50+, <strong>one recovered lead per month</strong> covers the cost.</li>
       <li>Most businesses recover 5 to 30 leads per month.</li>
       <li>Everything past the first recovered lead is pure margin.</li>
@@ -311,7 +311,7 @@
       <li><code class="text-cyan-400">lost_leads = monthly_leads × (loss_% / 100)</code></li>
       <li><code class="text-cyan-400">lost_revenue = lost_leads × avg_job_value</code></li>
       <li><code class="text-cyan-400">recovered = lost_revenue × 0.85</code></li>
-      <li><code class="text-cyan-400">roi_multiple = recovered / 29</code></li>
+      <li><code class="text-cyan-400">roi_multiple = recovered / starter_price</code></li>
     </ul>
 
     <p>No hidden fudge factors. If you disagree with the 85% recovery rate, move the loss slider lower and you'll get a more conservative number.</p>
@@ -321,7 +321,7 @@
     <p>Two options, in plain English:</p>
 
     <ol class="text-gray-300 space-y-2 ml-6 list-decimal my-4">
-      <li><strong>If the calculator says you're losing more than £200/month</strong> — the AI receptionist is a no-brainer. £29/month to recover 5 to 10× that.</li>
+      <li><strong>If the calculator says you're losing more than £200/month</strong> — the AI receptionist is a no-brainer. <span class="geo-price">£29</span>/month to recover 5 to 10x that.</li>
       <li><strong>If the calculator says you're losing less than £100/month</strong> — you probably don't need this yet. Wait until inquiry volume grows.</li>
     </ol>
 
@@ -332,7 +332,7 @@
   <!-- CTA -->
   <div class="mt-16 p-8 rounded-2xl border border-cyan-900/40 bg-gradient-to-br from-cyan-950/30 to-black text-center">
     <h2 class="text-2xl font-bold mb-2" style="margin-top:0;">Ready to stop losing leads?</h2>
-    <p class="text-gray-400 mb-5 max-w-xl mx-auto">Automatyn replies to every WhatsApp message in under 2 seconds, 24/7, with your real prices and availability. Free tier: 50 conversations/month.</p>
+    <p class="text-gray-400 mb-5 max-w-xl mx-auto">Automatyn replies to every WhatsApp message in under 2 seconds, 24/7, with your real prices and availability. Free tier: 25 conversations/month.</p>
     <a href="/signup.html" class="btn-cta px-6 py-3 rounded-xl font-bold inline-block">Start free — no credit card</a>
     <p class="text-xs text-gray-600 mt-4">Or <a href="/tools/ai-receptionist-roi-calculator.html" class="text-cyan-400 hover:underline">see the full calculator with 6 inputs</a></p>
   </div>
@@ -364,31 +364,57 @@
 
 <script>
 (function(){
-  const leads = document.getElementById('blogLeads');
-  const value = document.getElementById('blogValue');
-  const loss = document.getElementById('blogLoss');
-  const leadsVal = document.getElementById('blogLeadsVal');
-  const valueVal = document.getElementById('blogValueVal');
-  const lossVal = document.getElementById('blogLossVal');
-  const lostRev = document.getElementById('blogLostRev');
-  const recovered = document.getElementById('blogRecovered');
-  const multiple = document.getElementById('blogMultiple');
-  const payback = document.getElementById('blogPayback');
+  var geoData = { sym: '£', starterNum: 29, starter: '£29' };
+  var prices = {
+    US: { sym: '$', starterNum: 39, starter: '$39' },
+    GB: { sym: '£', starterNum: 29, starter: '£29' },
+    EU: { sym: '€', starterNum: 35, starter: '€35' },
+    AU: { sym: 'A$', starterNum: 59, starter: 'A$59' },
+    NZ: { sym: 'NZ$', starterNum: 65, starter: 'NZ$65' },
+    CA: { sym: 'C$', starterNum: 49, starter: 'C$49' },
+  };
+  var euCountries = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
 
-  function fmt(n){ return '£' + Math.round(n).toLocaleString(); }
+  function applyGeo(g) {
+    geoData = g;
+    document.querySelectorAll('.geo-price').forEach(function(el) { el.textContent = g.starter; });
+    calc();
+  }
+
+  fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var cc = d.country_code;
+      var p = prices[cc] || (euCountries.indexOf(cc) !== -1 ? prices.EU : prices.US);
+      applyGeo(p);
+    })
+    .catch(function() {});
+
+  var leads = document.getElementById('blogLeads');
+  var value = document.getElementById('blogValue');
+  var loss = document.getElementById('blogLoss');
+  var leadsVal = document.getElementById('blogLeadsVal');
+  var valueVal = document.getElementById('blogValueVal');
+  var lossVal = document.getElementById('blogLossVal');
+  var lostRev = document.getElementById('blogLostRev');
+  var recovered = document.getElementById('blogRecovered');
+  var multiple = document.getElementById('blogMultiple');
+  var payback = document.getElementById('blogPayback');
+
+  function fmt(n){ return geoData.sym + Math.round(n).toLocaleString(); }
 
   function calc(){
-    const l = parseInt(leads.value, 10);
-    const v = parseInt(value.value, 10);
-    const ls = parseInt(loss.value, 10);
+    var l = parseInt(leads.value, 10);
+    var v = parseInt(value.value, 10);
+    var ls = parseInt(loss.value, 10);
     leadsVal.textContent = l;
-    valueVal.textContent = '£' + v;
+    valueVal.textContent = geoData.sym + v;
     lossVal.textContent = ls + '%';
-    const monthlyLeads = l * 4.33;
-    const lostLeads = monthlyLeads * (ls/100);
-    const lostRevenue = lostLeads * v;
-    const rec = lostRevenue * 0.85;
-    const mult = rec / 29;
+    var monthlyLeads = l * 4.33;
+    var lostLeads = monthlyLeads * (ls/100);
+    var lostRevenue = lostLeads * v;
+    var rec = lostRevenue * 0.85;
+    var mult = rec / geoData.starterNum;
     lostRev.textContent = fmt(lostRevenue);
     recovered.textContent = fmt(rec);
     multiple.textContent = Math.round(mult) + 'x';
@@ -397,12 +423,12 @@
     } else if (mult >= 10) {
       payback.innerHTML = 'Pays for itself in the <strong class="text-white">first week</strong>. Rest of the month is profit.';
     } else if (mult >= 2) {
-      payback.innerHTML = 'Still a clear win — <strong class="text-white">' + Math.round(mult) + 'x</strong> return on the £29/month subscription.';
+      payback.innerHTML = 'Still a clear win — <strong class="text-white">' + Math.round(mult) + 'x</strong> return on the ' + geoData.starter + '/month subscription.';
     } else {
       payback.innerHTML = 'At this scale, you may want to wait until inquiry volume grows.';
     }
   }
-  [leads, value, loss].forEach(el => el.addEventListener('input', calc));
+  [leads, value, loss].forEach(function(el) { el.addEventListener('input', calc); });
   calc();
 })();
 </script>
