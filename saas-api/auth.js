@@ -113,7 +113,7 @@ function sendEmail({ to, subject, htmlContent }) {
   return new Promise((resolve, reject) => {
     const body = JSON.stringify({
       sender: { name: 'Automatyn', email: 'noreply@automatyn.co' },
-      replyTo: { email: 'hello@automatyn.co' },
+      replyTo: { email: 'support@automatyn.co' },
       to: [{ email: to }],
       subject,
       htmlContent,

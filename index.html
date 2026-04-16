@@ -25,6 +25,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
     <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
@@ -902,18 +904,20 @@
                 </a>
             </div>
 
-            <!-- Self-hosted option: Build Your Own + Hardware Guide -->
+            <!-- Self-hosted option: Build Your Own + Done-For-You setup -->
             <div class="mt-12 bg-gradient-to-r from-purple-950/20 to-purple-900/10 rounded-2xl p-8 border border-white/6">
-                <div class="flex flex-col md:flex-row md:items-start gap-6">
+                <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-white mb-2">Build Your Own AI Agent on Your Own Machine</h3>
-                        <p class="text-gray-400 mb-4">Prefer full control? <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-purple-400 hover:text-purple-300 font-semibold">OpenClaw is open source</a>. Deploy your own AI agent on your own server. Need help setting it up? <a href="mailto:hello@automatyn.co" class="text-cyan-400 hover:text-cyan-300">Talk to us</a>.</p>
-                        <p class="text-sm text-gray-500">Get our <strong class="text-gray-300">free Hardware Guide 2026</strong> — server specs, hosting costs, and setup requirements. Know exactly what you need before you start.</p>
+                        <p class="text-gray-400 mb-3">Prefer full control? <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-purple-400 hover:text-purple-300 font-semibold">OpenClaw is open source</a>. Deploy your own AI agent on your own server — you own everything, no monthly fees.</p>
+                        <p class="text-sm text-gray-400">Don't want to wrestle with the setup? <span class="text-white font-semibold">We'll do it for you — one-time from $400.</span></p>
                     </div>
-                    <form id="hardware-guide-form" class="flex flex-col gap-3 w-full md:w-auto md:min-w-[260px] shrink-0">
-                        <input id="guide-email" type="email" placeholder="Your email" required class="px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50" autocomplete="email">
-                        <button type="submit" class="cta-primary text-white px-6 py-3 rounded-xl font-semibold text-sm whitespace-nowrap hover:opacity-90 transition">Get Free Guide</button>
-                    </form>
+                    <div class="flex flex-col gap-2 w-full md:w-auto shrink-0">
+                        <button id="calendly-btn" type="button" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);">
+                            Book a 30-min call
+                        </button>
+                        <a href="mailto:support@automatyn.co" class="text-center text-xs text-gray-500 hover:text-gray-300 transition">or email us</a>
+                    </div>
                 </div>
             </div>
 
@@ -1352,9 +1356,12 @@
         </div>
     </footer>
 
-    <!-- Hardware Guide Form Handler with Formspree -->
+    <!-- Hardware Guide Form Handler with Formspree (no-op if form not on page) -->
     <script>
-        document.getElementById('hardware-guide-form').addEventListener('submit', function(e) {
+        (function() {
+            var guideForm = document.getElementById('hardware-guide-form');
+            if (!guideForm) return;
+            guideForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('guide-email').value;
             if (email && email.includes('@')) {
@@ -1372,6 +1379,7 @@
                 form.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-glow"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-xl font-bold text-white mb-2">Download Your Guide</h3><p class="text-gray-400 mb-4">We\'ve also sent a copy to ' + email + '</p><a href="https://automatyn.co/openclaw-hardware-guide-2026.pdf" download class="inline-flex items-center gap-2 cta-primary text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Download PDF Guide</a></div>';
             }
         });
+        })();
     </script>
 
     <!-- Demo Email Gate Handler -->

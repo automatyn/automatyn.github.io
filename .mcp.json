@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "npx",
+      "args": ["-y", "n8n-mcp"],
+      "env": {
+        "N8N_API_URL": "http://n8n-zwxfn09hqi8751v1plu6rjvt.35.232.23.45.sslip.io",
+        "N8N_API_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZmM2NWVhMC1iZGUzLTQzNmQtOTNkOC05OWJlNjZlN2Y0MTMiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwianRpIjoiNTJjMTllMmMtZGU5My00NjAxLTllMjktZjk1NWU4Yzg0MDg2IiwiaWF0IjoxNzc1NTE5MjI5fQ.-40M6iUCeVS0gsWIPOuz9_HZNXzfm1Ts-ENZ8sPL-_o",
+        "MCP_MODE": "stdio"
+      }
+    }
+  }
+}
