@@ -176,6 +176,28 @@
               <p class="text-gray-400">After you finish this form, we'll generate your AI receptionist's personality and take you to your dashboard where you can connect WhatsApp.</p>
             </div>
 
+            <!-- WhatsApp usage disclosure -->
+            <div class="bg-amber-950/20 border border-amber-800/40 rounded-xl p-4 sm:p-5">
+              <div class="flex items-start gap-3 mb-3">
+                <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <div class="text-sm">
+                  <p class="font-semibold text-white mb-2">Important: how to use safely</p>
+                  <p class="text-gray-400 leading-relaxed mb-3">Automatyn connects via WhatsApp Web (same as using WhatsApp on a browser). To keep your number safe:</p>
+                  <ul class="space-y-2 text-gray-400 leading-relaxed">
+                    <li class="flex gap-2"><span class="text-emerald-400 flex-shrink-0">✓</span><span>Use it to <strong class="text-white">reply to customer messages</strong> — this is what it's built for</span></li>
+                    <li class="flex gap-2"><span class="text-emerald-400 flex-shrink-0">✓</span><span>Use a <strong class="text-white">business-dedicated number</strong> (not your personal WhatsApp)</span></li>
+                    <li class="flex gap-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Don't send <strong class="text-white">bulk/cold messages</strong> to people who haven't messaged you first</span></li>
+                    <li class="flex gap-2"><span class="text-red-400 flex-shrink-0">✗</span><span>Don't use it for <strong class="text-white">marketing broadcasts</strong> to strangers</span></li>
+                  </ul>
+                  <p class="text-gray-500 text-xs mt-3 leading-relaxed">WhatsApp can restrict numbers that violate their terms. Used properly (reactive customer replies), the risk is low. Used improperly (cold outreach/spam), your number can be banned. You are responsible for how you use it.</p>
+                </div>
+              </div>
+              <label class="flex items-start gap-3 cursor-pointer mt-3 pt-3 border-t border-amber-800/30">
+                <input type="checkbox" id="wa-acknowledge" class="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 accent-cyan-400 flex-shrink-0" />
+                <span class="text-sm text-gray-300">I understand the risks and agree to use Automatyn only for replying to incoming customer messages, not for sending unsolicited outreach.</span>
+              </label>
+            </div>
+
             <div id="error-box" class="hidden text-sm text-red-400 bg-red-950/30 border border-red-900/40 rounded-lg px-3 py-2.5"></div>
           </div>
 
@@ -281,6 +303,14 @@
 
     if (!payload.businessName || !payload.industry || !payload.services || !payload.hours) {
       errBox.textContent = 'Please complete all required fields.'; errBox.classList.remove('hidden'); return;
+    }
+
+    const ack = document.getElementById('wa-acknowledge');
+    if (!ack || !ack.checked) {
+      errBox.textContent = 'Please acknowledge the WhatsApp usage guidelines to continue.';
+      errBox.classList.remove('hidden');
+      ack && ack.focus();
+      return;
     }
 
     submitBtn.disabled = true;

@@ -38,8 +38,22 @@ function renderTemplate(template, data) {
   return result;
 }
 
+function getWorkflowArchetype(industry) {
+  const key = (industry || '').toLowerCase();
+
+  const quoteIndustries = ['plumb', 'electric', 'auto', 'mechanic', 'hvac', 'roof', 'locksmith', 'handyman', 'pest', 'landscap', 'clean', 'moving', 'car wash'];
+  const consultationIndustries = ['legal', 'account', 'lawyer', 'real estate', 'photograph', 'event', 'cater', 'wedding', 'insurance', 'tattoo', 'architect'];
+  const reservationIndustries = ['restaurant', 'café', 'cafe', 'bakery'];
+
+  if (quoteIndustries.some(q => key.includes(q))) return 'quote';
+  if (consultationIndustries.some(q => key.includes(q))) return 'consultation';
+  if (reservationIndustries.some(q => key.includes(q))) return 'reservation';
+  return 'booking'; // default: appointment-based (salon, barber, dentist, PT, tutor, etc.)
+}
+
 function generateSoulMd(agentData) {
   const template = fs.readFileSync(TEMPLATE_PATH, 'utf-8');
+  const archetype = getWorkflowArchetype(agentData.industry);
   return renderTemplate(template, {
     businessName: agentData.businessName,
     industry: agentData.industry,
@@ -49,6 +63,10 @@ function generateSoulMd(agentData) {
     hours: agentData.hours,
     policies: agentData.policies || '',
     isFreeTier: agentData.plan === 'free' ? 'true' : '',
+    isBooking: archetype === 'booking' ? 'true' : '',
+    isQuote: archetype === 'quote' ? 'true' : '',
+    isConsultation: archetype === 'consultation' ? 'true' : '',
+    isReservation: archetype === 'reservation' ? 'true' : '',
   });
 }
 
@@ -129,6 +147,16 @@ function registerAgentInConfig(agentId, businessName, industry, workspaceDir, ag
       agentDir: agentDir,
       model: 'google/gemini-2.5-flash',
       identity: { name: businessName, emoji },
+      // WhatsApp ban-prevention safety settings (per-agent lock-in).
+      // These override any global defaults and ensure every Automatyn agent
+      // ships with human-like reply timing + typing indicators.
+      humanDelay: {
+        mode: 'natural',
+        minMs: 1500,
+        maxMs: 4000,
+      },
+      typingMode: 'message',
+      typingIntervalSeconds: 3,
     });
     config.meta.lastTouchedAt = new Date().toISOString();
     fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));

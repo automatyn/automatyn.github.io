@@ -702,6 +702,18 @@
                             </div>
                         </div>
 
+                        <!-- Pre-QR safety reminder (ban prevention) -->
+                        <div style="background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02)); border: 1px solid rgba(245,158,11,0.3); border-radius: 0.875rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+                            <div class="flex items-start gap-3">
+                                <svg style="width:20px;height:20px;color:#fbbf24;flex-shrink:0;margin-top:2px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                <div class="text-sm" style="color: #e4e4e7; line-height: 1.55;">
+                                    <p style="font-weight: 700; color: #fff; margin-bottom: 6px;">Before you scan — use this safely</p>
+                                    <p style="color: #a1a1aa; margin-bottom: 8px;">Automatyn is designed as a <strong style="color:#fff;">receptionist</strong>: customer-facing, answering messages, taking bookings, capturing leads — all receptionist tasks.</p>
+                                    <p style="color: #a1a1aa; margin-bottom: 0;">It is <strong style="color:#fca5a5;">not</strong> designed to send out cold marketing outreach. Doing so will result in your WhatsApp number being banned.</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="qr-container" class="flex flex-col md:flex-row gap-8 items-center">
                             <div class="qr-placeholder" id="qr-placeholder">
                                 <div class="text-center relative z-10">
@@ -876,7 +888,7 @@
                         <div class="usage-bar-bg mb-3">
                             <div class="usage-bar" id="usage-bar" style="width: 0%"></div>
                         </div>
-                        <p class="text-zinc-500 text-xs" id="plan-detail">50 conversations/month</p>
+                        <p class="text-zinc-500 text-xs" id="plan-detail">25 conversations/month</p>
                     </div>
                 </section>
 
@@ -896,7 +908,7 @@
                                     <span id="plan-name-billing" class="text-2xl font-bold" style="font-family: 'Cabinet Grotesk', sans-serif;">Free</span>
                                     <span class="plan-badge" id="plan-badge-billing">Active</span>
                                 </div>
-                                <p class="text-zinc-400 text-sm mt-1" id="plan-detail-billing">50 conversations/month</p>
+                                <p class="text-zinc-400 text-sm mt-1" id="plan-detail-billing">25 conversations/month</p>
                             </div>
                         </div>
                     </div>
@@ -913,7 +925,7 @@
                                         <div class="text-2xl font-bold mt-1" style="font-family: 'Cabinet Grotesk', sans-serif;">$39<span class="text-sm font-normal text-zinc-500">/mo</span></div>
                                     </div>
                                 </div>
-                                <p class="text-sm text-zinc-400 mb-4">500 conversations per month. For growing businesses.</p>
+                                <p class="text-sm text-zinc-400 mb-4">150 conversations per month. For growing businesses.</p>
                                 <button onclick="openCheckout('starter')" class="upgrade-pill starter w-full">Upgrade to Starter</button>
                             </div>
 
@@ -1175,9 +1187,9 @@
 
                 // Plan info (used in usage + billing sections)
                 const planNames = { free: 'Free', starter: 'Starter', pro: 'Pro' };
-                const planDetails = { free: '50 conversations/month', starter: '500 conversations/month', pro: 'Unlimited conversations' };
+                const planDetails = { free: '25 conversations/month', starter: '150 conversations/month', pro: 'Unlimited conversations' };
                 const planLabel = planNames[status.plan] || 'Free';
-                const planDesc = planDetails[status.plan] || '50 conversations/month';
+                const planDesc = planDetails[status.plan] || '25 conversations/month';
 
                 document.getElementById('plan-name').textContent = planLabel;
                 document.getElementById('plan-detail').textContent = planDesc;
@@ -1200,23 +1212,44 @@
 
         async function loadQR() {
             try {
-                const res = await fetch(API_URL + '/api/agent/' + agentId + '/qr', {
+                const res = await fetch(API_URL + '/api/agent/' + agentId + '/whatsapp/qr', {
                     headers: { 'Authorization': 'Bearer ' + token },
                 });
 
-                if (res.headers.get('content-type')?.includes('image')) {
-                    const blob = await res.blob();
-                    const url = URL.createObjectURL(blob);
-                    const placeholder = document.getElementById('qr-placeholder');
-                    placeholder.innerHTML = '<img src="' + url + '" alt="WhatsApp QR Code" style="width:240px;height:240px;border-radius:0.5rem;position:relative;z-index:10;">';
+                const data = await res.json();
+                const placeholder = document.getElementById('qr-placeholder');
+                if (data.qrDataUrl) {
+                    placeholder.innerHTML = '<img src="' + data.qrDataUrl + '" alt="WhatsApp QR Code" style="width:240px;height:240px;border-radius:0.5rem;position:relative;z-index:10;">';
+                    // Poll for connection after QR is shown
+                    pollWhatsAppConnection();
                 } else {
-                    const data = await res.json();
-                    const placeholder = document.getElementById('qr-placeholder');
-                    placeholder.innerHTML = '<div class="text-center relative z-10"><div class="text-4xl mb-3">⏳</div><p class="text-zinc-500 text-sm">' + (data.message || 'QR code will appear here shortly.') + '</p></div>';
+                    placeholder.innerHTML = '<div class="text-center relative z-10"><div class="text-4xl mb-3">⏳</div><p class="text-zinc-500 text-sm">' + (data.message || data.error || 'QR code will appear here shortly.') + '</p></div>';
                 }
             } catch (err) {
                 console.error('QR load failed:', err);
             }
+        }
+
+        function pollWhatsAppConnection() {
+            var attempts = 0;
+            var maxAttempts = 30; // 30 x 3s = 90 seconds
+            var pollInterval = setInterval(async function() {
+                attempts++;
+                if (attempts > maxAttempts) { clearInterval(pollInterval); return; }
+                try {
+                    var res = await fetch(API_URL + '/api/agent/' + agentId + '/whatsapp/status', {
+                        headers: { 'Authorization': 'Bearer ' + token },
+                    });
+                    if (!res.ok) return;
+                    var data = await res.json();
+                    if (data.connected) {
+                        clearInterval(pollInterval);
+                        var placeholder = document.getElementById('qr-placeholder');
+                        placeholder.innerHTML = '<div class="text-center relative z-10"><div class="text-4xl mb-3">✅</div><p class="text-white font-semibold">WhatsApp connected!</p><p class="text-zinc-400 text-sm mt-1">Your AI receptionist is now live.</p></div>';
+                        loadStatus(); // Refresh all status indicators
+                    }
+                } catch (e) {}
+            }, 3000);
         }
 
         function showSection(name, evt) {

@@ -806,12 +806,12 @@ app.get('/api/agent/:id/status', auth, (req, res) => {
     return res.status(404).json({ error: 'Agent not found' });
   }
 
-  const limits = { free: 50, starter: 500, pro: -1 };
+  const limits = { free: 25, starter: 150, pro: -1 };
   res.json({
     connected: agent.whatsappConnected || false,
     plan: agent.plan,
     conversationCount: agent.conversationCount || 0,
-    conversationLimit: limits[agent.plan] || 50,
+    conversationLimit: limits[agent.plan] || 25,
     resetDate: agent.conversationResetDate,
   });
 });
