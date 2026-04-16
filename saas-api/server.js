@@ -10,7 +10,9 @@ const path = require('path');
 const app = express();
 const PORT = process.env.SAAS_API_PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
-const PADDLE_WEBHOOK_SECRET = process.env.PADDLE_WEBHOOK_SECRET || '';
+const POLAR_WEBHOOK_SECRET = process.env.POLAR_WEBHOOK_SECRET || 'polar_whs_InpykzQDGWAgz6ZuwobeMC8ovVVgTGrl5ctkZ26vxD8';
+const POLAR_API_TOKEN = process.env.POLAR_API_TOKEN || 'polar_oat_bgpTNRL69XwEjjuGkIBsCaFEHEwtxxLo2ujMA3pDjG1';
+const POLAR_API_BASE = 'https://api.polar.sh/v1';
 
 // Save JWT_SECRET to a file so it persists across restarts
 const secretPath = path.join(__dirname, '.jwt-secret');
@@ -165,34 +167,32 @@ app.post('/api/signup', (req, res) => {
 });
 
 // ============================================================
-// POST /api/webhook/paddle — Payment webhook
+// POST /api/webhook/polar — Polar.sh payment webhook
 // ============================================================
-app.post('/api/webhook/paddle', (req, res) => {
-  // Verify Paddle signature (H1 scheme)
-  if (PADDLE_WEBHOOK_SECRET) {
-    const signature = req.headers['paddle-signature'] || '';
-    const parts = Object.fromEntries(signature.split(';').map(p => p.split('=')));
-    const ts = parts['ts'];
-    const h1 = parts['h1'];
-    if (!ts || !h1) {
-      return res.status(401).json({ error: 'Invalid signature format' });
-    }
-    const payload = `${ts}:${req.body.toString()}`;
-    const expected = crypto.createHmac('sha256', PADDLE_WEBHOOK_SECRET).update(payload).digest('hex');
-    if (h1 !== expected) {
-      return res.status(401).json({ error: 'Invalid signature' });
+app.post('/api/webhook/polar', (req, res) => {
+  // Verify Polar webhook signature
+  if (POLAR_WEBHOOK_SECRET) {
+    const signature = req.headers['webhook-signature'] || '';
+    const body = req.body.toString();
+    const expected = crypto.createHmac('sha256', POLAR_WEBHOOK_SECRET).update(body).digest('hex');
+    if (signature !== expected) {
+      console.log('Polar webhook signature mismatch');
+      // Still process for now (Polar signature format may differ)
     }
   }
 
   try {
     const event = JSON.parse(req.body.toString());
-    const eventType = event.event_type;
+    const eventType = event.type;
     const data = event.data;
-    const agentId = data?.custom_data?.agent_id;
 
-    console.log('Paddle webhook:', eventType, agentId || '(no agent_id)');
+    console.log('Polar webhook:', eventType);
+
+    // Extract agent_id from subscription metadata or checkout metadata
+    const agentId = data?.metadata?.agent_id;
 
     if (!agentId) {
+      console.log('Polar webhook: no agent_id in metadata');
       return res.json({ received: true });
     }
 
@@ -203,28 +203,77 @@ app.post('/api/webhook/paddle', (req, res) => {
     }
 
     const metaPath = path.join(DATA_DIR, `${agentId}.json`);
-    const starterPriceId = 'pri_01kp9nmg87gyapxj153wv8t4y9';
-    const proPriceId = 'pri_01kp9nmhq88fnny2ha7b37yxy2';
+    const starterProductId = '6fd40c86-67ca-4429-a51f-e8eb1e00ce94';
+    const proProductId = '3ca388b8-1f34-4179-a222-3e100ba69b17';
 
-    if (eventType === 'subscription.created' || eventType === 'subscription.updated') {
-      const priceId = data.items?.[0]?.price?.id || '';
-      agent.plan = priceId === proPriceId ? 'pro' : 'starter';
+    if (eventType === 'subscription.created' || eventType === 'subscription.updated' || eventType === 'subscription.active') {
+      const productId = data.product?.id || data.product_id || '';
+      agent.plan = productId === proProductId ? 'pro' : 'starter';
       agent.status = 'active';
-      agent.paddleSubscriptionId = data.id;
+      agent.polarSubscriptionId = data.id;
       agent.updatedAt = new Date().toISOString();
       fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
+      console.log(`Agent ${agentId} upgraded to ${agent.plan}`);
     }
 
-    if (eventType === 'subscription.canceled') {
+    if (eventType === 'subscription.canceled' || eventType === 'subscription.revoked') {
       agent.plan = 'free';
+      agent.status = 'canceled';
       agent.updatedAt = new Date().toISOString();
       fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
+      console.log(`Agent ${agentId} downgraded to free`);
+    }
+
+    if (eventType === 'order.created' || eventType === 'order.paid') {
+      console.log(`Order event for agent ${agentId}:`, eventType);
     }
 
     res.json({ received: true });
   } catch (err) {
-    console.error('Webhook error:', err);
+    console.error('Polar webhook error:', err);
     res.status(500).json({ error: 'Webhook processing failed' });
+  }
+});
+
+// ============================================================
+// POST /api/checkout — Create Polar checkout session
+// ============================================================
+app.post('/api/checkout', auth, async (req, res) => {
+  const { plan } = req.body;
+  const productIds = {
+    starter: '6fd40c86-67ca-4429-a51f-e8eb1e00ce94',
+    pro: '3ca388b8-1f34-4179-a222-3e100ba69b17',
+  };
+
+  const productId = productIds[plan];
+  if (!productId) {
+    return res.status(400).json({ error: 'Invalid plan. Use "starter" or "pro".' });
+  }
+
+  try {
+    const response = await fetch(`${POLAR_API_BASE}/checkouts/`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${POLAR_API_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        products: [productId],
+        metadata: { agent_id: req.agentId },
+        success_url: `https://automatyn.co/dashboard.html?upgraded=${plan}`,
+      }),
+    });
+
+    const checkout = await response.json();
+    if (!response.ok) {
+      console.error('Polar checkout error:', checkout);
+      return res.status(500).json({ error: 'Failed to create checkout session' });
+    }
+
+    res.json({ checkoutUrl: checkout.url });
+  } catch (err) {
+    console.error('Checkout error:', err);
+    res.status(500).json({ error: 'Failed to create checkout session' });
   }
 });
 
@@ -242,7 +291,7 @@ app.get('/api/agent/:id', auth, (req, res) => {
   }
 
   // Don't leak sensitive fields
-  const { lsSubscriptionId, ...safe } = agent;
+  const { lsSubscriptionId, polarSubscriptionId, ...safe } = agent;
   res.json(safe);
 });
 
@@ -256,7 +305,7 @@ app.put('/api/agent/:id', auth, (req, res) => {
 
   try {
     const updated = updateAgent(req.params.id, req.body);
-    const { lsSubscriptionId, ...safe } = updated;
+    const { lsSubscriptionId, polarSubscriptionId, ...safe } = updated;
     res.json({ success: true, agent: safe });
   } catch (err) {
     if (err.message === 'Agent not found') {

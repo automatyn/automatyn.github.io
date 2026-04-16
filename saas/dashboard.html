@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <!-- Polar.sh checkout via API -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
 
@@ -218,21 +218,31 @@
         const API_URL = 'https://api.automatyn.co';
         // const API_URL = 'http://localhost:3001';
 
-        const PADDLE_PRICES = {
-            starter: 'pri_01kp9nmg87gyapxj153wv8t4y9',
-            pro: 'pri_01kp9nmhq88fnny2ha7b37yxy2',
-        };
-
         let token = null;
         let agentId = null;
         let agentData = null;
 
-        function openCheckout(plan) {
-            if (!agentData) return;
-            const priceId = PADDLE_PRICES[plan];
-            // Paddle checkout link format
-            const url = `https://checkout.paddle.com/checkout/custom-checkout?items[0][price_id]=${priceId}&items[0][quantity]=1&customer[email]=${encodeURIComponent(agentData.email)}&custom_data[agent_id]=${encodeURIComponent(agentId)}`;
-            window.open(url, '_blank');
+        async function openCheckout(plan) {
+            if (!agentData || !token) return;
+            try {
+                const res = await fetch(`${API_URL}/api/checkout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ plan }),
+                });
+                const data = await res.json();
+                if (data.checkoutUrl) {
+                    window.open(data.checkoutUrl, '_blank');
+                } else {
+                    alert('Failed to start checkout. Please try again.');
+                }
+            } catch (err) {
+                console.error('Checkout error:', err);
+                alert('Failed to start checkout. Please try again.');
+            }
         }
 
         // Get auth from URL params or localStorage
