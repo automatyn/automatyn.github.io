@@ -18,7 +18,7 @@
     <style>
       html { -webkit-text-size-adjust: 100%; }
       body { font-family:'DM Sans', sans-serif; background:#030303; color:#f5f5f5; -webkit-font-smoothing:antialiased; min-height:100vh; }
-      .heading { font-family:'Cabinet Grotesk', sans-serif; letter-spacing:-0.04em; }
+      .heading { font-family:'Cabinet Grotesk', 'Sora', sans-serif; letter-spacing:-0.025em; }
       .urgency-banner { background:#0f0f0f; border-bottom:1px solid rgba(34,211,238,0.15); }
 
       .bg-ambient { position:relative; overflow:hidden; }
@@ -91,13 +91,13 @@
         <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
         <span id="plan-label"></span>
       </div>
-      <h1 class="heading text-3xl sm:text-4xl font-extrabold mb-2">Create your account</h1>
-      <p class="text-sm sm:text-base text-gray-400 mb-7">Free plan. No credit card. Set up in 10 minutes.</p>
+      <h1 class="heading text-2xl sm:text-3xl font-extrabold mb-2">Create your account</h1>
+      <p class="text-sm text-gray-400 mb-7">Free plan. No credit card. Set up in 10 minutes.</p>
 
       <form id="signup-form" class="space-y-5" novalidate>
         <div>
-          <label class="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider" for="email">Work email</label>
-          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@business.com" inputmode="email" />
+          <label class="block text-xs font-semibold text-gray-400 mb-2 uppercase tracking-wider" for="email">Email address</label>
+          <input class="field" id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" inputmode="email" />
         </div>
 
         <div>
@@ -133,7 +133,7 @@
       <div class="bounce-in w-16 h-16 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto mb-5">
         <svg class="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 6h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2z"/></svg>
       </div>
-      <h2 class="heading text-2xl sm:text-3xl font-extrabold mb-3">Check your email</h2>
+      <h2 class="heading text-xl sm:text-2xl font-extrabold mb-3">Check your email</h2>
       <p class="text-gray-400 text-sm sm:text-base mb-6 leading-relaxed">
         We've sent a verification link to<br>
         <strong id="sent-email" class="text-white"></strong>
