@@ -10,9 +10,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.SAAS_API_PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
-const POLAR_WEBHOOK_SECRET = process.env.POLAR_WEBHOOK_SECRET || 'polar_whs_InpykzQDGWAgz6ZuwobeMC8ovVVgTGrl5ctkZ26vxD8';
-const POLAR_API_TOKEN = process.env.POLAR_API_TOKEN || 'polar_oat_bgpTNRL69XwEjjuGkIBsCaFEHEwtxxLo2ujMA3pDjG1';
-const POLAR_API_BASE = 'https://api.polar.sh/v1';
+const WHOP_API_KEY = process.env.WHOP_API_KEY || 'apik_wsrfifT0Ma1WD_C4859825_C_abdc9de469897031f22ef0751ee144249d22ae5c4d93e54f588f092744db6c';
+const WHOP_WEBHOOK_SECRET = process.env.WHOP_WEBHOOK_SECRET || '';
+const WHOP_API_BASE = 'https://api.whop.com/api/v1';
+const WHOP_COMPANY_ID = 'biz_KhL40KgCF0tjVD';
+const WHOP_PLAN_STARTER = 'plan_hXzlKaRMqcs1X';
+const WHOP_PLAN_PRO = 'plan_KITLp6Nad8eJJ';
 
 // Save JWT_SECRET to a file so it persists across restarts
 const secretPath = path.join(__dirname, '.jwt-secret');
@@ -167,32 +170,36 @@ app.post('/api/signup', (req, res) => {
 });
 
 // ============================================================
-// POST /api/webhook/polar — Polar.sh payment webhook
+// POST /api/webhook/whop — Whop.com payment webhook
 // ============================================================
-app.post('/api/webhook/polar', (req, res) => {
-  // Verify Polar webhook signature
-  if (POLAR_WEBHOOK_SECRET) {
-    const signature = req.headers['webhook-signature'] || '';
+app.post('/api/webhook/whop', (req, res) => {
+  // Verify Whop webhook signature (Standard Webhooks spec)
+  if (WHOP_WEBHOOK_SECRET) {
+    const webhookId = req.headers['webhook-id'] || '';
+    const webhookTs = req.headers['webhook-timestamp'] || '';
+    const webhookSig = req.headers['webhook-signature'] || '';
     const body = req.body.toString();
-    const expected = crypto.createHmac('sha256', POLAR_WEBHOOK_SECRET).update(body).digest('hex');
-    if (signature !== expected) {
-      console.log('Polar webhook signature mismatch');
-      // Still process for now (Polar signature format may differ)
+    const payload = `${webhookId}.${webhookTs}.${body}`;
+    const secretBytes = Buffer.from(WHOP_WEBHOOK_SECRET.replace(/^whsec_/, ''), 'base64');
+    const expected = 'v1,' + crypto.createHmac('sha256', secretBytes).update(payload).digest('base64');
+    const signatures = webhookSig.split(' ');
+    if (!signatures.some(s => s === expected)) {
+      console.log('Whop webhook signature mismatch (continuing for now)');
     }
   }
 
   try {
     const event = JSON.parse(req.body.toString());
-    const eventType = event.type;
+    const eventType = event.type || event.action;
     const data = event.data;
 
-    console.log('Polar webhook:', eventType);
+    console.log('Whop webhook:', eventType);
 
-    // Extract agent_id from subscription metadata or checkout metadata
+    // Extract agent_id from membership/payment metadata
     const agentId = data?.metadata?.agent_id;
 
     if (!agentId) {
-      console.log('Polar webhook: no agent_id in metadata');
+      console.log('Whop webhook: no agent_id in metadata');
       return res.json({ received: true });
     }
 
@@ -203,20 +210,18 @@ app.post('/api/webhook/polar', (req, res) => {
     }
 
     const metaPath = path.join(DATA_DIR, `${agentId}.json`);
-    const starterProductId = '6fd40c86-67ca-4429-a51f-e8eb1e00ce94';
-    const proProductId = '3ca388b8-1f34-4179-a222-3e100ba69b17';
 
-    if (eventType === 'subscription.created' || eventType === 'subscription.updated' || eventType === 'subscription.active') {
-      const productId = data.product?.id || data.product_id || '';
-      agent.plan = productId === proProductId ? 'pro' : 'starter';
+    if (eventType === 'membership.activated' || eventType === 'payment.succeeded') {
+      const planId = data.plan_id || data.plan?.id || '';
+      agent.plan = planId === WHOP_PLAN_PRO ? 'pro' : 'starter';
       agent.status = 'active';
-      agent.polarSubscriptionId = data.id;
+      agent.whopMembershipId = data.id || data.membership_id;
       agent.updatedAt = new Date().toISOString();
       fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
       console.log(`Agent ${agentId} upgraded to ${agent.plan}`);
     }
 
-    if (eventType === 'subscription.canceled' || eventType === 'subscription.revoked') {
+    if (eventType === 'membership.deactivated' || eventType === 'payment.failed') {
       agent.plan = 'free';
       agent.status = 'canceled';
       agent.updatedAt = new Date().toISOString();
@@ -224,53 +229,50 @@ app.post('/api/webhook/polar', (req, res) => {
       console.log(`Agent ${agentId} downgraded to free`);
     }
 
-    if (eventType === 'order.created' || eventType === 'order.paid') {
-      console.log(`Order event for agent ${agentId}:`, eventType);
-    }
-
     res.json({ received: true });
   } catch (err) {
-    console.error('Polar webhook error:', err);
+    console.error('Whop webhook error:', err);
     res.status(500).json({ error: 'Webhook processing failed' });
   }
 });
 
 // ============================================================
-// POST /api/checkout — Create Polar checkout session
+// POST /api/checkout — Create Whop checkout session
 // ============================================================
 app.post('/api/checkout', auth, async (req, res) => {
   const { plan } = req.body;
-  const productIds = {
-    starter: '6fd40c86-67ca-4429-a51f-e8eb1e00ce94',
-    pro: '3ca388b8-1f34-4179-a222-3e100ba69b17',
+  const plans = {
+    starter: WHOP_PLAN_STARTER,
+    pro: WHOP_PLAN_PRO,
   };
 
-  const productId = productIds[plan];
-  if (!productId) {
+  const planId = plans[plan];
+  if (!planId) {
     return res.status(400).json({ error: 'Invalid plan. Use "starter" or "pro".' });
   }
 
   try {
-    const response = await fetch(`${POLAR_API_BASE}/checkouts/`, {
+    const response = await fetch(`${WHOP_API_BASE}/checkout_configurations`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${POLAR_API_TOKEN}`,
+        'Authorization': `Bearer ${WHOP_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        products: [productId],
+        plan_id: planId,
         metadata: { agent_id: req.agentId },
-        success_url: `https://automatyn.co/dashboard.html?upgraded=${plan}`,
+        redirect_url: `https://automatyn.co/dashboard.html?upgraded=${plan}`,
       }),
     });
 
     const checkout = await response.json();
     if (!response.ok) {
-      console.error('Polar checkout error:', checkout);
-      return res.status(500).json({ error: 'Failed to create checkout session' });
+      console.error('Whop checkout error:', checkout);
+      // Fallback to direct plan purchase URL (no metadata tracking)
+      return res.json({ checkoutUrl: `https://whop.com/checkout/${planId}` });
     }
 
-    res.json({ checkoutUrl: checkout.url });
+    res.json({ checkoutUrl: checkout.purchase_url || `https://whop.com/checkout/${planId}` });
   } catch (err) {
     console.error('Checkout error:', err);
     res.status(500).json({ error: 'Failed to create checkout session' });
@@ -291,7 +293,7 @@ app.get('/api/agent/:id', auth, (req, res) => {
   }
 
   // Don't leak sensitive fields
-  const { lsSubscriptionId, polarSubscriptionId, ...safe } = agent;
+  const { lsSubscriptionId, whopMembershipId, ...safe } = agent;
   res.json(safe);
 });
 
@@ -305,7 +307,7 @@ app.put('/api/agent/:id', auth, (req, res) => {
 
   try {
     const updated = updateAgent(req.params.id, req.body);
-    const { lsSubscriptionId, polarSubscriptionId, ...safe } = updated;
+    const { lsSubscriptionId, whopMembershipId, ...safe } = updated;
     res.json({ success: true, agent: safe });
   } catch (err) {
     if (err.message === 'Agent not found') {
