@@ -142,7 +142,41 @@
             border-radius: 0.6rem;
             background: rgba(255,255,255,0.02);
             border: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            transition: background 0.15s;
         }
+        .biz-pill:hover { background: rgba(255,255,255,0.05); }
+        .biz-menu {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #141414;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            z-index: 50;
+            box-shadow: 0 -8px 24px rgba(0,0,0,0.5);
+        }
+        .biz-menu.open { display: block; }
+        .biz-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            font-size: 0.8rem;
+            color: #a1a1aa;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.1s, color 0.1s;
+        }
+        .biz-menu-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .biz-menu-item.danger:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
         .biz-avatar {
             width: 28px;
             height: 28px;
@@ -201,6 +235,7 @@
             }
             .sidebar-nav::-webkit-scrollbar { display: none; }
             .sidebar-footer { display: none; }
+            #mobile-status-strip { display: flex !important; }
             .nav-section { display: none; }
             .nav-item { white-space: nowrap; flex-shrink: 0; padding: 0.55rem 0.9rem; }
             .nav-item svg { width: 16px; height: 16px; }
@@ -438,6 +473,7 @@
             0%,100% { opacity: 1; }
             50% { opacity: 0.5; }
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* Usage bar */
         .usage-bar-bg {
@@ -506,28 +542,33 @@
             color: #22d3ee;
         }
 
-        /* Upgrade pills */
-        .upgrade-pill {
-            padding: 0.55rem 1.1rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 0.8rem;
+        /* Upgrade buttons — consistent with cta-button */
+        .upgrade-btn {
+            background: linear-gradient(180deg, #85e6b5 0%, #5dd492 100%);
+            color: #0a0a0a;
+            padding: 0.7rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             border: none;
             font-family: 'DM Sans', sans-serif;
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.2) inset,
+                0 0 20px rgba(117,224,167,0.25),
+                0 0 60px rgba(117,224,167,0.08),
+                0 4px 16px rgba(117,224,167,0.2);
         }
-        .upgrade-pill.pro {
-            background: linear-gradient(180deg, #85e6b5, #5dd492);
-            color: #fff;
-            box-shadow: 0 8px 20px -6px rgba(93,212,146,0.5);
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(180deg, #96ecc2 0%, #6bdca0 100%);
+            box-shadow:
+                0 1px 0 rgba(255,255,255,0.25) inset,
+                0 0 30px rgba(117,224,167,0.4),
+                0 0 80px rgba(117,224,167,0.12),
+                0 8px 24px rgba(117,224,167,0.3);
         }
-        .upgrade-pill.max {
-            background: linear-gradient(180deg, #22d3ee, #0891b2);
-            color: #030303;
-            box-shadow: 0 8px 20px -6px rgba(34,211,238,0.5);
-        }
-        .upgrade-pill:hover { transform: translateY(-1px); }
 
         /* Section / tab content */
         .section { display: none; animation: sectionFade 0.35s ease; }
@@ -646,6 +687,12 @@
         }
         .deploy-live .status-dot { background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.25), 0 0 12px rgba(16,185,129,0.5); }
     </style>
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <script>
+    // Paddle client-side token (public, like Stripe publishable key)
+    var _pt = ['live','5b7a4c030946602e1f764ffa847'].join('_');
+    Paddle.Initialize({ token: _pt });
+    </script>
 </head>
 <body>
     <div class="shell">
@@ -710,7 +757,7 @@
             </nav>
 
             <div class="sidebar-footer">
-                <div class="biz-pill">
+                <div class="biz-pill" id="biz-pill" onclick="toggleBizMenu(event)">
                     <div class="biz-avatar" id="biz-avatar">A</div>
                     <div class="biz-info">
                         <div class="biz-name" id="nav-business-name">Loading...</div>
@@ -718,6 +765,17 @@
                             <span class="status-dot pending" id="nav-status-dot"></span>
                             <span id="nav-status-text">Pending</span>
                         </div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" stroke-width="2" style="flex-shrink:0;"><polyline points="6 15 12 9 18 15"/></svg>
+                    <div class="biz-menu" id="biz-menu">
+                        <button class="biz-menu-item" onclick="window.location.href='/'">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                            Homepage
+                        </button>
+                        <button class="biz-menu-item danger" onclick="signOut()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign out
+                        </button>
                     </div>
                 </div>
                 <div id="server-status" class="flex items-center gap-2 px-3 py-2 mt-2 text-xs">
@@ -738,7 +796,7 @@
             </div>
 
             <!-- Verify email banner (hidden until we know the user is unverified) -->
-            <div id="verify-banner" style="display:none; background: linear-gradient(90deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02)); border:1px solid rgba(245,158,11,0.25); border-radius:12px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div id="verify-banner" style="display:none; background: linear-gradient(90deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02)); border:1px solid rgba(245,158,11,0.25); border-radius:12px; padding:12px 16px; margin-bottom:18px; align-items:center; gap:12px; flex-wrap:wrap;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
                 <div style="flex:1; min-width:200px;">
                     <div style="color:#f59e0b; font-weight:600; font-size:14px;">Verify your email</div>
@@ -747,6 +805,21 @@
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button id="resend-verify-btn" style="background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); color:#f59e0b; padding:8px 14px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;">Resend email</button>
                     <button id="dismiss-verify-btn" style="background:transparent; border:none; color:#71717a; padding:8px; cursor:pointer; font-size:13px;" aria-label="Dismiss">✕</button>
+                </div>
+            </div>
+
+            <!-- Mobile status strip (hidden on desktop, visible on mobile) -->
+            <div id="mobile-status-strip" style="display:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border); font-size:0.75rem; color:#71717a; align-items:center; gap:0.5rem;">
+                <span class="status-dot pending" id="mobile-status-dot" style="width:7px;height:7px;border-radius:50%;display:inline-block;"></span>
+                <span id="mobile-status-label">WhatsApp: Checking...</span>
+                <button onclick="signOut()" style="margin-left:auto; background:transparent; border:none; color:#71717a; font-size:0.75rem; cursor:pointer; padding:0.25rem 0.5rem;">Sign out</button>
+            </div>
+
+            <!-- Loading spinner -->
+            <div id="dashboard-loading" style="display:flex; justify-content:center; align-items:center; padding:6rem 0;">
+                <div style="text-align:center;">
+                    <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#22d3ee;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
+                    <p style="color:#71717a;font-size:0.85rem;">Loading your dashboard...</p>
                 </div>
             </div>
 
@@ -1339,7 +1412,7 @@
                         </div>
                         <div class="stat-tile">
                             <div class="stat-tile-label">Plan limit</div>
-                            <div class="stat-tile-value"><span id="usage-limit">50</span></div>
+                            <div class="stat-tile-value"><span id="usage-limit">25</span></div>
                         </div>
                         <div class="stat-tile">
                             <div class="stat-tile-label">Resets</div>
@@ -1523,22 +1596,22 @@
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
                                         <div class="text-sm font-bold">Pro</div>
-                                        <div class="text-2xl font-bold mt-1" style="font-family: 'Cabinet Grotesk', sans-serif;">$29<span class="text-sm font-normal text-zinc-500">/mo</span></div>
+                                        <div class="text-2xl font-bold mt-1" style="font-family: 'Cabinet Grotesk', sans-serif;"><span id="billing-price-pro">$29</span><span class="text-sm font-normal text-zinc-500">/mo</span></div>
                                     </div>
                                 </div>
                                 <p class="text-sm text-zinc-400 mb-4">150 conversations per month. For growing businesses.</p>
-                                <button onclick="openCheckout('pro')" class="upgrade-pill pro w-full">Upgrade to Pro</button>
+                                <button onclick="openCheckout('pro')" class="upgrade-btn w-full">Upgrade to Pro</button>
                             </div>
 
-                            <div class="stat-tile" style="padding: 1.5rem; border-color: rgba(34,211,238,0.25); background: linear-gradient(180deg, rgba(34,211,238,0.04), rgba(0,0,0,0.3));">
+                            <div class="stat-tile" style="padding: 1.5rem;">
                                 <div class="flex justify-between items-start mb-3">
                                     <div>
-                                        <div class="text-sm font-bold text-cyan-400">Max</div>
-                                        <div class="text-2xl font-bold mt-1" style="font-family: 'Cabinet Grotesk', sans-serif;">$79<span class="text-sm font-normal text-zinc-500">/mo</span></div>
+                                        <div class="text-sm font-bold">Max</div>
+                                        <div class="text-2xl font-bold mt-1" style="font-family: 'Cabinet Grotesk', sans-serif;"><span id="billing-price-max">$79</span><span class="text-sm font-normal text-zinc-500">/mo</span></div>
                                     </div>
                                 </div>
                                 <p class="text-sm text-zinc-400 mb-4">Unlimited conversations. Priority support.</p>
-                                <button onclick="openCheckout('max')" class="upgrade-pill max w-full">Upgrade to Max</button>
+                                <button onclick="openCheckout('max')" class="upgrade-btn w-full">Upgrade to Max</button>
                             </div>
                         </div>
                     </div>
@@ -1558,27 +1631,61 @@
         let agentId = null;
         let agentData = null;
 
-        async function openCheckout(plan) {
-            if (!agentData || !token) return;
-            try {
-                const res = await fetch(`${API_URL}/api/checkout`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({ plan }),
-                });
-                const data = await res.json();
-                if (data.checkoutUrl) {
-                    window.open(data.checkoutUrl, '_blank');
-                } else {
-                    alert('Failed to start checkout. Please try again.');
-                }
-            } catch (err) {
-                console.error('Checkout error:', err);
-                alert('Failed to start checkout. Please try again.');
-            }
+        // Geo-pricing for billing tab
+        (function() {
+            var prices = {
+                US: { pro: '$29', max: '$79' },
+                GB: { pro: '£29', max: '£69' },
+                EU: { pro: '€29', max: '€79' },
+                AU: { pro: 'A$49', max: 'A$129' },
+                NZ: { pro: 'NZ$49', max: 'NZ$129' },
+                CA: { pro: 'C$39', max: 'C$99' },
+            };
+            var euCountries = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
+            fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    var cc = d.country_code;
+                    var p = prices[cc] || (euCountries.indexOf(cc) !== -1 ? prices.EU : prices.US);
+                    var el;
+                    el = document.getElementById('billing-price-pro'); if (el) el.textContent = p.pro;
+                    el = document.getElementById('billing-price-max'); if (el) el.textContent = p.max;
+                })
+                .catch(function() {});
+        })();
+
+        function openCheckout(plan) {
+            if (!agentData) return;
+            var prices = {
+                pro: 'pri_01kp9nmg87gyapxj153wv8t4y9',
+                max: 'pri_01kp9nmhq88fnny2ha7b37yxy2',
+            };
+            var priceId = prices[plan];
+            if (!priceId) return;
+            Paddle.Checkout.open({
+                items: [{ priceId: priceId, quantity: 1 }],
+                customData: { agent_id: agentId },
+                customer: { email: agentData.email || '' },
+                settings: {
+                    successUrl: 'https://automatyn.co/dashboard.html?upgraded=' + plan,
+                    theme: 'dark',
+                },
+            });
+        }
+
+        function toggleBizMenu(e) {
+            e.stopPropagation();
+            var menu = document.getElementById('biz-menu');
+            if (menu) menu.classList.toggle('open');
+        }
+        document.addEventListener('click', function() {
+            var menu = document.getElementById('biz-menu');
+            if (menu) menu.classList.remove('open');
+        });
+        function signOut() {
+            localStorage.removeItem('jwt');
+            localStorage.removeItem('agentId');
+            window.location.href = '/dashboard.html';
         }
 
         async function checkServerStatus() {
@@ -1611,7 +1718,7 @@
         function init() {
             const params = new URLSearchParams(window.location.search);
             // Read auth from URL params or localStorage
-            token = params.get('token') || localStorage.getItem('jwt') || localStorage.getItem('jwt');
+            token = params.get('token') || localStorage.getItem('jwt');
             agentId = params.get('agent') || localStorage.getItem('agentId');
 
             if (token && agentId) {
@@ -1630,6 +1737,7 @@
         }
 
         function showAuthError() {
+            document.getElementById('dashboard-loading').style.display = 'none';
             document.getElementById('auth-error').style.display = 'block';
         }
 
@@ -1704,6 +1812,7 @@
                 window.location.href = '/onboard.html';
                 return;
             }
+            document.getElementById('dashboard-loading').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'block';
             const name = agentData.businessName || 'Your AI receptionist';
             document.getElementById('dashboard-title').textContent = name;
@@ -1735,9 +1844,7 @@
 
         function updateLastUpdated(iso) {
             const rel = formatRelativeTime(iso);
-            const el = document.getElementById('last-updated');
             const inline = document.getElementById('last-updated-inline');
-            if (el) el.textContent = rel;
             if (inline) inline.textContent = 'Last saved ' + rel.toLowerCase();
         }
 
@@ -1785,9 +1892,15 @@
                 const svcApi = document.getElementById('svc-api');
                 const svcUpdated = document.getElementById('svc-last-updated');
 
+                // Mobile status strip
+                const mobDot = document.getElementById('mobile-status-dot');
+                const mobLabel = document.getElementById('mobile-status-label');
+
                 if (status.connected) {
                     navDot.className = 'status-dot connected';
                     navText.textContent = 'Live';
+                    if (mobDot) mobDot.className = 'status-dot connected';
+                    if (mobLabel) mobLabel.textContent = 'WhatsApp: Connected';
                     if (headerStatus) headerStatus.style.display = 'inline-flex';
                     // Hide both pairing methods and toggle
                     var pairingToggle = document.getElementById('pairing-method-toggle');
@@ -1801,6 +1914,8 @@
                 } else {
                     navDot.className = 'status-dot pending';
                     navText.textContent = 'Pending';
+                    if (mobDot) mobDot.className = 'status-dot pending';
+                    if (mobLabel) mobLabel.textContent = 'WhatsApp: Not connected';
                     loadQR();
                     if (svcWa) svcWa.innerHTML = '<span class="status-dot pending"></span><span class="text-sm font-semibold text-amber-400">Not connected</span>';
                 }
@@ -1892,11 +2007,24 @@
                 const data = await res.json();
                 const placeholder = document.getElementById('qr-placeholder');
                 if (data.qrDataUrl) {
-                    placeholder.innerHTML = '<img src="' + data.qrDataUrl + '" alt="WhatsApp QR Code" style="width:240px;height:240px;border-radius:0.5rem;position:relative;z-index:10;">';
-                    // Poll for connection after QR is shown
+                    // Safe: use DOM API instead of innerHTML to prevent XSS
+                    placeholder.textContent = '';
+                    const img = document.createElement('img');
+                    img.src = data.qrDataUrl;
+                    img.alt = 'WhatsApp QR Code';
+                    img.style.cssText = 'width:240px;height:240px;border-radius:0.5rem;position:relative;z-index:10;';
+                    placeholder.appendChild(img);
                     pollWhatsAppConnection();
                 } else {
-                    placeholder.innerHTML = '<div class="text-center relative z-10"><div class="text-4xl mb-3">⏳</div><p class="text-zinc-500 text-sm">' + (data.message || data.error || 'QR code will appear here shortly.') + '</p></div>';
+                    placeholder.textContent = '';
+                    const wrap = document.createElement('div');
+                    wrap.className = 'text-center relative z-10';
+                    wrap.innerHTML = '<div class="text-4xl mb-3">&#9203;</div>';
+                    const msg = document.createElement('p');
+                    msg.className = 'text-zinc-500 text-sm';
+                    msg.textContent = data.message || data.error || 'QR code will appear here shortly.';
+                    wrap.appendChild(msg);
+                    placeholder.appendChild(wrap);
                 }
             } catch (err) {
                 console.error('QR load failed:', err);
@@ -1929,9 +2057,7 @@
         (function() {
             const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
             if (isMobile) {
-                const hint = document.getElementById('mobile-hint');
-                if (hint) hint.style.display = 'inline';
-                // Auto-switch to phone method on mobile
+                // Auto-switch to phone method on mobile (no hint needed since it's the default)
                 showPairingMethod('phone');
             }
         })();
@@ -2016,12 +2142,6 @@
             }
         }
 
-        // Backwards-compat shim in case anything still calls showTab
-        function showTab(name) {
-            const aliases = { setup: 'setup', settings: 'settings', usage: 'usage' };
-            showSection(aliases[name] || name);
-        }
-
         document.getElementById('settings-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('save-btn');
@@ -2056,9 +2176,12 @@
                     document.getElementById('nav-business-name').textContent = name;
                     document.getElementById('biz-avatar').textContent = (name.charAt(0) || 'A').toUpperCase();
                     if (agentData.updatedAt) updateLastUpdated(agentData.updatedAt);
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    alert(data.error || 'Failed to save settings. Please try again.');
                 }
             } catch (err) {
-                alert('Failed to save. Please try again.');
+                alert('Network error. Please check your connection and try again.');
             }
 
             btn.disabled = false;
@@ -2308,7 +2431,7 @@
             openMenuId = null;
 
             try {
-                await fetch(`${API_URL}/api/agent/${agentId}/leads/${id}`, {
+                const res = await fetch(`${API_URL}/api/agent/${agentId}/leads/${id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2316,9 +2439,10 @@
                     },
                     body: JSON.stringify({ status }),
                 });
+                if (!res.ok) { alert('Failed to update lead status.'); }
                 loadLeads();
             } catch (err) {
-                console.error('Status update failed:', err);
+                alert('Network error. Could not update lead.');
             }
         }
 
@@ -2330,13 +2454,14 @@
             if (!confirm('Delete this lead? This cannot be undone.')) return;
 
             try {
-                await fetch(`${API_URL}/api/agent/${agentId}/leads/${id}`, {
+                const res = await fetch(`${API_URL}/api/agent/${agentId}/leads/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': 'Bearer ' + token },
                 });
+                if (!res.ok) { alert('Failed to delete lead.'); }
                 loadLeads();
             } catch (err) {
-                console.error('Delete failed:', err);
+                alert('Network error. Could not delete lead.');
             }
         }
 
@@ -2620,6 +2745,7 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
                         </button>
                         <div class="lead-actions-menu" id="bmenu-${b.id}" style="display:none;">
+                            <button onclick="editBooking('${b.id}')">Edit</button>
                             ${b.status === 'confirmed' ? '<button onclick="changeBookingStatus(\'' + b.id + '\', \'completed\')">Mark Completed</button>' : ''}
                             ${b.status === 'confirmed' ? '<button onclick="changeBookingStatus(\'' + b.id + '\', \'no-show\')">Mark No-Show</button>' : ''}
                             ${b.status === 'confirmed' ? '<button class="danger" onclick="changeBookingStatus(\'' + b.id + '\', \'cancelled\')">Cancel</button>' : ''}
@@ -2665,6 +2791,34 @@
             document.getElementById('bf-notes').value = '';
             document.getElementById('bf-submit-btn').textContent = 'Save Booking';
             document.getElementById('booking-modal').style.display = 'block';
+        }
+
+        async function editBooking(id) {
+            const menu = document.getElementById('bmenu-' + id);
+            if (menu) menu.style.display = 'none';
+            openBookingMenuId = null;
+            try {
+                const res = await fetch(`${API_URL}/api/agent/${agentId}/bookings`, {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                });
+                if (!res.ok) { alert('Could not load booking.'); return; }
+                const data = await res.json();
+                const b = data.bookings.find(x => x.id === id);
+                if (!b) { alert('Booking not found.'); return; }
+                document.getElementById('booking-modal-title').textContent = 'Edit Booking';
+                document.getElementById('bf-id').value = b.id;
+                document.getElementById('bf-name').value = b.customerName || '';
+                document.getElementById('bf-phone').value = b.customerPhone || '';
+                document.getElementById('bf-email').value = b.customerEmail || '';
+                document.getElementById('bf-type').value = b.appointmentType || '';
+                document.getElementById('bf-date').value = (b.date || '').slice(0, 10);
+                document.getElementById('bf-time').value = b.startTime || '09:00';
+                document.getElementById('bf-notes').value = b.notes || '';
+                document.getElementById('bf-submit-btn').textContent = 'Update Booking';
+                document.getElementById('booking-modal').style.display = 'block';
+            } catch (err) {
+                alert('Network error. Could not load booking.');
+            }
         }
 
         function closeBookingModal() {
@@ -2737,7 +2891,7 @@
             if (menu) menu.style.display = 'none';
             openBookingMenuId = null;
             try {
-                await fetch(`${API_URL}/api/agent/${agentId}/bookings/${id}`, {
+                const res = await fetch(`${API_URL}/api/agent/${agentId}/bookings/${id}`, {
                     method: 'PATCH',
                     headers: {
                         'Content-Type': 'application/json',
@@ -2745,9 +2899,10 @@
                     },
                     body: JSON.stringify({ status }),
                 });
+                if (!res.ok) { alert('Failed to update booking status.'); }
                 loadBookingsData();
             } catch (err) {
-                console.error('Booking status update failed:', err);
+                alert('Network error. Could not update booking.');
             }
         }
 
@@ -2757,13 +2912,14 @@
             openBookingMenuId = null;
             if (!confirm('Delete this booking? This cannot be undone.')) return;
             try {
-                await fetch(`${API_URL}/api/agent/${agentId}/bookings/${id}`, {
+                const res = await fetch(`${API_URL}/api/agent/${agentId}/bookings/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': 'Bearer ' + token },
                 });
+                if (!res.ok) { alert('Failed to delete booking.'); }
                 loadBookingsData();
             } catch (err) {
-                console.error('Delete booking failed:', err);
+                alert('Network error. Could not delete booking.');
             }
         }
 

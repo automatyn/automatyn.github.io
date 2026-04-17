@@ -268,7 +268,7 @@ function getIndustryEmoji(industry) {
 
 function getNextMonthReset() {
   const now = new Date();
-  return new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString();
+  return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
 }
 
 module.exports = {

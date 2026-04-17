@@ -21,6 +21,13 @@ const DODO_API_BASE = 'https://live.dodopayments.com';
 const DODO_PRODUCT_PRO = 'pdt_0NcooRMOGyOxO7roCiSmn';
 const DODO_PRODUCT_MAX = 'pdt_0NcooSqClvpfz5UfxgLcS';
 
+// Paddle (primary payment provider)
+const PADDLE_API_KEY = process.env.PADDLE_API_KEY;
+const PADDLE_WEBHOOK_SECRET = process.env.PADDLE_WEBHOOK_SECRET;
+const PADDLE_API_BASE = 'https://api.paddle.com';
+const PADDLE_PRICE_PRO = 'pri_01kp9nmg87gyapxj153wv8t4y9';   // $29/mo
+const PADDLE_PRICE_MAX = 'pri_01kp9nmhq88fnny2ha7b37yxy2';   // $79/mo
+
 // Save JWT_SECRET to a file so it persists across restarts
 const secretPath = path.join(__dirname, '.jwt-secret');
 let jwtSecret = JWT_SECRET;
@@ -73,7 +80,7 @@ app.use(cors({
 
 // Raw body for webhook signature verification
 app.use('/api/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
+app.use(express.json({ limit: '100kb' }));
 
 // Rate limiting (simple in-memory)
 const signupAttempts = new Map();
@@ -387,6 +394,7 @@ app.post('/api/auth/magic-link/consume', (req, res) => {
   }
 
   // Magic-link success = email is verified (they own the inbox)
+  const wasAlreadyVerified = user.verified;
   if (!user.verified) {
     user.verified = true;
     user.verifiedAt = new Date().toISOString();
@@ -394,6 +402,13 @@ app.post('/api/auth/magic-link/consume', (req, res) => {
   user.lastLoginAt = new Date().toISOString();
   user.updatedAt = new Date().toISOString();
   authLib.setUser(entry.email, user);
+
+  // Trigger welcome drip on first verification
+  if (!wasAlreadyVerified) {
+    const agent = getAgent(user.agentId);
+    scheduleOnboardingDrip(entry.email, user.agentId, agent?.industry || '');
+    authLib.addContactToList(entry.email, authLib.BREVO_LIST_SIGNUPS).catch(() => {});
+  }
 
   // Consume the token (one-time use)
   delete tokens[token];
@@ -477,6 +492,9 @@ app.post('/api/auth/google', async (req, res) => {
         updatedAt: new Date().toISOString(),
       };
       authLib.setUser(email, user);
+      // New Google user: trigger welcome drip + add to list
+      scheduleOnboardingDrip(email, metadata.agentId, '');
+      authLib.addContactToList(email, authLib.BREVO_LIST_SIGNUPS).catch(() => {});
     } catch (err) {
       console.error('Google sign-up provision failed:', err);
       return res.status(500).json({ error: 'Account creation failed. Please try again.' });
@@ -519,13 +537,21 @@ app.post('/api/auth/verify', (req, res) => {
   const user = authLib.getUser(entry.email);
   if (!user) return res.status(404).json({ error: 'Account not found.' });
 
+  const wasAlreadyVerified = user.verified;
   user.verified = true;
-  user.verifiedAt = new Date().toISOString();
+  user.verifiedAt = user.verifiedAt || new Date().toISOString();
   user.updatedAt = new Date().toISOString();
   authLib.setUser(entry.email, user);
 
   delete tokens[token];
   authLib.saveVerifyTokens(tokens);
+
+  // Trigger welcome drip on first verification
+  if (!wasAlreadyVerified) {
+    const agent = getAgent(user.agentId);
+    scheduleOnboardingDrip(entry.email, user.agentId, agent?.industry || '');
+    authLib.addContactToList(entry.email, authLib.BREVO_LIST_SIGNUPS).catch(() => {});
+  }
 
   const jwtToken = issueJwt(user);
   res.json({
@@ -663,116 +689,164 @@ app.get('/api/auth/me', auth, (req, res) => {
   });
 });
 
+// Legacy /api/register and /api/signup endpoints removed (security: bypassed auth system)
+
 // ============================================================
-// POST /api/register — Create account (email only, no business details) [LEGACY]
+// POST /api/capture — Email capture for homepage forms (guide/demo)
 // ============================================================
-app.post('/api/register', (req, res) => {
+app.post('/api/capture', async (req, res) => {
   const ip = req.ip || req.connection.remoteAddress;
-  if (!rateLimit(ip, 5, 3600000)) {
-    return res.status(429).json({ error: 'Too many attempts. Try again in an hour.' });
+  if (!rateLimit(ip, 10, 3600000)) {
+    return res.status(429).json({ error: 'Too many requests.' });
   }
 
-  const email = (req.body.email || '').trim();
+  const email = (req.body.email || '').trim().toLowerCase();
+  const source = req.body.source || 'guide'; // 'guide' or 'demo'
+
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: 'Please enter a valid email address.' });
+    return res.status(400).json({ error: 'Invalid email.' });
   }
 
+  const listId = source === 'demo' ? authLib.BREVO_LIST_DEMO : authLib.BREVO_LIST_GUIDE;
+
   try {
-    const plan = req.body.plan || 'starter';
-    const metadata = provisionAgent({
-      email,
-      businessName: '',
-      industry: '',
-      services: '',
-      prices: '',
-      hours: '',
-      location: '',
-      policies: '',
-      plan,
-    });
-
-    const token = jwt.sign(
-      { agentId: metadata.agentId, email },
-      jwtSecret,
-      { expiresIn: '365d' }
-    );
-
-    res.json({
-      success: true,
-      agentId: metadata.agentId,
-      token,
-      dashboardUrl: `https://automatyn.co/dashboard.html?agent=${metadata.agentId}&token=${token}&onboarding=true`,
-    });
+    await authLib.addContactToList(email, listId, { SOURCE: source });
+    log('info', 'email_captured', { source, email: email.slice(0, 3) + '***' });
+    res.json({ success: true });
   } catch (err) {
-    console.error('Register error:', err);
-    res.status(500).json({ error: 'Failed to create account. Please try again.' });
+    log('error', 'email_capture_failed', { error: err.message });
+    // Still return success to user (don't block UX on Brevo errors)
+    res.json({ success: true });
   }
 });
 
 // ============================================================
-// POST /api/signup — Create a new agent (legacy, full details)
+// Onboarding email drip scheduler
 // ============================================================
-app.post('/api/signup', (req, res) => {
-  const ip = req.ip || req.connection.remoteAddress;
-  if (!rateLimit(ip, 5, 3600000)) {
-    return res.status(429).json({ error: 'Too many signups. Try again in an hour.' });
+const DRIP_FILE = path.join(DATA_DIR, 'email-drip.json');
+
+function loadDripState() {
+  try { return JSON.parse(fs.readFileSync(DRIP_FILE, 'utf-8')); }
+  catch { return {}; }
+}
+function saveDripState(state) {
+  fs.writeFileSync(DRIP_FILE, JSON.stringify(state, null, 2));
+}
+
+// Schedule onboarding drip for a newly verified user
+function scheduleOnboardingDrip(email, agentId, industry) {
+  const state = loadDripState();
+  if (state[email]?.welcomeSent) return; // Already started
+
+  state[email] = { agentId, industry: industry || '', welcomeSent: false, steps: {} };
+  saveDripState(state);
+
+  // Email 1: Welcome (immediate)
+  sendDripEmail(email, 'welcome', 0);
+  // Email 2: WhatsApp nudge (2 days)
+  sendDripEmail(email, 'whatsapp_nudge', 2 * 24 * 60 * 60 * 1000);
+  // Email 3: Social proof (4 days)
+  sendDripEmail(email, 'social_proof', 4 * 24 * 60 * 60 * 1000);
+  // Email 4: Upgrade nudge (7 days)
+  sendDripEmail(email, 'upgrade_nudge', 7 * 24 * 60 * 60 * 1000);
+}
+
+function sendDripEmail(email, step, delayMs) {
+  setTimeout(async () => {
+    const state = loadDripState();
+    const entry = state[email];
+    if (!entry || entry.steps?.[step]) return; // Already sent or user removed
+
+    // Skip nudge emails if user already upgraded or connected
+    if (step === 'upgrade_nudge') {
+      const user = authLib.getUser(email);
+      if (user && user.plan !== 'starter') return;
+    }
+    if (step === 'whatsapp_nudge') {
+      const agent = getAgent(entry.agentId);
+      if (agent && agent.whatsappConnected) return;
+    }
+
+    let subject, html;
+    switch (step) {
+      case 'welcome':
+        subject = "You're in. Here's how to go live in 3 steps";
+        html = authLib.welcomeEmailHtml();
+        break;
+      case 'whatsapp_nudge':
+        subject = 'Your AI is waiting for WhatsApp';
+        html = authLib.nudgeWhatsAppEmailHtml();
+        break;
+      case 'social_proof':
+        subject = 'How businesses like yours use Automatyn';
+        html = authLib.socialProofEmailHtml(entry.industry);
+        break;
+      case 'upgrade_nudge':
+        subject = "You're on the free plan. Here's what you're missing";
+        html = authLib.upgradeNudgeEmailHtml();
+        break;
+      default: return;
+    }
+
+    try {
+      await authLib.sendEmail({ to: email, subject, htmlContent: html });
+      entry.steps = entry.steps || {};
+      entry.steps[step] = new Date().toISOString();
+      if (step === 'welcome') entry.welcomeSent = true;
+      saveDripState(state);
+      log('info', 'drip_email_sent', { email: email.slice(0, 3) + '***', step });
+    } catch (err) {
+      log('error', 'drip_email_failed', { step, error: err.message });
+    }
+  }, delayMs);
+}
+
+// On startup: reschedule any pending drip emails
+(function resumePendingDrips() {
+  const state = loadDripState();
+  const steps = ['welcome', 'whatsapp_nudge', 'social_proof', 'upgrade_nudge'];
+  const delays = { welcome: 0, whatsapp_nudge: 2*86400000, social_proof: 4*86400000, upgrade_nudge: 7*86400000 };
+
+  for (const [email, entry] of Object.entries(state)) {
+    if (!entry.welcomeSent) {
+      // Never got welcome email, restart full sequence
+      for (const s of steps) {
+        if (!entry.steps?.[s]) sendDripEmail(email, s, delays[s]);
+      }
+    } else {
+      // Resume remaining steps
+      for (const s of steps) {
+        if (!entry.steps?.[s]) {
+          // Calculate remaining delay from when welcome was sent
+          const welcomeTime = new Date(entry.steps?.welcome || Date.now()).getTime();
+          const remaining = Math.max(0, delays[s] - (Date.now() - welcomeTime));
+          sendDripEmail(email, s, remaining);
+        }
+      }
+    }
   }
-
-  const error = validateSignup(req.body);
-  if (error) {
-    return res.status(400).json({ error });
-  }
-
-  try {
-    const plan = req.body.plan || 'starter';
-    const metadata = provisionAgent({
-      email: req.body.email.trim(),
-      businessName: req.body.businessName.trim(),
-      industry: req.body.industry.trim(),
-      services: req.body.services.trim(),
-      prices: (req.body.prices || '').trim(),
-      hours: req.body.hours.trim(),
-      location: (req.body.location || '').trim(),
-      policies: (req.body.policies || '').trim(),
-      plan,
-    });
-
-    const token = jwt.sign(
-      { agentId: metadata.agentId, email: metadata.email },
-      jwtSecret,
-      { expiresIn: '365d' }
-    );
-
-    res.json({
-      success: true,
-      agentId: metadata.agentId,
-      token,
-      dashboardUrl: `https://automatyn.co/dashboard.html?agent=${metadata.agentId}&token=${token}`,
-    });
-  } catch (err) {
-    console.error('Signup error:', err);
-    res.status(500).json({ error: 'Failed to create agent. Please try again.' });
-  }
-});
+})();
 
 // ============================================================
 // POST /api/webhook/dodo — DodoPayments webhook (Standard Webhooks spec)
 // ============================================================
 app.post('/api/webhook/dodo', (req, res) => {
-  // Verify signature
-  if (DODO_WEBHOOK_SECRET) {
-    const webhookId = req.headers['webhook-id'] || '';
-    const webhookTs = req.headers['webhook-timestamp'] || '';
-    const webhookSig = req.headers['webhook-signature'] || '';
-    const body = req.body.toString();
-    const payload = `${webhookId}.${webhookTs}.${body}`;
-    const secretBytes = Buffer.from(DODO_WEBHOOK_SECRET.replace(/^whsec_/, ''), 'base64');
-    const expected = 'v1,' + crypto.createHmac('sha256', secretBytes).update(payload).digest('base64');
-    const signatures = webhookSig.split(' ');
-    if (!signatures.some(s => s === expected)) {
-      log('error', 'dodo_webhook_sig_mismatch');
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+  // Verify signature — FAIL CLOSED: reject if secret is not configured
+  if (!DODO_WEBHOOK_SECRET) {
+    log('error', 'dodo_webhook_secret_missing');
+    return res.status(500).json({ error: 'Webhook verification not configured' });
+  }
+  const webhookId = req.headers['webhook-id'] || '';
+  const webhookTs = req.headers['webhook-timestamp'] || '';
+  const webhookSig = req.headers['webhook-signature'] || '';
+  const body = req.body.toString();
+  const payload = `${webhookId}.${webhookTs}.${body}`;
+  const secretBytes = Buffer.from(DODO_WEBHOOK_SECRET.replace(/^whsec_/, ''), 'base64');
+  const expected = 'v1,' + crypto.createHmac('sha256', secretBytes).update(payload).digest('base64');
+  const signatures = webhookSig.split(' ');
+  if (!signatures.some(s => s === expected)) {
+    log('error', 'dodo_webhook_sig_mismatch');
+    return res.status(401).json({ error: 'Invalid signature' });
   }
 
   try {
@@ -823,18 +897,128 @@ app.post('/api/webhook/dodo', (req, res) => {
 });
 
 // ============================================================
-// POST /api/checkout — Create DodoPayments subscription checkout
+// POST /api/webhook/paddle — Paddle webhook (Paddle Billing)
+// ============================================================
+app.post('/api/webhook/paddle', (req, res) => {
+  // Verify signature — FAIL CLOSED
+  if (!PADDLE_WEBHOOK_SECRET) {
+    log('error', 'paddle_webhook_secret_missing');
+    return res.status(500).json({ error: 'Webhook verification not configured' });
+  }
+
+  const signature = req.headers['paddle-signature'] || '';
+  const body = req.body.toString();
+
+  // Parse Paddle signature: ts=xxx;h1=xxx
+  const parts = {};
+  signature.split(';').forEach(p => {
+    const [k, v] = p.split('=');
+    if (k && v) parts[k] = v;
+  });
+
+  if (!parts.ts || !parts.h1) {
+    log('error', 'paddle_webhook_sig_missing');
+    return res.status(401).json({ error: 'Missing signature components' });
+  }
+
+  const payload = `${parts.ts}:${body}`;
+  const expected = crypto.createHmac('sha256', PADDLE_WEBHOOK_SECRET).update(payload).digest('hex');
+
+  if (expected !== parts.h1) {
+    log('error', 'paddle_webhook_sig_mismatch');
+    return res.status(401).json({ error: 'Invalid signature' });
+  }
+
+  try {
+    const event = JSON.parse(body);
+    const eventType = event.event_type;
+    const data = event.data;
+
+    log('info', 'paddle_webhook', { event: eventType });
+
+    const agentId = data?.custom_data?.agent_id;
+    if (!agentId) {
+      log('warn', 'paddle_webhook_no_agent_id');
+      return res.json({ received: true });
+    }
+
+    const agent = getAgent(agentId);
+    if (!agent) {
+      log('warn', 'paddle_webhook_unknown_agent', { agentId });
+      return res.json({ received: true });
+    }
+
+    const metaPath = path.join(DATA_DIR, `${agentId}.json`);
+
+    if (eventType === 'subscription.created' || eventType === 'subscription.updated' || eventType === 'transaction.completed') {
+      // Determine plan from price ID in items
+      const items = data.items || [];
+      const priceId = items[0]?.price?.id || '';
+      agent.plan = priceId === PADDLE_PRICE_MAX ? 'max' : 'pro';
+      agent.status = 'active';
+      agent.paddleSubscriptionId = data.id;
+      agent.paddleCustomerId = data.customer_id;
+      agent.updatedAt = new Date().toISOString();
+      fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
+
+      // Also update the user record's plan
+      const user = authLib.getUser(agent.email);
+      if (user) {
+        user.plan = agent.plan;
+        user.updatedAt = new Date().toISOString();
+        authLib.setUser(agent.email, user);
+      }
+
+      log('info', 'agent_upgraded_paddle', { agentId, plan: agent.plan });
+    }
+
+    if (eventType === 'subscription.canceled' || eventType === 'subscription.past_due' || eventType === 'transaction.payment_failed') {
+      if (eventType === 'subscription.canceled') {
+        agent.plan = 'starter';
+        agent.status = 'canceled';
+      } else {
+        agent.status = 'past_due';
+      }
+      agent.updatedAt = new Date().toISOString();
+      fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
+
+      if (eventType === 'subscription.canceled') {
+        const user = authLib.getUser(agent.email);
+        if (user) {
+          user.plan = 'starter';
+          user.updatedAt = new Date().toISOString();
+          authLib.setUser(agent.email, user);
+        }
+      }
+
+      log('info', 'agent_downgraded_paddle', { agentId, plan: agent.plan, status: agent.status });
+    }
+
+    res.json({ received: true });
+  } catch (err) {
+    log('error', 'paddle_webhook_error', { error: err.message });
+    res.status(500).json({ error: 'Webhook processing failed' });
+  }
+});
+
+// ============================================================
+// POST /api/checkout — Create Paddle checkout (transaction)
 // ============================================================
 app.post('/api/checkout', auth, async (req, res) => {
   const { plan } = req.body;
-  const productIds = {
-    pro: DODO_PRODUCT_PRO,
-    max: DODO_PRODUCT_MAX,
+  const priceIds = {
+    pro: PADDLE_PRICE_PRO,
+    max: PADDLE_PRICE_MAX,
   };
 
-  const productId = productIds[plan];
-  if (!productId) {
+  const priceId = priceIds[plan];
+  if (!priceId) {
     return res.status(400).json({ error: 'Invalid plan. Use "pro" or "max".' });
+  }
+
+  if (!PADDLE_API_KEY) {
+    log('error', 'paddle_api_key_missing');
+    return res.status(500).json({ error: 'Payment provider not configured' });
   }
 
   const agent = getAgent(req.agentId);
@@ -843,41 +1027,37 @@ app.post('/api/checkout', auth, async (req, res) => {
   }
 
   try {
-    const response = await fetch(`${DODO_API_BASE}/subscriptions`, {
+    const response = await fetch(`${PADDLE_API_BASE}/transactions`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${DODO_API_KEY}`,
+        'Authorization': `Bearer ${PADDLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        product_id: productId,
-        quantity: 1,
-        payment_link: true,
-        return_url: `https://automatyn.co/dashboard.html?upgraded=${plan}`,
-        metadata: { agent_id: req.agentId },
-        customer: {
-          email: agent.email || req.email,
-          name: agent.businessName || 'Automatyn Customer',
+        items: [{ price_id: priceId, quantity: 1 }],
+        custom_data: { agent_id: req.agentId },
+        checkout: {
+          url: `https://automatyn.co/dashboard.html?upgraded=${plan}`,
         },
-        billing: {
-          country: 'US',
-          state: 'CA',
-          city: 'San Francisco',
-          street: '123 Main St',
-          zipcode: '94102',
-        },
+        customer_email: agent.email || req.email,
       }),
     });
 
     const result = await response.json();
     if (!response.ok) {
-      console.error('Dodo checkout error:', result);
+      log('error', 'paddle_checkout_error', { status: response.status, body: result });
       return res.status(500).json({ error: 'Failed to create checkout session' });
     }
 
-    res.json({ checkoutUrl: result.payment_link });
+    const checkoutUrl = result.data?.checkout?.url;
+    if (!checkoutUrl) {
+      log('error', 'paddle_no_checkout_url', { result: result.data });
+      return res.status(500).json({ error: 'Failed to create checkout session' });
+    }
+
+    res.json({ checkoutUrl });
   } catch (err) {
-    console.error('Checkout error:', err);
+    log('error', 'checkout_error', { error: err.message });
     res.status(500).json({ error: 'Failed to create checkout session' });
   }
 });
@@ -896,7 +1076,7 @@ app.get('/api/agent/:id', auth, (req, res) => {
   }
 
   // Don't leak sensitive fields
-  const { lsSubscriptionId, dodoSubscriptionId, ...safe } = agent;
+  const { lsSubscriptionId, dodoSubscriptionId, paddleSubscriptionId, paddleCustomerId, ...safe } = agent;
   res.json(safe);
 });
 
@@ -910,7 +1090,7 @@ app.put('/api/agent/:id', auth, (req, res) => {
 
   try {
     const updated = updateAgent(req.params.id, req.body);
-    const { lsSubscriptionId, dodoSubscriptionId, ...safe } = updated;
+    const { lsSubscriptionId, dodoSubscriptionId, paddleSubscriptionId, paddleCustomerId, ...safe } = updated;
     res.json({ success: true, agent: safe });
   } catch (err) {
     if (err.message === 'Agent not found') {
@@ -1082,158 +1262,186 @@ function saveLeads(agentId, leads) {
 
 // GET /api/agent/:id/leads — List leads with optional filters
 app.get('/api/agent/:id/leads', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  let leads = loadLeads(req.params.id);
+    let leads = loadLeads(req.params.id);
 
-  // Filter by status
-  if (req.query.status) {
-    leads = leads.filter(l => l.status === req.query.status);
+    // Filter by status
+    if (req.query.status) {
+      leads = leads.filter(l => l.status === req.query.status);
+    }
+    // Search by name, phone, email, notes
+    if (req.query.q) {
+      const q = req.query.q.toLowerCase();
+      leads = leads.filter(l =>
+        (l.name || '').toLowerCase().includes(q) ||
+        (l.phone || '').toLowerCase().includes(q) ||
+        (l.email || '').toLowerCase().includes(q) ||
+        (l.notes || '').toLowerCase().includes(q)
+      );
+    }
+
+    // Sort newest first
+    leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // Stats (reuse loaded leads instead of loading twice)
+    const all = loadLeads(req.params.id);
+    const today = new Date().toISOString().slice(0, 10);
+    const stats = {
+      total: all.length,
+      newToday: all.filter(l => (l.createdAt || '').slice(0, 10) === today).length,
+      needsFollowUp: all.filter(l => l.status === 'new' || l.status === 'contacted').length,
+      converted: all.filter(l => l.status === 'won').length,
+    };
+
+    res.json({ leads, stats });
+  } catch (err) {
+    log('error', 'leads_list_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to load leads.' });
   }
-  // Search by name, phone, email, notes
-  if (req.query.q) {
-    const q = req.query.q.toLowerCase();
-    leads = leads.filter(l =>
-      (l.name || '').toLowerCase().includes(q) ||
-      (l.phone || '').toLowerCase().includes(q) ||
-      (l.email || '').toLowerCase().includes(q) ||
-      (l.notes || '').toLowerCase().includes(q)
-    );
-  }
-
-  // Sort newest first
-  leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
-  // Stats
-  const all = loadLeads(req.params.id);
-  const today = new Date().toISOString().slice(0, 10);
-  const stats = {
-    total: all.length,
-    newToday: all.filter(l => (l.createdAt || '').slice(0, 10) === today).length,
-    needsFollowUp: all.filter(l => l.status === 'new' || l.status === 'contacted').length,
-    converted: all.filter(l => l.status === 'won').length,
-  };
-
-  res.json({ leads, stats });
 });
 
 // POST /api/agent/:id/leads — Create a lead (called by bot or manually)
 app.post('/api/agent/:id/leads', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const { name, phone, email, notes, source } = req.body;
-  if (!name && !phone && !email) {
-    return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
+    const { name, phone, email, notes, source } = req.body;
+    if (!name && !phone && !email) {
+      return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
+    }
+
+    const leads = loadLeads(req.params.id);
+    const lead = {
+      id: crypto.randomBytes(8).toString('hex'),
+      name: (name || '').trim(),
+      phone: (phone || '').trim(),
+      email: (email || '').trim(),
+      status: 'new',
+      notes: (notes || '').trim(),
+      source: (source || 'whatsapp').trim(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    leads.push(lead);
+    saveLeads(req.params.id, leads);
+    res.json({ success: true, lead });
+  } catch (err) {
+    log('error', 'lead_create_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to create lead.' });
   }
-
-  const leads = loadLeads(req.params.id);
-  const lead = {
-    id: crypto.randomBytes(8).toString('hex'),
-    name: (name || '').trim(),
-    phone: (phone || '').trim(),
-    email: (email || '').trim(),
-    status: 'new',
-    notes: (notes || '').trim(),
-    source: (source || 'whatsapp').trim(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  leads.push(lead);
-  saveLeads(req.params.id, leads);
-  res.json({ success: true, lead });
 });
 
 // POST /api/agent/:id/leads/ingest — Unauthenticated lead capture (called by OpenClaw bot)
-// Uses a simple agent-level secret token instead of JWT
 app.post('/api/agent/:id/leads/ingest', (req, res) => {
-  const agentId = req.params.id;
-  const agent = getAgent(agentId);
-  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  try {
+    const agentId = req.params.id;
+    const agent = getAgent(agentId);
+    if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
-  // Verify ingest token (stored in agent metadata)
-  const ingestToken = req.headers['x-ingest-token'] || '';
-  if (!agent.ingestToken || ingestToken !== agent.ingestToken) {
-    return res.status(401).json({ error: 'Invalid ingest token' });
+    const ingestToken = req.headers['x-ingest-token'] || '';
+    if (!agent.ingestToken || ingestToken !== agent.ingestToken) {
+      return res.status(401).json({ error: 'Invalid ingest token' });
+    }
+
+    const { name, phone, email, notes, source } = req.body;
+    if (!name && !phone && !email) {
+      return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
+    }
+
+    const leads = loadLeads(agentId);
+    const lead = {
+      id: crypto.randomBytes(8).toString('hex'),
+      name: (name || '').trim(),
+      phone: (phone || '').trim(),
+      email: (email || '').trim(),
+      status: 'new',
+      notes: (notes || '').trim(),
+      source: (source || 'whatsapp-bot').trim(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    leads.push(lead);
+    saveLeads(agentId, leads);
+    res.json({ success: true, lead });
+  } catch (err) {
+    log('error', 'lead_ingest_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to save lead.' });
   }
-
-  const { name, phone, email, notes, source } = req.body;
-  if (!name && !phone && !email) {
-    return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
-  }
-
-  const leads = loadLeads(agentId);
-  const lead = {
-    id: crypto.randomBytes(8).toString('hex'),
-    name: (name || '').trim(),
-    phone: (phone || '').trim(),
-    email: (email || '').trim(),
-    status: 'new',
-    notes: (notes || '').trim(),
-    source: (source || 'whatsapp-bot').trim(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  leads.push(lead);
-  saveLeads(agentId, leads);
-  res.json({ success: true, lead });
 });
 
 // PATCH /api/agent/:id/leads/:leadId — Update a lead
 app.patch('/api/agent/:id/leads/:leadId', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const leads = loadLeads(req.params.id);
-  const idx = leads.findIndex(l => l.id === req.params.leadId);
-  if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
+    const leads = loadLeads(req.params.id);
+    const idx = leads.findIndex(l => l.id === req.params.leadId);
+    if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
 
-  const allowed = ['name', 'phone', 'email', 'status', 'notes'];
-  const validStatuses = ['new', 'contacted', 'qualified', 'won', 'lost'];
+    const allowed = ['name', 'phone', 'email', 'status', 'notes'];
+    const validStatuses = ['new', 'contacted', 'qualified', 'won', 'lost'];
 
-  for (const key of allowed) {
-    if (req.body[key] !== undefined) {
-      if (key === 'status' && !validStatuses.includes(req.body[key])) {
-        return res.status(400).json({ error: `Invalid status. Use: ${validStatuses.join(', ')}` });
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) {
+        if (key === 'status' && !validStatuses.includes(req.body[key])) {
+          return res.status(400).json({ error: `Invalid status. Use: ${validStatuses.join(', ')}` });
+        }
+        leads[idx][key] = (req.body[key] || '').trim();
       }
-      leads[idx][key] = (req.body[key] || '').trim();
     }
-  }
-  leads[idx].updatedAt = new Date().toISOString();
+    leads[idx].updatedAt = new Date().toISOString();
 
-  saveLeads(req.params.id, leads);
-  res.json({ success: true, lead: leads[idx] });
+    saveLeads(req.params.id, leads);
+    res.json({ success: true, lead: leads[idx] });
+  } catch (err) {
+    log('error', 'lead_update_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to update lead.' });
+  }
 });
 
 // DELETE /api/agent/:id/leads/:leadId — Delete a lead
 app.delete('/api/agent/:id/leads/:leadId', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const leads = loadLeads(req.params.id);
-  const idx = leads.findIndex(l => l.id === req.params.leadId);
-  if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
+    const leads = loadLeads(req.params.id);
+    const idx = leads.findIndex(l => l.id === req.params.leadId);
+    if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
 
-  leads.splice(idx, 1);
-  saveLeads(req.params.id, leads);
-  res.json({ success: true });
+    leads.splice(idx, 1);
+    saveLeads(req.params.id, leads);
+    res.json({ success: true });
+  } catch (err) {
+    log('error', 'lead_delete_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to delete lead.' });
+  }
 });
 
 // GET /api/agent/:id/leads/export — CSV export
 app.get('/api/agent/:id/leads/export', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const leads = loadLeads(req.params.id);
-  leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const leads = loadLeads(req.params.id);
+    leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  const escape = (v) => `"${(v || '').replace(/"/g, '""')}"`;
-  const header = 'Name,Phone,Email,Status,Notes,Source,Created';
-  const rows = leads.map(l =>
-    [l.name, l.phone, l.email, l.status, l.notes, l.source, l.createdAt].map(escape).join(',')
-  );
+    const escape = (v) => `"${(v || '').replace(/"/g, '""')}"`;
+    const header = 'Name,Phone,Email,Status,Notes,Source,Created';
+    const rows = leads.map(l =>
+      [l.name, l.phone, l.email, l.status, l.notes, l.source, l.createdAt].map(escape).join(',')
+    );
 
-  res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', `attachment; filename="leads-${req.params.id}.csv"`);
-  res.send([header, ...rows].join('\n'));
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename="leads-${req.params.id}.csv"`);
+    res.send([header, ...rows].join('\n'));
+  } catch (err) {
+    log('error', 'leads_export_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to export leads.' });
+  }
 });
 
 // ============================================================
@@ -1269,354 +1477,362 @@ function saveBookings(agentId, bookings) {
 
 // GET /api/agent/:id/availability — Get availability settings
 app.get('/api/agent/:id/availability', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const avail = loadAvailability(req.params.id);
-  if (!avail) {
-    // Return default (empty) availability
-    return res.json({
-      schedule: {
-        monday:    { enabled: false, start: '09:00', end: '17:00' },
-        tuesday:   { enabled: false, start: '09:00', end: '17:00' },
-        wednesday: { enabled: false, start: '09:00', end: '17:00' },
-        thursday:  { enabled: false, start: '09:00', end: '17:00' },
-        friday:    { enabled: false, start: '09:00', end: '17:00' },
-        saturday:  { enabled: false, start: '09:00', end: '17:00' },
-        sunday:    { enabled: false, start: '09:00', end: '17:00' },
-      },
-      appointmentTypes: [],
-      bufferMinutes: 15,
-      blockedDates: [],
-      googleCalendar: { connected: false },
-      updatedAt: null,
-    });
+    const avail = loadAvailability(req.params.id);
+    if (!avail) {
+      return res.json({
+        schedule: {
+          monday:    { enabled: false, start: '09:00', end: '17:00' },
+          tuesday:   { enabled: false, start: '09:00', end: '17:00' },
+          wednesday: { enabled: false, start: '09:00', end: '17:00' },
+          thursday:  { enabled: false, start: '09:00', end: '17:00' },
+          friday:    { enabled: false, start: '09:00', end: '17:00' },
+          saturday:  { enabled: false, start: '09:00', end: '17:00' },
+          sunday:    { enabled: false, start: '09:00', end: '17:00' },
+        },
+        appointmentTypes: [],
+        bufferMinutes: 15,
+        blockedDates: [],
+        googleCalendar: { connected: false },
+        updatedAt: null,
+      });
+    }
+    res.json(avail);
+  } catch (err) {
+    log('error', 'availability_get_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to load availability.' });
   }
-  res.json(avail);
 });
 
 // PUT /api/agent/:id/availability — Update availability settings
 app.put('/api/agent/:id/availability', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const { schedule, appointmentTypes, bufferMinutes, blockedDates } = req.body;
+    const { schedule, appointmentTypes, bufferMinutes, blockedDates } = req.body;
 
-  // Validate schedule
-  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  if (schedule) {
-    for (const day of validDays) {
-      if (schedule[day]) {
-        const d = schedule[day];
-        if (typeof d.enabled !== 'boolean') {
-          return res.status(400).json({ error: `Invalid schedule for ${day}` });
+    const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    if (schedule) {
+      for (const day of validDays) {
+        if (schedule[day]) {
+          const d = schedule[day];
+          if (typeof d.enabled !== 'boolean') {
+            return res.status(400).json({ error: `Invalid schedule for ${day}` });
+          }
         }
       }
     }
-  }
 
-  // Validate appointment types
-  if (appointmentTypes && Array.isArray(appointmentTypes)) {
-    for (const t of appointmentTypes) {
-      if (!t.name || !t.durationMinutes || t.durationMinutes < 5 || t.durationMinutes > 480) {
-        return res.status(400).json({ error: 'Each appointment type needs a name and duration (5-480 minutes)' });
+    if (appointmentTypes && Array.isArray(appointmentTypes)) {
+      for (const t of appointmentTypes) {
+        if (!t.name || !t.durationMinutes || t.durationMinutes < 5 || t.durationMinutes > 480) {
+          return res.status(400).json({ error: 'Each appointment type needs a name and duration (5-480 minutes)' });
+        }
       }
     }
+
+    const existing = loadAvailability(req.params.id) || {};
+    const updated = {
+      schedule: schedule || existing.schedule || {},
+      appointmentTypes: appointmentTypes || existing.appointmentTypes || [],
+      bufferMinutes: typeof bufferMinutes === 'number' ? bufferMinutes : (existing.bufferMinutes || 15),
+      blockedDates: blockedDates || existing.blockedDates || [],
+      googleCalendar: existing.googleCalendar || { connected: false },
+      updatedAt: new Date().toISOString(),
+    };
+
+    saveAvailability(req.params.id, updated);
+    res.json({ success: true, availability: updated });
+  } catch (err) {
+    log('error', 'availability_update_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to save availability.' });
   }
-
-  const existing = loadAvailability(req.params.id) || {};
-  const updated = {
-    schedule: schedule || existing.schedule || {},
-    appointmentTypes: appointmentTypes || existing.appointmentTypes || [],
-    bufferMinutes: typeof bufferMinutes === 'number' ? bufferMinutes : (existing.bufferMinutes || 15),
-    blockedDates: blockedDates || existing.blockedDates || [],
-    googleCalendar: existing.googleCalendar || { connected: false },
-    updatedAt: new Date().toISOString(),
-  };
-
-  saveAvailability(req.params.id, updated);
-  res.json({ success: true, availability: updated });
 });
 
 // GET /api/agent/:id/bookings — List bookings
 app.get('/api/agent/:id/bookings', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  let bookings = loadBookings(req.params.id);
+    let bookings = loadBookings(req.params.id);
 
-  // Filter by status
-  if (req.query.status) {
-    bookings = bookings.filter(b => b.status === req.query.status);
+    if (req.query.status) {
+      bookings = bookings.filter(b => b.status === req.query.status);
+    }
+    if (req.query.from) {
+      bookings = bookings.filter(b => b.startTime >= req.query.from);
+    }
+    if (req.query.to) {
+      bookings = bookings.filter(b => b.startTime <= req.query.to);
+    }
+
+    bookings.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+
+    const all = loadBookings(req.params.id);
+    const now = new Date().toISOString();
+    const today = now.slice(0, 10);
+    const stats = {
+      total: all.length,
+      upcoming: all.filter(b => b.startTime >= now && b.status === 'confirmed').length,
+      today: all.filter(b => (b.startTime || '').slice(0, 10) === today && b.status === 'confirmed').length,
+      cancelled: all.filter(b => b.status === 'cancelled').length,
+    };
+
+    res.json({ bookings, stats });
+  } catch (err) {
+    log('error', 'bookings_list_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to load bookings.' });
   }
-  // Filter by date range
-  if (req.query.from) {
-    bookings = bookings.filter(b => b.startTime >= req.query.from);
-  }
-  if (req.query.to) {
-    bookings = bookings.filter(b => b.startTime <= req.query.to);
-  }
-
-  // Sort by start time (upcoming first)
-  bookings.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-
-  // Stats
-  const all = loadBookings(req.params.id);
-  const now = new Date().toISOString();
-  const today = now.slice(0, 10);
-  const stats = {
-    total: all.length,
-    upcoming: all.filter(b => b.startTime >= now && b.status === 'confirmed').length,
-    today: all.filter(b => (b.startTime || '').slice(0, 10) === today && b.status === 'confirmed').length,
-    cancelled: all.filter(b => b.status === 'cancelled').length,
-  };
-
-  res.json({ bookings, stats });
 });
 
 // POST /api/agent/:id/bookings — Create a booking (from dashboard or AI)
 app.post('/api/agent/:id/bookings', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const { customerName, customerPhone, customerEmail, appointmentType, startTime, notes } = req.body;
+    const { customerName, customerPhone, customerEmail, appointmentType, startTime, notes } = req.body;
+    if (!customerName && !customerPhone) return res.status(400).json({ error: 'Customer name or phone is required.' });
+    if (!startTime) return res.status(400).json({ error: 'Start time is required.' });
 
-  if (!customerName && !customerPhone) {
-    return res.status(400).json({ error: 'Customer name or phone is required.' });
+    const avail = loadAvailability(req.params.id);
+    let durationMinutes = 60;
+    if (avail && appointmentType) {
+      const type = avail.appointmentTypes.find(t => t.name === appointmentType);
+      if (type) durationMinutes = type.durationMinutes;
+    }
+
+    const start = new Date(startTime);
+    const end = new Date(start.getTime() + durationMinutes * 60000);
+
+    const existing = loadBookings(req.params.id);
+    const conflict = existing.find(b => {
+      if (b.status === 'cancelled') return false;
+      return start < new Date(b.endTime) && end > new Date(b.startTime);
+    });
+    if (conflict) return res.status(409).json({ error: 'This time slot conflicts with an existing booking.' });
+
+    const booking = {
+      id: crypto.randomBytes(8).toString('hex'),
+      customerName: (customerName || '').trim(),
+      customerPhone: (customerPhone || '').trim(),
+      customerEmail: (customerEmail || '').trim(),
+      appointmentType: (appointmentType || '').trim(),
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
+      durationMinutes,
+      status: 'confirmed',
+      notes: (notes || '').trim(),
+      source: 'dashboard',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    existing.push(booking);
+    saveBookings(req.params.id, existing);
+    res.json({ success: true, booking });
+  } catch (err) {
+    log('error', 'booking_create_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to create booking.' });
   }
-  if (!startTime) {
-    return res.status(400).json({ error: 'Start time is required.' });
-  }
-
-  // Look up appointment type duration
-  const avail = loadAvailability(req.params.id);
-  let durationMinutes = 60; // default
-  if (avail && appointmentType) {
-    const type = avail.appointmentTypes.find(t => t.name === appointmentType);
-    if (type) durationMinutes = type.durationMinutes;
-  }
-
-  const start = new Date(startTime);
-  const end = new Date(start.getTime() + durationMinutes * 60000);
-
-  // Check for conflicts
-  const existing = loadBookings(req.params.id);
-  const conflict = existing.find(b => {
-    if (b.status === 'cancelled') return false;
-    const bStart = new Date(b.startTime);
-    const bEnd = new Date(b.endTime);
-    return start < bEnd && end > bStart;
-  });
-
-  if (conflict) {
-    return res.status(409).json({ error: 'This time slot conflicts with an existing booking.' });
-  }
-
-  const booking = {
-    id: crypto.randomBytes(8).toString('hex'),
-    customerName: (customerName || '').trim(),
-    customerPhone: (customerPhone || '').trim(),
-    customerEmail: (customerEmail || '').trim(),
-    appointmentType: (appointmentType || '').trim(),
-    startTime: start.toISOString(),
-    endTime: end.toISOString(),
-    durationMinutes,
-    status: 'confirmed',
-    notes: (notes || '').trim(),
-    source: 'dashboard',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  existing.push(booking);
-  saveBookings(req.params.id, existing);
-  res.json({ success: true, booking });
 });
 
 // POST /api/agent/:id/bookings/ingest — Unauthenticated booking creation (called by OpenClaw bot)
 app.post('/api/agent/:id/bookings/ingest', (req, res) => {
-  const agentId = req.params.id;
-  const agent = getAgent(agentId);
-  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+  try {
+    const agentId = req.params.id;
+    const agent = getAgent(agentId);
+    if (!agent) return res.status(404).json({ error: 'Agent not found' });
 
-  const ingestToken = req.headers['x-ingest-token'] || '';
-  if (!agent.ingestToken || ingestToken !== agent.ingestToken) {
-    return res.status(401).json({ error: 'Invalid ingest token' });
+    const ingestToken = req.headers['x-ingest-token'] || '';
+    if (!agent.ingestToken || ingestToken !== agent.ingestToken) {
+      return res.status(401).json({ error: 'Invalid ingest token' });
+    }
+
+    const { customerName, customerPhone, appointmentType, startTime, notes } = req.body;
+    if (!startTime) return res.status(400).json({ error: 'Start time is required.' });
+
+    const avail = loadAvailability(agentId);
+    let durationMinutes = 60;
+    if (avail && appointmentType) {
+      const type = avail.appointmentTypes.find(t => t.name === appointmentType);
+      if (type) durationMinutes = type.durationMinutes;
+    }
+
+    const start = new Date(startTime);
+    const end = new Date(start.getTime() + durationMinutes * 60000);
+
+    const existing = loadBookings(agentId);
+    const conflict = existing.find(b => {
+      if (b.status === 'cancelled') return false;
+      return start < new Date(b.endTime) && end > new Date(b.startTime);
+    });
+    if (conflict) return res.status(409).json({ error: 'This time slot is no longer available.' });
+
+    const booking = {
+      id: crypto.randomBytes(8).toString('hex'),
+      customerName: (customerName || '').trim(),
+      customerPhone: (customerPhone || '').trim(),
+      customerEmail: '',
+      appointmentType: (appointmentType || '').trim(),
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
+      durationMinutes,
+      status: 'confirmed',
+      notes: (notes || '').trim(),
+      source: 'whatsapp-ai',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    existing.push(booking);
+    saveBookings(agentId, existing);
+    res.json({ success: true, booking });
+  } catch (err) {
+    log('error', 'booking_ingest_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to save booking.' });
   }
-
-  const { customerName, customerPhone, appointmentType, startTime, notes } = req.body;
-  if (!startTime) return res.status(400).json({ error: 'Start time is required.' });
-
-  const avail = loadAvailability(agentId);
-  let durationMinutes = 60;
-  if (avail && appointmentType) {
-    const type = avail.appointmentTypes.find(t => t.name === appointmentType);
-    if (type) durationMinutes = type.durationMinutes;
-  }
-
-  const start = new Date(startTime);
-  const end = new Date(start.getTime() + durationMinutes * 60000);
-
-  const existing = loadBookings(agentId);
-  const conflict = existing.find(b => {
-    if (b.status === 'cancelled') return false;
-    const bStart = new Date(b.startTime);
-    const bEnd = new Date(b.endTime);
-    return start < bEnd && end > bStart;
-  });
-
-  if (conflict) {
-    return res.status(409).json({ error: 'This time slot is no longer available.' });
-  }
-
-  const booking = {
-    id: crypto.randomBytes(8).toString('hex'),
-    customerName: (customerName || '').trim(),
-    customerPhone: (customerPhone || '').trim(),
-    customerEmail: '',
-    appointmentType: (appointmentType || '').trim(),
-    startTime: start.toISOString(),
-    endTime: end.toISOString(),
-    durationMinutes,
-    status: 'confirmed',
-    notes: (notes || '').trim(),
-    source: 'whatsapp-ai',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  existing.push(booking);
-  saveBookings(agentId, existing);
-  res.json({ success: true, booking });
 });
 
 // PATCH /api/agent/:id/bookings/:bookingId — Update a booking (reschedule/cancel)
 app.patch('/api/agent/:id/bookings/:bookingId', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const bookings = loadBookings(req.params.id);
-  const idx = bookings.findIndex(b => b.id === req.params.bookingId);
-  if (idx === -1) return res.status(404).json({ error: 'Booking not found' });
+    const bookings = loadBookings(req.params.id);
+    const idx = bookings.findIndex(b => b.id === req.params.bookingId);
+    if (idx === -1) return res.status(404).json({ error: 'Booking not found' });
 
-  const allowed = ['customerName', 'customerPhone', 'customerEmail', 'appointmentType', 'startTime', 'status', 'notes'];
-  const validStatuses = ['confirmed', 'cancelled', 'completed', 'no-show'];
+    const allowed = ['customerName', 'customerPhone', 'customerEmail', 'appointmentType', 'startTime', 'status', 'notes'];
+    const validStatuses = ['confirmed', 'cancelled', 'completed', 'no-show'];
 
-  for (const key of allowed) {
-    if (req.body[key] !== undefined) {
-      if (key === 'status' && !validStatuses.includes(req.body[key])) {
-        return res.status(400).json({ error: `Invalid status. Use: ${validStatuses.join(', ')}` });
+    for (const key of allowed) {
+      if (req.body[key] !== undefined) {
+        if (key === 'status' && !validStatuses.includes(req.body[key])) {
+          return res.status(400).json({ error: `Invalid status. Use: ${validStatuses.join(', ')}` });
+        }
+        bookings[idx][key] = typeof req.body[key] === 'string' ? req.body[key].trim() : req.body[key];
       }
-      bookings[idx][key] = typeof req.body[key] === 'string' ? req.body[key].trim() : req.body[key];
     }
-  }
 
-  // If startTime changed, recalculate endTime
-  if (req.body.startTime) {
-    const start = new Date(req.body.startTime);
-    const dur = bookings[idx].durationMinutes || 60;
-    bookings[idx].startTime = start.toISOString();
-    bookings[idx].endTime = new Date(start.getTime() + dur * 60000).toISOString();
+    if (req.body.startTime) {
+      const start = new Date(req.body.startTime);
+      const dur = bookings[idx].durationMinutes || 60;
+      bookings[idx].startTime = start.toISOString();
+      bookings[idx].endTime = new Date(start.getTime() + dur * 60000).toISOString();
 
-    // Check conflicts (excluding self)
-    const conflict = bookings.find((b, i) => {
-      if (i === idx || b.status === 'cancelled') return false;
-      const bStart = new Date(b.startTime);
-      const bEnd = new Date(b.endTime);
-      return start < bEnd && new Date(bookings[idx].endTime) > bStart;
-    });
-    if (conflict) {
-      return res.status(409).json({ error: 'This time slot conflicts with another booking.' });
+      const conflict = bookings.find((b, i) => {
+        if (i === idx || b.status === 'cancelled') return false;
+        return start < new Date(b.endTime) && new Date(bookings[idx].endTime) > new Date(b.startTime);
+      });
+      if (conflict) return res.status(409).json({ error: 'This time slot conflicts with another booking.' });
     }
-  }
 
-  bookings[idx].updatedAt = new Date().toISOString();
-  saveBookings(req.params.id, bookings);
-  res.json({ success: true, booking: bookings[idx] });
+    bookings[idx].updatedAt = new Date().toISOString();
+    saveBookings(req.params.id, bookings);
+    res.json({ success: true, booking: bookings[idx] });
+  } catch (err) {
+    log('error', 'booking_update_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to update booking.' });
+  }
 });
 
 // DELETE /api/agent/:id/bookings/:bookingId — Delete a booking
 app.delete('/api/agent/:id/bookings/:bookingId', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const bookings = loadBookings(req.params.id);
-  const idx = bookings.findIndex(b => b.id === req.params.bookingId);
-  if (idx === -1) return res.status(404).json({ error: 'Booking not found' });
+    const bookings = loadBookings(req.params.id);
+    const idx = bookings.findIndex(b => b.id === req.params.bookingId);
+    if (idx === -1) return res.status(404).json({ error: 'Booking not found' });
 
-  bookings.splice(idx, 1);
-  saveBookings(req.params.id, bookings);
-  res.json({ success: true });
+    bookings.splice(idx, 1);
+    saveBookings(req.params.id, bookings);
+    res.json({ success: true });
+  } catch (err) {
+    log('error', 'booking_delete_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to delete booking.' });
+  }
 });
 
 // GET /api/agent/:id/bookings/slots — Get available slots for a date
 app.get('/api/agent/:id/bookings/slots', auth, (req, res) => {
-  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+  try {
+    if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
 
-  const { date, type } = req.query;
-  if (!date) return res.status(400).json({ error: 'Date parameter required (YYYY-MM-DD)' });
+    const { date, type } = req.query;
+    if (!date) return res.status(400).json({ error: 'Date parameter required (YYYY-MM-DD)' });
 
-  const avail = loadAvailability(req.params.id);
-  if (!avail) return res.json({ slots: [], message: 'No availability configured' });
+    const avail = loadAvailability(req.params.id);
+    if (!avail) return res.json({ slots: [], message: 'No availability configured' });
 
-  // Check if date is blocked
-  if (avail.blockedDates && avail.blockedDates.includes(date)) {
-    return res.json({ slots: [], message: 'This date is blocked' });
-  }
-
-  // Get day of week
-  const dayOfWeek = new Date(date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-  const daySchedule = avail.schedule[dayOfWeek];
-  if (!daySchedule || !daySchedule.enabled) {
-    return res.json({ slots: [], message: 'Not available on this day' });
-  }
-
-  // Get duration
-  let durationMinutes = 60;
-  if (type && avail.appointmentTypes.length > 0) {
-    const apptType = avail.appointmentTypes.find(t => t.name === type);
-    if (apptType) durationMinutes = apptType.durationMinutes;
-  } else if (avail.appointmentTypes.length > 0) {
-    durationMinutes = avail.appointmentTypes[0].durationMinutes;
-  }
-
-  const buffer = avail.bufferMinutes || 0;
-  const [startH, startM] = daySchedule.start.split(':').map(Number);
-  const [endH, endM] = daySchedule.end.split(':').map(Number);
-  const dayStartMin = startH * 60 + startM;
-  const dayEndMin = endH * 60 + endM;
-
-  // Get existing bookings for this date
-  const bookings = loadBookings(req.params.id).filter(b => {
-    if (b.status === 'cancelled') return false;
-    return (b.startTime || '').slice(0, 10) === date;
-  });
-
-  // Generate slots
-  const slots = [];
-  let cursor = dayStartMin;
-  while (cursor + durationMinutes <= dayEndMin) {
-    const slotStart = new Date(`${date}T${String(Math.floor(cursor / 60)).padStart(2, '0')}:${String(cursor % 60).padStart(2, '0')}:00`);
-    const slotEnd = new Date(slotStart.getTime() + durationMinutes * 60000);
-
-    // Check if slot conflicts with any existing booking
-    const hasConflict = bookings.some(b => {
-      const bStart = new Date(b.startTime);
-      const bEnd = new Date(b.endTime);
-      return slotStart < bEnd && slotEnd > bStart;
-    });
-
-    if (!hasConflict) {
-      slots.push({
-        start: slotStart.toISOString(),
-        end: slotEnd.toISOString(),
-        label: `${String(Math.floor(cursor / 60)).padStart(2, '0')}:${String(cursor % 60).padStart(2, '0')}`,
-      });
+    if (avail.blockedDates && avail.blockedDates.includes(date)) {
+      return res.json({ slots: [], message: 'This date is blocked' });
     }
 
-    cursor += durationMinutes + buffer;
-  }
+    const dayOfWeek = new Date(date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+    const daySchedule = avail.schedule[dayOfWeek];
+    if (!daySchedule || !daySchedule.enabled) {
+      return res.json({ slots: [], message: 'Not available on this day' });
+    }
 
-  res.json({ slots, date, durationMinutes });
+    let durationMinutes = 60;
+    if (type && avail.appointmentTypes.length > 0) {
+      const apptType = avail.appointmentTypes.find(t => t.name === type);
+      if (apptType) durationMinutes = apptType.durationMinutes;
+    } else if (avail.appointmentTypes.length > 0) {
+      durationMinutes = avail.appointmentTypes[0].durationMinutes;
+    }
+
+    const buffer = avail.bufferMinutes || 0;
+    const [startH, startM] = daySchedule.start.split(':').map(Number);
+    const [endH, endM] = daySchedule.end.split(':').map(Number);
+    const dayStartMin = startH * 60 + startM;
+    const dayEndMin = endH * 60 + endM;
+
+    const bookings = loadBookings(req.params.id).filter(b => {
+      if (b.status === 'cancelled') return false;
+      return (b.startTime || '').slice(0, 10) === date;
+    });
+
+    const slots = [];
+    let cursor = dayStartMin;
+    while (cursor + durationMinutes <= dayEndMin) {
+      const slotStart = new Date(`${date}T${String(Math.floor(cursor / 60)).padStart(2, '0')}:${String(cursor % 60).padStart(2, '0')}:00`);
+      const slotEnd = new Date(slotStart.getTime() + durationMinutes * 60000);
+
+      const hasConflict = bookings.some(b => {
+        return slotStart < new Date(b.endTime) && slotEnd > new Date(b.startTime);
+      });
+
+      if (!hasConflict) {
+        slots.push({
+          start: slotStart.toISOString(),
+          end: slotEnd.toISOString(),
+          label: `${String(Math.floor(cursor / 60)).padStart(2, '0')}:${String(cursor % 60).padStart(2, '0')}`,
+        });
+      }
+
+      cursor += durationMinutes + buffer;
+    }
+
+    res.json({ slots, date, durationMinutes });
+  } catch (err) {
+    log('error', 'slots_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to generate available slots.' });
+  }
 });
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Global error handler — prevents stack traces leaking to clients
+app.use((err, req, res, next) => {
+  log('error', 'unhandled_error', { error: err.message, path: req.path });
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 app.listen(PORT, '0.0.0.0', () => {

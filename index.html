@@ -1697,13 +1697,11 @@
             e.preventDefault();
             const email = document.getElementById('guide-email').value;
             if (email && email.includes('@')) {
-                // Submit to Brevo form (hidden, no API key exposed)
-                const brevoForm = new FormData();
-                brevoForm.append('EMAIL', email);
-                fetch('https://e9b2bb57.sibforms.com/serve/MUIFALDsXgfDHOTeA8JiA_g-QJ1jfIUjYuMe7YrKSfvdtBIrlSCW50LHlMrijNr0c8KjVPsfByI0MCvu4CPuCDptgLQP1kThFWMWVkziKV1NVj3aakOCytMANNUzoSo0cXpQfY9axzNjUv5stXp9idge-nkrZEFkffV9695AcEv8dnRgIJSoWD_bwUhn_U6FUa8epyskx9C2lAdMAg==', {
+                // Submit to backend (adds to Guide Downloads list)
+                fetch('https://api.automatyn.co/api/capture', {
                     method: 'POST',
-                    body: brevoForm,
-                    mode: 'no-cors'
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, source: 'guide' }),
                 }).catch(() => {});
 
                 // Show success with download link
@@ -1720,13 +1718,11 @@
             e.preventDefault();
             var email = document.getElementById('demo-email').value.trim();
             if (email && email.includes('@')) {
-                // Submit to Brevo
-                var brevoForm = new FormData();
-                brevoForm.append('EMAIL', email);
-                fetch('https://e9b2bb57.sibforms.com/serve/MUIFALDsXgfDHOTeA8JiA_g-QJ1jfIUjYuMe7YrKSfvdtBIrlSCW50LHlMrijNr0c8KjVPsfByI0MCvu4CPuCDptgLQP1kThFWMWVkziKV1NVj3aakOCytMANNUzoSo0cXpQfY9axzNjUv5stXp9idge-nkrZEFkffV9695AcEv8dnRgIJSoWD_bwUhn_U6FUa8epyskx9C2lAdMAg==', {
+                // Submit to backend (adds to Demo Requests list)
+                fetch('https://api.automatyn.co/api/capture', {
                     method: 'POST',
-                    body: brevoForm,
-                    mode: 'no-cors'
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, source: 'demo' }),
                 }).catch(function() {});
                 // Show success
                 document.getElementById('demo-form-container').classList.add('hidden');
@@ -1982,11 +1978,11 @@
     (function() {
         var prices = {
             US: { pro: '$29', max: '$79' },
-            GB: { pro: '£29', max: '£79' },
-            EU: { pro: '€27', max: '€72' },
-            AU: { pro: 'A$44', max: 'A$119' },
+            GB: { pro: '£29', max: '£69' },
+            EU: { pro: '€29', max: '€79' },
+            AU: { pro: 'A$49', max: 'A$129' },
             NZ: { pro: 'NZ$49', max: 'NZ$129' },
-            CA: { pro: 'C$39', max: 'C$109' },
+            CA: { pro: 'C$39', max: 'C$99' },
         };
         var euCountries = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
         fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
