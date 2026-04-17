@@ -210,12 +210,42 @@
   // Read plan from URL
   const params = new URLSearchParams(window.location.search);
   const plan = (params.get('plan') || 'starter').toLowerCase();
-  const validPlans = { starter: 'Starter — Free', pro: 'Pro — $29/mo', max: 'Max — $79/mo' };
-  if (plan !== 'starter' && validPlans[plan]) {
-    document.getElementById('plan-badge').classList.remove('hidden');
-    document.getElementById('plan-badge').classList.add('flex');
-    document.getElementById('plan-label').textContent = validPlans[plan];
+
+  // Geo-pricing for plan badge
+  var geoPrices = {
+    US: { pro: '$29', max: '$79' },
+    GB: { pro: '£29', max: '£79' },
+    AT: { pro: '€27', max: '€72' }, BE: { pro: '€27', max: '€72' }, CY: { pro: '€27', max: '€72' },
+    EE: { pro: '€27', max: '€72' }, FI: { pro: '€27', max: '€72' }, FR: { pro: '€27', max: '€72' },
+    DE: { pro: '€27', max: '€72' }, GR: { pro: '€27', max: '€72' }, IE: { pro: '€27', max: '€72' },
+    IT: { pro: '€27', max: '€72' }, LV: { pro: '€27', max: '€72' }, LT: { pro: '€27', max: '€72' },
+    LU: { pro: '€27', max: '€72' }, MT: { pro: '€27', max: '€72' }, NL: { pro: '€27', max: '€72' },
+    PT: { pro: '€27', max: '€72' }, SK: { pro: '€27', max: '€72' }, SI: { pro: '€27', max: '€72' },
+    ES: { pro: '€27', max: '€72' },
+    AU: { pro: 'A$44', max: 'A$119' },
+    NZ: { pro: 'NZ$49', max: 'NZ$129' },
+    CA: { pro: 'C$39', max: 'C$109' },
+  };
+
+  function showPlanBadge(proPriceStr, maxPriceStr) {
+    var validPlans = { starter: 'Starter — Free', pro: 'Pro — ' + proPriceStr + '/mo', max: 'Max — ' + maxPriceStr + '/mo' };
+    if (plan !== 'starter' && validPlans[plan]) {
+      document.getElementById('plan-badge').classList.remove('hidden');
+      document.getElementById('plan-badge').classList.add('flex');
+      document.getElementById('plan-label').textContent = validPlans[plan];
+    }
   }
+
+  // Default to USD, then override with geo
+  showPlanBadge('$29', '$79');
+  fetch('https://ipapi.co/json/', { mode: 'cors' })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var cc = d.country_code;
+      var p = geoPrices[cc];
+      if (p) showPlanBadge(p.pro, p.max);
+    })
+    .catch(function() {});
 
   const form = document.getElementById('signup-form');
   const btn = document.getElementById('submit-btn');
