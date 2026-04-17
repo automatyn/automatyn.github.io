@@ -105,6 +105,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Business name</label>
               <input class="field" id="businessName" name="businessName" type="text" required placeholder="e.g. Greenwood Plumbing" maxlength="100" />
+              <div class="text-xs text-gray-500 mt-1.5">Your AI will introduce itself using this name when replying to customers.</div>
             </div>
 
             <div>
@@ -129,11 +130,13 @@
                 <option>Event planning</option>
                 <option>Other</option>
               </select>
+              <div class="text-xs text-gray-500 mt-1.5">This helps your AI understand the type of questions your customers typically ask.</div>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Location <span class="text-gray-600 normal-case font-normal">(optional)</span></label>
               <input class="field" id="location" name="location" type="text" placeholder="City, country" maxlength="100" />
+              <div class="text-xs text-gray-500 mt-1.5">So your AI can give directions or mention your area when customers ask.</div>
             </div>
           </div>
 
@@ -150,17 +153,19 @@
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Services</label>
               <textarea class="field" id="services" name="services" required placeholder="e.g.&#10;Emergency plumbing&#10;Boiler repair&#10;Bathroom installation" rows="4" maxlength="1000"></textarea>
-              <div class="text-xs text-gray-500 mt-1.5">One per line. The AI uses these to answer customer questions.</div>
+              <div class="text-xs text-gray-500 mt-1.5">One per line. The AI uses these to answer customer questions. Be as detailed as you like.</div>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Pricing <span class="text-gray-600 normal-case font-normal">(optional)</span></label>
               <textarea class="field" id="prices" name="prices" placeholder="e.g.&#10;Callout fee: £45&#10;Hourly rate: £60" rows="3" maxlength="500"></textarea>
+              <div class="text-xs text-gray-500 mt-1.5">If you add prices, your AI can quote them to customers. Leave blank if you prefer to quote manually.</div>
             </div>
 
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Opening hours</label>
               <input class="field" id="hours" name="hours" type="text" required placeholder="e.g. Mon-Fri 9am-5pm, Sat 10am-2pm" maxlength="200" />
+              <div class="text-xs text-gray-500 mt-1.5">Your AI will let customers know when you're available and handle after-hours messages.</div>
             </div>
           </div>
 
@@ -178,6 +183,7 @@
             <div>
               <label class="block text-sm font-medium text-gray-300 mb-2">Booking &amp; cancellation policy <span class="text-gray-600 normal-case font-normal">(optional)</span></label>
               <textarea class="field" id="policies" name="policies" placeholder="e.g. 24hr cancellation notice. £20 deposit for first-time clients." rows="3" maxlength="500"></textarea>
+              <div class="text-xs text-gray-500 mt-1.5">Your AI will share these when customers ask about bookings, cancellations, or deposits.</div>
             </div>
 
             <div class="bg-cyan-950/20 border border-cyan-800/30 rounded-xl p-4 text-sm text-gray-300 leading-relaxed">
