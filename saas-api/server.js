@@ -30,6 +30,41 @@ if (fs.existsSync(secretPath)) {
   fs.writeFileSync(secretPath, jwtSecret);
 }
 
+// --- Structured request logging ---
+const LOG_FILE = path.join(__dirname, 'logs', 'api.log');
+fs.mkdirSync(path.join(__dirname, 'logs'), { recursive: true });
+const logStream = fs.createWriteStream(LOG_FILE, { flags: 'a' });
+
+function log(level, msg, meta = {}) {
+  const entry = JSON.stringify({
+    ts: new Date().toISOString(),
+    level,
+    msg,
+    ...meta
+  });
+  logStream.write(entry + '\n');
+  if (level === 'error') console.error(entry);
+}
+
+// Log every request + response
+app.use((req, res, next) => {
+  const start = Date.now();
+  const originalEnd = res.end;
+  res.end = function(...args) {
+    const duration = Date.now() - start;
+    log('info', 'request', {
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      duration,
+      ip: req.ip || req.connection.remoteAddress,
+      ua: (req.headers['user-agent'] || '').slice(0, 120),
+    });
+    originalEnd.apply(res, args);
+  };
+  next();
+});
+
 app.use(cors({
   origin: ['https://automatyn.co', 'https://automatyn.github.io', 'http://localhost:8080'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -405,12 +440,13 @@ app.post('/api/auth/google', async (req, res) => {
       }).on('error', reject);
     });
   } catch (err) {
-    console.error('Google token verify failed:', err.message);
+    log('error', 'google_token_verify_failed', { error: err.message });
     return res.status(401).json({ error: 'Invalid Google credential. Please try again.' });
   }
 
   // Verify audience matches our client ID
   if (payload.aud !== GOOGLE_CLIENT_ID) {
+    log('error', 'google_aud_mismatch', { got: payload.aud, expected: GOOGLE_CLIENT_ID ? 'set' : 'NOT_SET' });
     return res.status(401).json({ error: 'Invalid Google credential.' });
   }
 
@@ -734,7 +770,7 @@ app.post('/api/webhook/dodo', (req, res) => {
     const expected = 'v1,' + crypto.createHmac('sha256', secretBytes).update(payload).digest('base64');
     const signatures = webhookSig.split(' ');
     if (!signatures.some(s => s === expected)) {
-      console.log('Dodo webhook signature mismatch');
+      log('error', 'dodo_webhook_sig_mismatch');
       return res.status(401).json({ error: 'Invalid signature' });
     }
   }
@@ -744,18 +780,18 @@ app.post('/api/webhook/dodo', (req, res) => {
     const eventType = event.type;
     const data = event.data;
 
-    console.log('Dodo webhook:', eventType);
+    log('info', 'dodo_webhook', { event: eventType });
 
     const agentId = data?.metadata?.agent_id;
 
     if (!agentId) {
-      console.log('Dodo webhook: no agent_id in metadata');
+      log('warn', 'dodo_webhook_no_agent_id');
       return res.json({ received: true });
     }
 
     const agent = getAgent(agentId);
     if (!agent) {
-      console.log('Webhook for unknown agent:', agentId);
+      log('warn', 'dodo_webhook_unknown_agent', { agentId });
       return res.json({ received: true });
     }
 
@@ -768,7 +804,7 @@ app.post('/api/webhook/dodo', (req, res) => {
       agent.dodoSubscriptionId = data.subscription_id || data.id;
       agent.updatedAt = new Date().toISOString();
       fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
-      console.log(`Agent ${agentId} upgraded to ${agent.plan}`);
+      log('info', 'agent_upgraded', { agentId, plan: agent.plan });
     }
 
     if (eventType === 'subscription.cancelled' || eventType === 'subscription.expired' || eventType === 'subscription.failed') {
@@ -776,7 +812,7 @@ app.post('/api/webhook/dodo', (req, res) => {
       agent.status = 'canceled';
       agent.updatedAt = new Date().toISOString();
       fs.writeFileSync(metaPath, JSON.stringify(agent, null, 2));
-      console.log(`Agent ${agentId} downgraded to starter`);
+      log('info', 'agent_downgraded', { agentId });
     }
 
     res.json({ received: true });

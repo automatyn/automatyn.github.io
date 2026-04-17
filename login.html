@@ -144,10 +144,36 @@
     ? 'http://localhost:3001'
     : 'https://api.automatyn.co';
 
-  // If already logged in, go straight to dashboard
-  if (localStorage.getItem('jwt')) {
-    window.location.href = '/dashboard.html';
-  }
+  // If already logged in, verify token then go to dashboard
+  // Guard against redirect loops: if we came from dashboard, the token is bad — clear it
+  (async function checkExistingAuth() {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) return;
+    const fromDashboard = document.referrer.includes('/dashboard');
+    if (fromDashboard) {
+      // Dashboard sent us here = token is invalid, clear it
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('agentId');
+      localStorage.removeItem('email');
+      return;
+    }
+    // Quick token check before redirecting
+    try {
+      const res = await fetch(`${API}/api/auth/me`, {
+        headers: { 'Authorization': 'Bearer ' + jwt }
+      });
+      if (res.ok) {
+        window.location.href = '/dashboard.html';
+      } else {
+        // Token expired/invalid, clear it
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('agentId');
+        localStorage.removeItem('email');
+      }
+    } catch(e) {
+      // API unreachable, don't redirect
+    }
+  })();
 
   // Google Sign-In callback
   async function handleGoogleSignIn(response) {
