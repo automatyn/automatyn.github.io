@@ -366,7 +366,7 @@
             --bg-surface: #0f0f0f;
             --border-subtle: rgba(255, 255, 255, 0.06);
             --border-hover: rgba(34, 211, 238, 0.25);
-            --neon-purple: #a855f7;
+            --neon-accent: #22d3ee;
             --text-primary: #f5f5f5;
             --text-secondary: #a1a1aa;
             --text-muted: #71717a;
@@ -530,21 +530,21 @@
         .chat-widget { display: none; /* Hidden - using embedded chat now */ }
 
         /* Embedded Chat Styles */
-        .chat-messages { scrollbar-width: thin; scrollbar-color: rgba(168, 85, 247, 0.3) transparent; }
+        .chat-messages { scrollbar-width: thin; scrollbar-color: rgba(34, 211, 238, 0.3) transparent; }
         .chat-messages::-webkit-scrollbar { width: 6px; }
         .chat-messages::-webkit-scrollbar-track { background: transparent; }
-        .chat-messages::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.3); border-radius: 3px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 3px; }
 
         /* Typing indicator animation */
         .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 4px 0; }
-        .typing-indicator span { width: 8px; height: 8px; background: var(--neon-purple); border-radius: 50%; animation: typingBounce 1.4s infinite both; }
+        .typing-indicator span { width: 8px; height: 8px; background: var(--neon-accent); border-radius: 50%; animation: typingBounce 1.4s infinite both; }
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-4px); } }
 
         /* Quick reply buttons - dark mode */
-        .quick-reply { display: inline-block; padding: 6px 12px; background: var(--bg-surface); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--text-primary); }
-        .quick-reply:hover { background: rgba(168, 85, 247, 0.2); border-color: var(--neon-purple); }
+        .quick-reply { display: inline-block; padding: 6px 12px; background: var(--bg-surface); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: 16px; font-size: 12px; cursor: pointer; transition: all 0.2s; color: var(--text-primary); }
+        .quick-reply:hover { background: rgba(34, 211, 238, 0.2); border-color: var(--neon-accent); }
 
         /* Mobile optimizations */
         html, body { overflow-x: hidden; }
@@ -558,8 +558,8 @@
         }
 
         /* Hardware Guide CTA */
-        .hardware-cta { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.3); }
-        .hardware-cta:hover { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 30px rgba(168, 85, 247, 0.2); }
+        .hardware-cta { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(34, 211, 238, 0.1) 100%); border: 1px solid rgba(34, 211, 238, 0.3); }
+        .hardware-cta:hover { border-color: rgba(34, 211, 238, 0.6); box-shadow: 0 0 30px rgba(34, 211, 238, 0.2); }
     </style>
 
     <!-- Google Analytics -->
@@ -599,7 +599,7 @@
                     <a href="#case-study" class="text-gray-400 hover:text-white transition text-sm font-medium">Case Study</a>
                     <a href="#process" class="text-gray-400 hover:text-white transition text-sm font-medium">Process</a>
                     <a href="#blog" class="text-gray-400 hover:text-white transition text-sm font-medium">Blog</a>
-                    <a href="#try-demo" class="text-purple-400 hover:text-purple-300 transition text-sm font-medium">Try Demo</a>
+                    <a href="#try-demo" class="text-cyan-400 hover:text-cyan-300 transition text-sm font-medium">Try Demo</a>
                     <a href="/signup.html" class="cta-primary cta-nav px-5 py-2 transition text-sm font-medium">Start Free</a>
                 </div>
                 <div class="md:hidden flex items-center gap-3">
@@ -875,11 +875,11 @@
 
     <!-- Try the AI Demo — Email-Gated -->
     <section id="try-demo" class="py-16 px-4 bg-black relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-purple-950/10 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-cyan-950/10 to-transparent pointer-events-none"></div>
         <div class="max-w-3xl mx-auto relative z-10 text-center">
-            <div class="inline-flex items-center gap-2 bg-purple-950/30 border border-purple-500/20 px-4 py-2 rounded-full mb-6">
-                <span class="w-2 h-2 bg-purple-400 rounded-full pulse" aria-hidden="true"></span>
-                <span class="text-sm font-medium text-purple-300">Live Demo</span>
+            <div class="inline-flex items-center gap-2 bg-cyan-950/30 border border-cyan-500/20 px-4 py-2 rounded-full mb-6">
+                <span class="w-2 h-2 bg-cyan-400 rounded-full pulse" aria-hidden="true"></span>
+                <span class="text-sm font-medium text-cyan-300">Live Demo</span>
             </div>
             <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">Try It Yourself in 30 Seconds</h2>
             <p class="text-base sm:text-lg text-gray-400 mb-8">See how an AI receptionist handles real customer inquiries for salons, dental offices, restaurants, and more. Enter your email and we'll send you a link to chat with our demo bot on Telegram.</p>
@@ -887,21 +887,21 @@
             <!-- Email gate form -->
             <div id="demo-form-container">
                 <form id="demo-email-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
-                    <input id="demo-email" type="email" placeholder="Your work email" required class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-purple-500/50" autocomplete="email">
-                    <button type="submit" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);">Get Demo Link</button>
+                    <input id="demo-email" type="email" placeholder="Your work email" required class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500/50" autocomplete="email">
+                    <button type="submit" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">Get Demo Link</button>
                 </form>
                 <p class="text-gray-600 text-xs">No spam. Just a Telegram link so you can test the bot instantly.</p>
             </div>
 
             <!-- Success state (hidden by default) -->
             <div id="demo-success" class="hidden">
-                <div class="bg-gradient-to-br from-purple-950/30 to-blue-950/20 border border-purple-500/20 rounded-2xl p-8 max-w-md mx-auto">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #a855f7, #3b82f6);">
+                <div class="bg-gradient-to-br from-cyan-950/30 to-blue-950/20 border border-cyan-500/20 rounded-2xl p-8 max-w-md mx-auto">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9);">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Your demo is ready!</h3>
                     <p class="text-gray-400 text-sm mb-6">Chat with our AI receptionist on Telegram. Pick any business type and watch it handle bookings, FAQs, and customer inquiries.</p>
-                    <a href="https://t.me/automatyn_demo_bot" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-lg hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);">
+                    <a href="https://t.me/automatyn_demo_bot" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-lg hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">
                         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
                         Open Demo on Telegram
                     </a>
@@ -1028,11 +1028,11 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                <div class="flex flex-col gap-4 items-center text-center mt-2">
                     <p class="text-sm text-gray-400"><span id="roi-payback">Setup pays for itself in the first few bookings.</span></p>
-                    <div class="flex gap-3">
-                        <a href="/signup.html" class="cta-primary px-6 py-3 font-semibold text-sm">Start free →</a>
-                        <a href="/tools/ai-receptionist-roi-calculator.html" class="px-6 py-3 rounded-xl font-semibold text-sm border border-white/10 text-gray-300 hover:text-white hover:border-cyan-500/40 transition">See full breakdown</a>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto sm:justify-center">
+                        <a href="/signup.html" class="cta-primary cta-glow-full px-8 py-3.5 font-semibold text-sm sm:text-base text-center">Start free →</a>
+                        <a href="/tools/ai-receptionist-roi-calculator.html" class="px-8 py-3.5 rounded-xl font-semibold text-sm sm:text-base border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400/60 hover:bg-cyan-950/30 transition text-center">See full breakdown</a>
                     </div>
                 </div>
             </div>
@@ -1075,7 +1075,7 @@
             if (multiple >= 10) {
                 paybackEl.textContent = `At ${Math.round(multiple)}x ROI, Automatyn pays for itself ${Math.round(multiple)} times over — first recovered booking covers the month.`;
             } else if (multiple >= 2) {
-                paybackEl.textContent = `Starter plan (£29/mo) pays for itself in the first ${Math.ceil(29 / jobValue)} booking${Math.ceil(29 / jobValue) > 1 ? 's' : ''} of the month.`;
+                paybackEl.textContent = `Pro plan ($29/mo) pays for itself in the first ${Math.ceil(29 / jobValue)} booking${Math.ceil(29 / jobValue) > 1 ? 's' : ''} of the month.`;
             } else {
                 paybackEl.textContent = `Even the free tier (25 conversations/mo) saves you most of this. No credit card needed.`;
             }
@@ -1225,15 +1225,15 @@
             </div>
 
             <!-- Self-hosted option: Build Your Own + Done-For-You setup -->
-            <div class="mt-12 bg-gradient-to-r from-purple-950/20 to-purple-900/10 rounded-2xl p-5 sm:p-8 border border-white/6">
+            <div class="mt-12 bg-gradient-to-r from-cyan-950/20 to-cyan-900/10 rounded-2xl p-5 sm:p-8 border border-white/6">
                 <div class="flex flex-col md:flex-row md:items-center gap-6">
                     <div class="flex-1">
                         <h3 class="text-xl font-bold text-white mb-2">Build Your Own AI Agent on Your Own Machine</h3>
-                        <p class="text-gray-400 mb-3">Prefer full control? <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-purple-400 hover:text-purple-300 font-semibold">OpenClaw is open source</a>. Deploy your own AI agent on your own server — you own everything, no monthly fees.</p>
+                        <p class="text-gray-400 mb-3">Prefer full control? <a href="https://github.com/nichochar/openclaw" target="_blank" rel="noopener" class="text-cyan-400 hover:text-cyan-300 font-semibold">OpenClaw is open source</a>. Deploy your own AI agent on your own server — you own everything, no monthly fees.</p>
                         <p class="text-sm text-gray-400">Don't want to wrestle with the setup? <span class="text-white font-semibold">We'll do it for you — one-time from <span id="price-setup">$400</span>.</span></p>
                     </div>
                     <div class="flex flex-col gap-2 w-full md:w-auto shrink-0">
-                        <button id="calendly-btn" type="button" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #a855f7, #3b82f6); box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);">
+                        <button id="calendly-btn" type="button" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.2);">
                             Book a 30-min call
                         </button>
                         <a href="mailto:support@automatyn.co" class="text-center text-xs text-gray-500 hover:text-gray-300 transition">or email us</a>
@@ -1600,7 +1600,7 @@
                 <p class="text-gray-400 max-w-2xl mx-auto">Learn how AI automation can transform your business and create new income streams.</p>
             </div>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-posts">
-                <a href="/blog/whatsapp-automation-small-business-2026.html" class="group bg-gray-900/50 border border-purple-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
+                <a href="/blog/whatsapp-automation-small-business-2026.html" class="group bg-gray-900/50 border border-cyan-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
                     <div class="aspect-video overflow-hidden">
                         <img src="/blog/images/whatsapp-automation-hero.jpg" alt="WhatsApp automation for small business 2026" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                     </div>
@@ -1611,7 +1611,7 @@
                         <span class="inline-flex items-center text-cyan-400 text-sm mt-4 group-hover:text-cyan-300">Read more →</span>
                     </div>
                 </a>
-                <a href="/blog/how-much-does-ai-chatbot-cost-2026.html" class="group bg-gray-900/50 border border-purple-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
+                <a href="/blog/how-much-does-ai-chatbot-cost-2026.html" class="group bg-gray-900/50 border border-cyan-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
                     <div class="aspect-video overflow-hidden">
                         <img src="/blog/images/chatbot-cost-hero.jpg" alt="AI chatbot cost breakdown 2026" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                     </div>
@@ -1622,7 +1622,7 @@
                         <span class="inline-flex items-center text-cyan-400 text-sm mt-4 group-hover:text-cyan-300">Read more →</span>
                     </div>
                 </a>
-                <a href="/blog/claude-code-getting-dumber-2026.html" class="group bg-gray-900/50 border border-purple-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
+                <a href="/blog/claude-code-getting-dumber-2026.html" class="group bg-gray-900/50 border border-cyan-900/20 rounded-2xl overflow-hidden hover:border-cyan-500/20 transition-all duration-300">
                     <div class="aspect-video overflow-hidden">
                         <img src="/blog/images/claude-code-dumber-hero.jpg" alt="Claude Code Got 67% Dumber data analysis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                     </div>
@@ -1704,7 +1704,7 @@
 
                 // Show success with download link
                 const form = this;
-                form.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-glow"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-xl font-bold text-white mb-2">Download Your Guide</h3><p class="text-gray-400 mb-4">We\'ve also sent a copy to ' + email + '</p><a href="https://automatyn.co/openclaw-hardware-guide-2026.pdf" download class="inline-flex items-center gap-2 cta-primary px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Download PDF Guide</a></div>';
+                form.innerHTML = '<div class="text-center py-8"><div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-glow"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div><h3 class="text-xl font-bold text-white mb-2">Download Your Guide</h3><p class="text-gray-400 mb-4">We\'ve also sent a copy to ' + email + '</p><a href="https://automatyn.co/openclaw-hardware-guide-2026.pdf" download class="inline-flex items-center gap-2 cta-primary px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Download PDF Guide</a></div>';
             }
         });
         })();
@@ -1820,7 +1820,7 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = 'flex gap-3 mb-4';
             msgDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div class="bg-card rounded-2xl rounded-tl-none px-4 py-3 max-w-md border border-white/6">
@@ -1850,7 +1850,7 @@
             typingDiv.id = 'typing-indicator';
             typingDiv.className = 'flex gap-3 mb-4';
             typingDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div class="bg-card rounded-2xl rounded-tl-none px-4 py-3 border border-white/6">
@@ -1874,7 +1874,7 @@
             formDiv.id = 'email-capture-form';
             formDiv.className = 'flex gap-3 mb-4';
             formDiv.innerHTML = `
-                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div class="bg-white rounded-2xl rounded-tl-none px-4 py-3 max-w-xs shadow-sm">
