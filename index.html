@@ -646,7 +646,7 @@
                                 <div class="flex items-center gap-3 flex-1">
                                     <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-green-400 flex items-center justify-center text-white font-bold text-sm" id="wa-avatar">M</div>
                                     <div>
-                                        <div class="text-white text-sm font-semibold" id="wa-name">Mike's E-Commerce Store</div>
+                                        <div class="text-white text-sm font-semibold" id="wa-name">Glow Studio Salon</div>
                                         <div class="text-green-400 text-xs" id="wa-status">online</div>
                                     </div>
                                 </div>
@@ -1242,36 +1242,36 @@
 
         const scenarios = [
             {
-                name: "Mike's E-Commerce Store", avatar: 'M', color: 'from-green-600 to-green-400', platform: 0,
+                name: 'Glow Studio Salon', avatar: 'G', color: 'from-pink-500 to-rose-400', platform: 0,
                 messages: [
-                    { type: 'out', text: 'Hey, a customer just left a 1-star review on our store. Can you handle it?', time: '8:15 AM' },
-                    { type: 'in', text: 'On it. I found the review — it\'s about a late delivery on order #4821. I\'ve checked the tracking: it was stuck at the Memphis hub for 3 days. Here\'s what I\'ve done:\n\n✅ Drafted a public response apologising and offering 15% off\n✅ Sent the customer a private email with a replacement shipping label\n✅ Flagged the carrier issue in your logistics sheet', time: '8:15 AM' },
-                    { type: 'out', text: 'Wow that was fast. Did you update the spreadsheet too?', time: '8:16 AM' },
-                    { type: 'in', text: 'Yes — row 48 in your Carrier Issues tracker is updated with the delay details, date, and resolution status. I also noticed 2 other orders from the same batch are delayed. Want me to proactively reach out to those customers before they complain?', time: '8:16 AM' },
-                    { type: 'out', text: 'Yes do it', time: '8:17 AM' },
-                    { type: 'in', text: 'Done ✅ Both customers messaged with an apology + 10% discount code. I\'ll monitor their tracking and update you if anything else stalls. 📦', time: '8:17 AM' },
+                    { type: 'out', text: 'Hi! Do you have any availability for a balayage this Saturday?', time: '9:42 PM' },
+                    { type: 'in', text: 'Hi there! Yes, we have slots available on Saturday. Our balayage starts at £95 for medium length hair.\n\nAvailable times:\n• 10:00 AM with Jess\n• 1:30 PM with Abi\n• 3:00 PM with Jess\n\nWould any of these work for you?', time: '9:42 PM' },
+                    { type: 'out', text: '1:30 please! How long does it take?', time: '9:43 PM' },
+                    { type: 'in', text: 'Booked you in for 1:30 PM Saturday with Abi ✅\n\nBalayage usually takes 2.5 to 3 hours depending on your hair. We recommend arriving 5 minutes early.\n\n📍 23 High Street, Clapham SW4 7TG\n\nI\'ll send you a reminder on Friday evening. See you Saturday!', time: '9:43 PM' },
+                    { type: 'out', text: 'Amazing, thank you!', time: '9:44 PM' },
+                    { type: 'in', text: 'You\'re welcome! If you need to reschedule just message here anytime. Have a lovely evening 💇‍♀️', time: '9:44 PM' },
                 ]
             },
             {
-                name: 'Sarah — Real Estate Agent', avatar: 'S', color: 'from-sky-500 to-blue-400', platform: 1,
+                name: 'Dave Harris Plumbing', avatar: 'D', color: 'from-sky-500 to-blue-400', platform: 1,
                 messages: [
-                    { type: 'out', text: 'I got 12 new leads from the open house. Can you follow up with all of them?', time: '9:30 PM' },
-                    { type: 'in', text: 'I\'ve pulled the 12 contacts from your sign-in sheet. Here\'s what I\'m doing for each:\n\n1. Personalised follow-up email mentioning the property they viewed\n2. Text message with your calendar link\n3. Adding them to your CRM with lead score based on their enquiry notes\n\nFirst batch of emails going out in 10 minutes.', time: '9:30 PM' },
-                    { type: 'out', text: 'Can you also check which ones are pre-approved?', time: '9:31 PM' },
-                    { type: 'in', text: 'Cross-referenced with your mortgage partner\'s list. 4 of the 12 are pre-approved buyers:\n\n• James K — pre-approved $450K\n• Diana R — pre-approved $380K\n• Tom & Lisa W — pre-approved $520K\n• Marcus J — pre-approved $290K\n\nI\'ve flagged these 4 as high-priority in your CRM and moved them to the top of your call list for tomorrow morning.', time: '9:32 PM' },
-                    { type: 'out', text: 'This is incredible', time: '9:32 PM' },
-                    { type: 'in', text: 'Just doing my job 24/7 😉 I\'ll send you a summary report at 8 AM tomorrow with open rates and any replies. Sleep well! 🏡', time: '9:33 PM' },
+                    { type: 'out', text: 'My boiler is making a banging noise and the pressure keeps dropping. Are you available today?', time: '7:14 AM' },
+                    { type: 'in', text: 'Sorry to hear that. Sounds like it could be a pressure valve issue or trapped air in the system. A few quick questions:\n\n1. What make and model is your boiler?\n2. What\'s the pressure reading on the gauge?\n3. What\'s your postcode?\n\nDave covers most of South Leeds and can usually get out same day.', time: '7:14 AM' },
+                    { type: 'out', text: 'Worcester Bosch, the gauge is in the red below 0.5, and I\'m in LS11', time: '7:15 AM' },
+                    { type: 'in', text: 'LS11 is in Dave\'s area. That low pressure with banging sounds like the filling loop or expansion vessel.\n\nDave has a slot this afternoon between 2 and 4 PM. Callout is £65 which includes the first hour of labour. Parts extra if needed.\n\nShall I book that in for you?', time: '7:15 AM' },
+                    { type: 'out', text: 'Yes please, 2pm works', time: '7:16 AM' },
+                    { type: 'in', text: 'Booked ✅ Dave will be with you between 2 and 4 PM today.\n\n📍 Please confirm your full address and a contact number so Dave can call when he\'s on his way.\n\nIn the meantime, don\'t try to repressurise it yourself if you\'re not sure how. Dave will sort it out.', time: '7:16 AM' },
                 ]
             },
             {
-                name: 'CoachLaunch Community', avatar: 'C', color: 'from-indigo-500 to-purple-400', platform: 2,
+                name: 'Bright Smile Dental', avatar: 'B', color: 'from-cyan-500 to-teal-400', platform: 2,
                 messages: [
-                    { type: 'out', text: 'What did our competitors post this week? I need content ideas', time: '7:45 AM' },
-                    { type: 'in', text: 'I monitored 5 competitor accounts overnight. Here\'s the breakdown:\n\n📈 Top performer: @DigitalCoachPro posted a carousel "7 AI Tools That Replace a VA" — 2.4K likes, 380 saves\n\n🔥 Trending topic: "AI side income" is surging — 3 competitors posted about it\n\n💡 Gap I found: Nobody is talking about setup costs vs. DIY time. That\'s your angle.', time: '7:46 AM' },
-                    { type: 'out', text: 'Write me 3 post ideas based on that', time: '7:46 AM' },
-                    { type: 'in', text: 'Here are 3 ready-to-use hooks:\n\n1. "I spent $400 on AI setup and saved 15 hours/week. Here\'s the math."\n2. "Your competitor is using AI agents while you\'re still answering DMs manually"\n3. "The real cost of NOT automating your business in 2026"\n\nWant me to draft the full captions and generate carousel slides for any of these?', time: '7:47 AM' },
-                    { type: 'out', text: 'Do all 3. Schedule them for this week', time: '7:47 AM' },
-                    { type: 'in', text: 'On it ✅ I\'ll have all 3 drafted with captions, hashtags, and posting times optimised for your audience peak hours. You\'ll get them for review in 30 minutes. 🚀', time: '7:48 AM' },
+                    { type: 'out', text: 'I need to cancel my cleaning appointment on Thursday. Can I rebook for next week?', time: '6:30 PM' },
+                    { type: 'in', text: 'No problem at all. I\'ve cancelled your Thursday 3 PM cleaning with Dr Patel.\n\nHere\'s what\'s available next week:\n\n• Monday 11:00 AM\n• Tuesday 2:30 PM\n• Thursday 10:00 AM\n• Friday 4:00 PM\n\nWhich works best for you?', time: '6:30 PM' },
+                    { type: 'out', text: 'Tuesday 2:30 please', time: '6:31 PM' },
+                    { type: 'in', text: 'Done ✅ You\'re booked for Tuesday at 2:30 PM with Dr Patel.\n\nJust a reminder: please arrive 5 minutes early and avoid eating 30 minutes before your appointment.\n\n📍 14 Park Row, Nottingham NG1 6GR\n\nI\'ll send you a reminder on Monday evening.', time: '6:31 PM' },
+                    { type: 'out', text: 'Thanks! Also, do you do teeth whitening?', time: '6:32 PM' },
+                    { type: 'in', text: 'Yes! We offer professional teeth whitening starting at £299 for in-chair treatment (takes about an hour) or £199 for take-home trays.\n\nWould you like me to book a free consultation? We can add it before or after your Tuesday cleaning.', time: '6:32 PM' },
                 ]
             }
         ];
