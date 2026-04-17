@@ -814,12 +814,20 @@
                                 <div class="text-sm" style="color: #e4e4e7; line-height: 1.55;">
                                     <p style="font-weight: 700; color: #fff; margin-bottom: 6px;">Before you scan — use this safely</p>
                                     <p style="color: #a1a1aa; margin-bottom: 8px;">Automatyn is designed as a <strong style="color:#fff;">receptionist</strong>: customer-facing, answering messages, taking bookings, capturing leads — all receptionist tasks.</p>
-                                    <p style="color: #a1a1aa; margin-bottom: 0;">It is <strong style="color:#fca5a5;">not</strong> designed to send out cold marketing outreach. Doing so will result in your WhatsApp number being banned.</p>
+                                    <p style="color: #a1a1aa; margin-bottom: 0;">It is <strong style="color:#fca5a5;">not</strong> designed to send out cold marketing outreach. Doing so can get your WhatsApp number flagged and reported to Meta.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div id="qr-container" class="flex flex-col md:flex-row gap-8 items-center">
+                        <!-- Method toggle (QR vs Phone Code) -->
+                        <div class="flex gap-2 mb-5" id="pairing-method-toggle">
+                            <button class="filter-pill active" id="method-qr-btn" onclick="showPairingMethod('qr')">QR Code</button>
+                            <button class="filter-pill" id="method-phone-btn" onclick="showPairingMethod('phone')">Phone Number</button>
+                            <span class="text-zinc-500 text-xs self-center ml-2" id="mobile-hint" style="display:none;">On mobile? Use Phone Number instead.</span>
+                        </div>
+
+                        <!-- QR method -->
+                        <div id="pairing-qr" class="flex flex-col md:flex-row gap-8 items-center">
                             <div class="qr-placeholder" id="qr-placeholder">
                                 <div class="text-center relative z-10">
                                     <div class="text-4xl mb-3">📱</div>
@@ -836,6 +844,27 @@
                                     <li>Point your phone at the QR code</li>
                                 </ol>
                                 <p class="text-xs text-zinc-500 mt-4">Your agent stays connected even after editing settings. You only need to scan again if you switch phone numbers.</p>
+                            </div>
+                        </div>
+
+                        <!-- Phone number method -->
+                        <div id="pairing-phone" style="display:none;">
+                            <div class="flex flex-col gap-4" style="max-width:400px;">
+                                <div>
+                                    <label class="form-label" for="pair-phone-input">Your WhatsApp Business phone number</label>
+                                    <input type="tel" id="pair-phone-input" class="form-input" placeholder="e.g. 447700900000" style="font-size:1rem;">
+                                    <p class="text-zinc-500 text-xs mt-1.5">Enter your full number with country code, no spaces or dashes. e.g. 447700900000 for a UK number.</p>
+                                </div>
+                                <button class="cta-button" id="pair-phone-btn" onclick="startPhonePairing()" style="align-self:flex-start;">Get pairing code</button>
+
+                                <div id="pair-code-result" style="display:none;">
+                                    <div style="background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.2);border-radius:0.875rem;padding:1.25rem;text-align:center;">
+                                        <p class="text-zinc-400 text-sm mb-2">Enter this code in WhatsApp:</p>
+                                        <div id="pair-code-value" style="font-family:'Cabinet Grotesk',sans-serif;font-size:2rem;font-weight:800;letter-spacing:0.15em;color:#22d3ee;"></div>
+                                        <p class="text-zinc-500 text-xs mt-3">Go to WhatsApp Business → Settings → Linked Devices → Link a Device → Link with phone number instead.</p>
+                                    </div>
+                                </div>
+                                <div id="pair-phone-error" class="text-red-400 text-sm" style="display:none;"></div>
                             </div>
                         </div>
 
@@ -1345,7 +1374,7 @@
                                 <div class="flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0" style="background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.25);font-size:0.85rem;font-weight:800;color:#22d3ee;">1</div>
                                 <div>
                                     <h3 class="text-sm font-bold text-white mb-1">Setup — Connect WhatsApp</h3>
-                                    <p class="text-zinc-400 text-sm" style="line-height:1.6;">Open WhatsApp Business on your phone, go to Settings > Linked Devices > Link a Device, then scan the QR code shown on the Setup tab. Your AI receptionist goes live immediately. You only need to scan once — it stays connected even if you close this dashboard.</p>
+                                    <p class="text-zinc-400 text-sm" style="line-height:1.6;">Open WhatsApp Business on your phone, go to Settings > Linked Devices > Link a Device, then scan the QR code shown on the Setup tab. If you're on mobile, switch to the "Phone Number" method and enter your number to get a pairing code instead. Your AI receptionist goes live immediately. You only need to pair once — it stays connected even if you close this dashboard.</p>
                                 </div>
                             </div>
                         </div>
@@ -1402,7 +1431,7 @@
                                 <li>• <strong class="text-zinc-200">Include pricing where possible.</strong> Customers ask about cost more than anything else. Even a range ("Boiler service: £80-120") is better than nothing.</li>
                                 <li>• <strong class="text-zinc-200">Update your hours if they change.</strong> The AI tells customers when you're available based on what you've entered here. If your hours change seasonally, update them so customers get accurate info.</li>
                                 <li>• <strong class="text-zinc-200">Check your leads regularly.</strong> The AI captures contact details, but following up is on you. Customers who get a quick callback convert at a much higher rate.</li>
-                                <li>• <strong class="text-zinc-200">Don't use the WhatsApp number for cold outreach.</strong> The AI is designed as a receptionist. Sending unsolicited marketing messages can get your WhatsApp number banned.</li>
+                                <li>• <strong class="text-zinc-200">Don't use the WhatsApp number for cold outreach.</strong> The AI is designed as a receptionist. Sending unsolicited marketing messages can get your WhatsApp number flagged and reported to Meta.</li>
                             </ul>
                         </div>
 
@@ -1710,8 +1739,13 @@
                     navDot.className = 'status-dot connected';
                     navText.textContent = 'Live';
                     if (headerStatus) headerStatus.style.display = 'inline-flex';
-                    document.getElementById('qr-placeholder').style.display = 'none';
-                    document.getElementById('qr-instructions').style.display = 'none';
+                    // Hide both pairing methods and toggle
+                    var pairingToggle = document.getElementById('pairing-method-toggle');
+                    var pairingQr = document.getElementById('pairing-qr');
+                    var pairingPhone = document.getElementById('pairing-phone');
+                    if (pairingToggle) pairingToggle.style.display = 'none';
+                    if (pairingQr) pairingQr.style.display = 'none';
+                    if (pairingPhone) pairingPhone.style.display = 'none';
                     document.getElementById('connected-status').style.display = 'block';
                     if (svcWa) svcWa.innerHTML = '<span class="status-dot connected"></span><span class="text-sm font-semibold text-emerald-400">Connected</span>';
                 } else {
@@ -1839,6 +1873,85 @@
                     }
                 } catch (e) {}
             }, 3000);
+        }
+
+        // Detect mobile and auto-show hint
+        (function() {
+            const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+            if (isMobile) {
+                const hint = document.getElementById('mobile-hint');
+                if (hint) hint.style.display = 'inline';
+                // Auto-switch to phone method on mobile
+                showPairingMethod('phone');
+            }
+        })();
+
+        function showPairingMethod(method) {
+            const qrSection = document.getElementById('pairing-qr');
+            const phoneSection = document.getElementById('pairing-phone');
+            const qrBtn = document.getElementById('method-qr-btn');
+            const phoneBtn = document.getElementById('method-phone-btn');
+            if (method === 'phone') {
+                qrSection.style.display = 'none';
+                phoneSection.style.display = 'block';
+                qrBtn.classList.remove('active');
+                phoneBtn.classList.add('active');
+            } else {
+                qrSection.style.display = 'flex';
+                phoneSection.style.display = 'none';
+                qrBtn.classList.add('active');
+                phoneBtn.classList.remove('active');
+            }
+        }
+
+        async function startPhonePairing() {
+            const input = document.getElementById('pair-phone-input');
+            const btn = document.getElementById('pair-phone-btn');
+            const resultDiv = document.getElementById('pair-code-result');
+            const errorDiv = document.getElementById('pair-phone-error');
+            const phone = input.value.trim().replace(/[\s\-\(\)\+]/g, '');
+
+            if (!phone || phone.length < 8) {
+                errorDiv.textContent = 'Please enter a valid phone number with country code.';
+                errorDiv.style.display = 'block';
+                resultDiv.style.display = 'none';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Requesting code...';
+            errorDiv.style.display = 'none';
+            resultDiv.style.display = 'none';
+
+            try {
+                const res = await fetch(API_URL + '/api/agent/' + agentId + '/whatsapp/pair', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token,
+                    },
+                    body: JSON.stringify({ phoneNumber: phone }),
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorDiv.textContent = data.error || 'Failed to generate pairing code. Please try again.';
+                    errorDiv.style.display = 'block';
+                } else if (data.pairingCode) {
+                    document.getElementById('pair-code-value').textContent = data.pairingCode;
+                    resultDiv.style.display = 'block';
+                    pollWhatsAppConnection();
+                } else {
+                    errorDiv.textContent = data.message || 'Pairing initiated. Check WhatsApp for the code.';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = 'Network error. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Get pairing code';
         }
 
         function showSection(name, evt) {
