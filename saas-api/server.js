@@ -32,7 +32,7 @@ if (fs.existsSync(secretPath)) {
 
 app.use(cors({
   origin: ['https://automatyn.co', 'https://automatyn.github.io', 'http://localhost:8080'],
-  methods: ['GET', 'POST', 'PUT'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
@@ -986,6 +986,183 @@ app.get('/api/agent/:id/whatsapp/status', auth, async (req, res) => {
     console.error('WhatsApp status error:', err.message);
     res.status(500).json({ error: err.message || 'Failed to check status' });
   }
+});
+
+// ============================================================
+// LEADS ENDPOINTS
+// ============================================================
+
+const LEADS_DIR = path.join(__dirname, 'data', 'leads');
+if (!fs.existsSync(LEADS_DIR)) fs.mkdirSync(LEADS_DIR, { recursive: true });
+
+function getLeadsPath(agentId) {
+  return path.join(LEADS_DIR, `${agentId}.json`);
+}
+
+function loadLeads(agentId) {
+  const p = getLeadsPath(agentId);
+  if (!fs.existsSync(p)) return [];
+  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return []; }
+}
+
+function saveLeads(agentId, leads) {
+  fs.writeFileSync(getLeadsPath(agentId), JSON.stringify(leads, null, 2));
+}
+
+// GET /api/agent/:id/leads — List leads with optional filters
+app.get('/api/agent/:id/leads', auth, (req, res) => {
+  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+
+  let leads = loadLeads(req.params.id);
+
+  // Filter by status
+  if (req.query.status) {
+    leads = leads.filter(l => l.status === req.query.status);
+  }
+  // Search by name, phone, email, notes
+  if (req.query.q) {
+    const q = req.query.q.toLowerCase();
+    leads = leads.filter(l =>
+      (l.name || '').toLowerCase().includes(q) ||
+      (l.phone || '').toLowerCase().includes(q) ||
+      (l.email || '').toLowerCase().includes(q) ||
+      (l.notes || '').toLowerCase().includes(q)
+    );
+  }
+
+  // Sort newest first
+  leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // Stats
+  const all = loadLeads(req.params.id);
+  const today = new Date().toISOString().slice(0, 10);
+  const stats = {
+    total: all.length,
+    newToday: all.filter(l => (l.createdAt || '').slice(0, 10) === today).length,
+    needsFollowUp: all.filter(l => l.status === 'new' || l.status === 'contacted').length,
+    converted: all.filter(l => l.status === 'won').length,
+  };
+
+  res.json({ leads, stats });
+});
+
+// POST /api/agent/:id/leads — Create a lead (called by bot or manually)
+app.post('/api/agent/:id/leads', auth, (req, res) => {
+  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+
+  const { name, phone, email, notes, source } = req.body;
+  if (!name && !phone && !email) {
+    return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
+  }
+
+  const leads = loadLeads(req.params.id);
+  const lead = {
+    id: crypto.randomBytes(8).toString('hex'),
+    name: (name || '').trim(),
+    phone: (phone || '').trim(),
+    email: (email || '').trim(),
+    status: 'new',
+    notes: (notes || '').trim(),
+    source: (source || 'whatsapp').trim(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  leads.push(lead);
+  saveLeads(req.params.id, leads);
+  res.json({ success: true, lead });
+});
+
+// POST /api/agent/:id/leads/ingest — Unauthenticated lead capture (called by OpenClaw bot)
+// Uses a simple agent-level secret token instead of JWT
+app.post('/api/agent/:id/leads/ingest', (req, res) => {
+  const agentId = req.params.id;
+  const agent = getAgent(agentId);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+
+  // Verify ingest token (stored in agent metadata)
+  const ingestToken = req.headers['x-ingest-token'] || '';
+  if (!agent.ingestToken || ingestToken !== agent.ingestToken) {
+    return res.status(401).json({ error: 'Invalid ingest token' });
+  }
+
+  const { name, phone, email, notes, source } = req.body;
+  if (!name && !phone && !email) {
+    return res.status(400).json({ error: 'At least one of name, phone, or email is required.' });
+  }
+
+  const leads = loadLeads(agentId);
+  const lead = {
+    id: crypto.randomBytes(8).toString('hex'),
+    name: (name || '').trim(),
+    phone: (phone || '').trim(),
+    email: (email || '').trim(),
+    status: 'new',
+    notes: (notes || '').trim(),
+    source: (source || 'whatsapp-bot').trim(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  leads.push(lead);
+  saveLeads(agentId, leads);
+  res.json({ success: true, lead });
+});
+
+// PATCH /api/agent/:id/leads/:leadId — Update a lead
+app.patch('/api/agent/:id/leads/:leadId', auth, (req, res) => {
+  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+
+  const leads = loadLeads(req.params.id);
+  const idx = leads.findIndex(l => l.id === req.params.leadId);
+  if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
+
+  const allowed = ['name', 'phone', 'email', 'status', 'notes'];
+  const validStatuses = ['new', 'contacted', 'qualified', 'won', 'lost'];
+
+  for (const key of allowed) {
+    if (req.body[key] !== undefined) {
+      if (key === 'status' && !validStatuses.includes(req.body[key])) {
+        return res.status(400).json({ error: `Invalid status. Use: ${validStatuses.join(', ')}` });
+      }
+      leads[idx][key] = (req.body[key] || '').trim();
+    }
+  }
+  leads[idx].updatedAt = new Date().toISOString();
+
+  saveLeads(req.params.id, leads);
+  res.json({ success: true, lead: leads[idx] });
+});
+
+// DELETE /api/agent/:id/leads/:leadId — Delete a lead
+app.delete('/api/agent/:id/leads/:leadId', auth, (req, res) => {
+  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+
+  const leads = loadLeads(req.params.id);
+  const idx = leads.findIndex(l => l.id === req.params.leadId);
+  if (idx === -1) return res.status(404).json({ error: 'Lead not found' });
+
+  leads.splice(idx, 1);
+  saveLeads(req.params.id, leads);
+  res.json({ success: true });
+});
+
+// GET /api/agent/:id/leads/export — CSV export
+app.get('/api/agent/:id/leads/export', auth, (req, res) => {
+  if (req.params.id !== req.agentId) return res.status(403).json({ error: 'Access denied' });
+
+  const leads = loadLeads(req.params.id);
+  leads.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const escape = (v) => `"${(v || '').replace(/"/g, '""')}"`;
+  const header = 'Name,Phone,Email,Status,Notes,Source,Created';
+  const rows = leads.map(l =>
+    [l.name, l.phone, l.email, l.status, l.notes, l.source, l.createdAt].map(escape).join(',')
+  );
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename="leads-${req.params.id}.csv"`);
+  res.send([header, ...rows].join('\n'));
 });
 
 // Health check

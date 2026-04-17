@@ -120,6 +120,7 @@ function provisionAgent(agentData) {
     policies: agentData.policies || '',
     plan: agentData.plan || 'free',
     status: 'provisioned',
+    ingestToken: crypto.randomBytes(16).toString('hex'),
     whatsappConnected: false,
     conversationCount: 0,
     conversationResetDate: getNextMonthReset(),
