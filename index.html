@@ -426,18 +426,18 @@
             opacity: 0.4;
         }
 
-        /* Enhanced CTA buttons — emerald green for high contrast */
+        /* Enhanced CTA buttons — white on dark, premium feel */
         .cta-primary {
-            background: linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite;
-            box-shadow: 0 4px 20px var(--cta-green-glow), 0 0 40px rgba(16, 185, 129, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: #fff;
+            color: #030303 !important;
+            box-shadow: 0 2px 12px rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.9);
         }
         .cta-primary:hover {
-            box-shadow: 0 6px 30px rgba(16, 185, 129, 0.6), 0 0 60px rgba(16, 185, 129, 0.2);
-            transform: translateY(-2px);
+            background: #f0f0f0;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
         @keyframes gradientShift {
             0%, 100% { background-position: 0% 50%; }
