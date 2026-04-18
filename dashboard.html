@@ -1849,7 +1849,7 @@
             document.getElementById('dashboard-loading').style.display = 'none';
             document.getElementById('dashboard-content').style.display = 'block';
             const name = agentData.businessName || 'Your AI receptionist';
-            document.getElementById('dashboard-title').textContent = name;
+            document.getElementById('dashboard-title').textContent = 'Welcome, ' + name;
             document.getElementById('nav-business-name').textContent = name;
             document.getElementById('biz-avatar').textContent = (name.charAt(0) || 'A').toUpperCase();
 
@@ -2306,7 +2306,7 @@
                     const data = await res.json();
                     if (data.agent) agentData = data.agent;
                     const name = agentData.businessName || 'Your AI receptionist';
-                    document.getElementById('dashboard-title').textContent = name;
+                    document.getElementById('dashboard-title').textContent = 'Welcome, ' + name;
                     document.getElementById('nav-business-name').textContent = name;
                     document.getElementById('biz-avatar').textContent = (name.charAt(0) || 'A').toUpperCase();
                     if (agentData.updatedAt) updateLastUpdated(agentData.updatedAt);
