@@ -112,7 +112,7 @@
                     <tbody class="divide-y divide-white/5">
                         <tr>
                             <td class="py-3 px-4 text-gray-400">Monthly cost</td>
-                            <td class="py-3 px-4 text-center text-white">Free / $29 / $79</td>
+                            <td class="py-3 px-4 text-center text-white">Free / <span id="saas-pro">$29</span> / <span id="saas-max">$79</span></td>
                             <td class="py-3 px-4 text-center text-white">$0 (your hosting costs only)</td>
                         </tr>
                         <tr>
@@ -354,12 +354,12 @@
     <script>
     (function() {
         var prices = {
-            US: { starter: '$400', pro: '$800', business: '$1,500', support: '$150' },
-            GB: { starter: '£350', pro: '£700', business: '£1,300', support: '£130' },
-            EU: { starter: '€400', pro: '€800', business: '€1,500', support: '€150' },
-            AU: { starter: 'A$650', pro: 'A$1,300', business: 'A$2,400', support: 'A$250' },
-            NZ: { starter: 'NZ$700', pro: 'NZ$1,400', business: 'NZ$2,600', support: 'NZ$260' },
-            CA: { starter: 'C$550', pro: 'C$1,100', business: 'C$2,100', support: 'C$200' },
+            US: { starter: '$400', pro: '$800', business: '$1,500', support: '$150', saasPro: '$29', saasMax: '$79' },
+            GB: { starter: '£350', pro: '£700', business: '£1,300', support: '£130', saasPro: '£29', saasMax: '£69' },
+            EU: { starter: '€400', pro: '€800', business: '€1,500', support: '€150', saasPro: '€29', saasMax: '€79' },
+            AU: { starter: 'A$650', pro: 'A$1,300', business: 'A$2,400', support: 'A$250', saasPro: 'A$49', saasMax: 'A$129' },
+            NZ: { starter: 'NZ$700', pro: 'NZ$1,400', business: 'NZ$2,600', support: 'NZ$260', saasPro: 'NZ$49', saasMax: 'NZ$129' },
+            CA: { starter: 'C$550', pro: 'C$1,100', business: 'C$2,100', support: 'C$200', saasPro: 'C$39', saasMax: 'C$99' },
         };
         var euCountries = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
         fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
@@ -373,6 +373,8 @@
                 el = document.getElementById('price-business'); if (el) el.textContent = p.business;
                 el = document.getElementById('price-support'); if (el) el.textContent = p.support;
                 el = document.getElementById('price-support-table'); if (el) el.textContent = p.support;
+                el = document.getElementById('saas-pro'); if (el) el.textContent = p.saasPro;
+                el = document.getElementById('saas-max'); if (el) el.textContent = p.saasMax;
             })
             .catch(function() {});
     })();
