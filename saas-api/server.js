@@ -7,6 +7,7 @@ const { startPairingCode, startQrPairing, checkPairingStatus, isWhatsAppConnecte
 const authLib = require('./auth');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const https = require('https');
 const APP_URL = process.env.APP_URL || 'https://automatyn.co';
@@ -1063,6 +1064,122 @@ app.post('/api/checkout', auth, async (req, res) => {
 });
 
 // ============================================================
+// POST /api/subscription/cancel — Cancel the current Paddle subscription
+// ============================================================
+app.post('/api/subscription/cancel', auth, async (req, res) => {
+  if (!PADDLE_API_KEY) {
+    return res.status(500).json({ error: 'Payment provider not configured' });
+  }
+
+  const agent = getAgent(req.agentId);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+
+  if (!agent.paddleSubscriptionId) {
+    return res.status(400).json({ error: 'No active subscription to cancel.' });
+  }
+
+  const { reasons, note } = req.body || {};
+  const safeReasons = Array.isArray(reasons) ? reasons.filter(r => typeof r === 'string').slice(0, 10) : [];
+  const safeNote = typeof note === 'string' ? note.slice(0, 500) : '';
+
+  try {
+    const r = await fetch(`${PADDLE_API_BASE}/subscriptions/${agent.paddleSubscriptionId}/cancel`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${PADDLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ effective_from: 'next_billing_period' }),
+    });
+
+    const result = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      log('error', 'paddle_cancel_failed', { agentId: req.agentId, status: r.status, body: result });
+      return res.status(500).json({ error: 'Paddle refused the cancellation. Please email support@automatyn.co.' });
+    }
+
+    try {
+      const cancelsFile = path.join(DATA_DIR, 'cancellation-feedback.json');
+      let all = [];
+      if (fs.existsSync(cancelsFile)) {
+        try { all = JSON.parse(fs.readFileSync(cancelsFile, 'utf-8')); } catch {}
+      }
+      all.push({
+        email: req.email,
+        agentId: req.agentId,
+        plan: agent.plan,
+        reasons: safeReasons,
+        note: safeNote,
+        canceledAt: new Date().toISOString(),
+        effectiveFrom: result?.data?.scheduled_change?.effective_at || null,
+      });
+      fs.writeFileSync(cancelsFile, JSON.stringify(all, null, 2));
+    } catch (err) {
+      log('warn', 'cancellation_feedback_save_failed', { error: err.message });
+    }
+
+    log('info', 'subscription_canceled', { agentId: req.agentId, email: req.email });
+    res.json({
+      success: true,
+      message: 'Subscription will end at the end of your current billing period. You keep access until then.',
+      effectiveFrom: result?.data?.scheduled_change?.effective_at || null,
+    });
+  } catch (err) {
+    log('error', 'subscription_cancel_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to cancel subscription. Please email support@automatyn.co.' });
+  }
+});
+
+// ============================================================
+// GET /api/subscription/portal — Get Paddle customer portal URL
+// ============================================================
+app.get('/api/subscription/portal', auth, async (req, res) => {
+  if (!PADDLE_API_KEY) {
+    return res.status(500).json({ error: 'Payment provider not configured' });
+  }
+
+  const agent = getAgent(req.agentId);
+  if (!agent) return res.status(404).json({ error: 'Agent not found' });
+
+  if (!agent.paddleCustomerId) {
+    return res.status(400).json({ error: 'No billing history yet. Upgrade to a paid plan first.' });
+  }
+
+  try {
+    const body = {};
+    if (agent.paddleSubscriptionId) {
+      body.subscription_ids = [agent.paddleSubscriptionId];
+    }
+
+    const r = await fetch(`${PADDLE_API_BASE}/customers/${agent.paddleCustomerId}/portal-sessions`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${PADDLE_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const result = await r.json().catch(() => ({}));
+    if (!r.ok) {
+      log('error', 'paddle_portal_failed', { status: r.status, body: result });
+      return res.status(500).json({ error: 'Could not generate billing portal link.' });
+    }
+
+    const portalUrl = result?.data?.urls?.general?.overview || result?.data?.urls?.subscriptions?.[0]?.cancel_subscription || null;
+    if (!portalUrl) {
+      log('error', 'paddle_portal_no_url', { result: result.data });
+      return res.status(500).json({ error: 'Could not generate billing portal link.' });
+    }
+
+    res.json({ portalUrl });
+  } catch (err) {
+    log('error', 'subscription_portal_error', { error: err.message });
+    res.status(500).json({ error: 'Failed to open billing portal.' });
+  }
+});
+
+// ============================================================
 // GET /api/agent/:id — Get agent details
 // ============================================================
 app.get('/api/agent/:id', auth, (req, res) => {
@@ -1270,6 +1387,120 @@ app.post('/api/agent/:id/whatsapp/unpair', auth, async (req, res) => {
   } catch (err) {
     console.error('WhatsApp unpair error:', err.message);
     res.status(500).json({ error: err.message || 'Failed to unpair WhatsApp' });
+  }
+});
+
+// ============================================================
+// DELETE /api/auth/account — Fully delete the logged-in user's account
+// ============================================================
+app.delete('/api/auth/account', auth, async (req, res) => {
+  const { confirmEmail, reasons, note } = req.body || {};
+
+  if (!confirmEmail || typeof confirmEmail !== 'string') {
+    return res.status(400).json({ error: 'confirmEmail is required' });
+  }
+
+  if (confirmEmail.trim().toLowerCase() !== (req.email || '').toLowerCase()) {
+    return res.status(400).json({ error: 'Email does not match your account. Please type it exactly.' });
+  }
+
+  const agentId = req.agentId;
+  const email = req.email;
+  const agent = getAgent(agentId);
+
+  const safeReasons = Array.isArray(reasons) ? reasons.filter(function(r) { return typeof r === 'string'; }).slice(0, 10) : [];
+  const safeNote = typeof note === 'string' ? note.slice(0, 500) : '';
+  try {
+    const deletionsFile = path.join(DATA_DIR, 'deletion-feedback.json');
+    let all = [];
+    if (fs.existsSync(deletionsFile)) {
+      try { all = JSON.parse(fs.readFileSync(deletionsFile, 'utf-8')); } catch {}
+    }
+    all.push({
+      email,
+      agentId,
+      plan: agent?.plan || 'unknown',
+      reasons: safeReasons,
+      note: safeNote,
+      deletedAt: new Date().toISOString(),
+    });
+    fs.writeFileSync(deletionsFile, JSON.stringify(all, null, 2));
+  } catch (err) {
+    log('warn', 'deletion_feedback_save_failed', { error: err.message });
+  }
+  log('info', 'account_delete_requested', { agentId, email, reasons: safeReasons, hasNote: !!safeNote });
+
+  try {
+    // 1. Cancel Paddle subscription if present
+    if (agent?.paddleSubscriptionId && PADDLE_API_KEY) {
+      try {
+        const r = await fetch(`${PADDLE_API_BASE}/subscriptions/${agent.paddleSubscriptionId}/cancel`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${PADDLE_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ effective_from: 'immediately' }),
+        });
+        if (!r.ok) {
+          const body = await r.text();
+          log('warn', 'paddle_cancel_failed', { agentId, status: r.status, body });
+        } else {
+          log('info', 'paddle_subscription_canceled', { agentId });
+        }
+      } catch (err) {
+        log('warn', 'paddle_cancel_error', { agentId, error: err.message });
+      }
+    }
+
+    // 2. Unpair WhatsApp (removes from gateway config + deletes auth folder)
+    try {
+      await unpairWhatsApp(agentId);
+    } catch (err) {
+      log('warn', 'unpair_on_delete_failed', { agentId, error: err.message });
+    }
+
+    // 3. Delete agent metadata
+    const metaPath = path.join(DATA_DIR, `${agentId}.json`);
+    if (fs.existsSync(metaPath)) fs.unlinkSync(metaPath);
+
+    // 4. Delete leads and bookings for this agent
+    const leadsPath = path.join(LEADS_DIR, `${agentId}.json`);
+    if (fs.existsSync(leadsPath)) fs.unlinkSync(leadsPath);
+    const bookingsPath = path.join(BOOKINGS_DIR, `${agentId}.json`);
+    if (fs.existsSync(bookingsPath)) fs.unlinkSync(bookingsPath);
+
+    // 5. Delete agent directory (~/.openclaw/agents/:agentId) if present
+    const agentHomeDir = path.join(os.homedir(), '.openclaw', 'agents', agentId);
+    if (fs.existsSync(agentHomeDir)) {
+      try { fs.rmSync(agentHomeDir, { recursive: true, force: true }); }
+      catch (err) { log('warn', 'agent_dir_delete_failed', { agentId, error: err.message }); }
+    }
+
+    // 6. Delete user record
+    authLib.deleteUser(email);
+
+    // 7. Send confirmation email (best-effort)
+    try {
+      await authLib.sendEmail({
+        to: email,
+        subject: 'Your Automatyn account has been deleted',
+        htmlContent: `<div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;padding:24px;color:#111;">
+          <h2 style="margin:0 0 12px;">Account deleted</h2>
+          <p>Your Automatyn account and all associated data have been permanently deleted. Your WhatsApp has been disconnected and any active subscription has been cancelled.</p>
+          <p>If this wasn't you, reply to this email and we'll investigate immediately.</p>
+          <p style="color:#666;font-size:13px;margin-top:24px;">Automatyn &middot; <a href="https://automatyn.co" style="color:#0891b2;">automatyn.co</a></p>
+        </div>`,
+      });
+    } catch (err) {
+      log('warn', 'delete_confirmation_email_failed', { email, error: err.message });
+    }
+
+    log('info', 'account_deleted', { agentId, email });
+    res.json({ success: true, message: 'Account deleted.' });
+  } catch (err) {
+    log('error', 'account_delete_error', { agentId, email, error: err.message });
+    res.status(500).json({ error: 'Failed to delete account. Please email support@automatyn.co.' });
   }
 });
 

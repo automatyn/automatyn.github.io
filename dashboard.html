@@ -792,6 +792,10 @@
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                             Sign out
                         </button>
+                        <button class="biz-menu-item danger" onclick="openDeleteAccountModal(event)" style="color:#f87171;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            Delete account
+                        </button>
                     </div>
                 </div>
                 <div id="server-status" class="flex items-center gap-2 px-3 py-2 mt-2 text-xs">
@@ -1670,6 +1674,10 @@
                                 </div>
                                 <p class="text-zinc-400 text-sm mt-1" id="plan-detail-billing">25 conversations/month</p>
                             </div>
+                            <div id="paid-plan-actions" style="display:none; flex-wrap:wrap; gap:8px;">
+                                <button id="manage-billing-btn" onclick="openBillingPortal()" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#d4d4d8; padding:9px 14px; border-radius:8px; font-size:0.85rem; cursor:pointer;">Manage billing &amp; invoices &rarr;</button>
+                                <button id="cancel-subscription-btn" onclick="openCancelSubscriptionModal()" style="background:transparent; border:1px solid rgba(248,113,113,0.3); color:#f87171; padding:9px 14px; border-radius:8px; font-size:0.85rem; cursor:pointer;">Cancel subscription</button>
+                            </div>
                         </div>
                     </div>
 
@@ -1772,6 +1780,170 @@
             localStorage.removeItem('jwt');
             localStorage.removeItem('agentId');
             window.location.href = '/dashboard.html';
+        }
+
+        var _deleteReason = { reasons: [], note: '' };
+        function openDeleteAccountModal(e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            _deleteReason = { reasons: [], note: '' };
+            var reasonModal = document.getElementById('delete-reason-modal');
+            var note = document.getElementById('delete-reason-note');
+            if (note) note.value = '';
+            var boxes = document.querySelectorAll('.delete-reason-box');
+            boxes.forEach(function(b) { b.checked = false; });
+            if (reasonModal) reasonModal.style.display = 'flex';
+            var menu = document.getElementById('biz-menu');
+            if (menu) menu.classList.remove('open');
+        }
+        function closeDeleteReasonModal() {
+            var modal = document.getElementById('delete-reason-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        function proceedFromReason() {
+            var boxes = document.querySelectorAll('.delete-reason-box:checked');
+            _deleteReason.reasons = Array.from(boxes).map(function(b) { return b.value; });
+            var note = document.getElementById('delete-reason-note');
+            _deleteReason.note = note ? note.value.trim() : '';
+            closeDeleteReasonModal();
+            var modal = document.getElementById('delete-account-modal');
+            var err = document.getElementById('delete-account-error');
+            var input = document.getElementById('delete-confirm-email');
+            if (err) err.style.display = 'none';
+            if (input) input.value = '';
+            if (modal) modal.style.display = 'flex';
+        }
+        function closeDeleteAccountModal() {
+            var modal = document.getElementById('delete-account-modal');
+            if (modal) modal.style.display = 'none';
+        }
+        async function confirmDeleteAccount() {
+            var input = document.getElementById('delete-confirm-email');
+            var err = document.getElementById('delete-account-error');
+            var btn = document.getElementById('delete-account-confirm-btn');
+            var typed = (input && input.value || '').trim();
+            if (!typed) {
+                if (err) { err.textContent = 'Please type your email to confirm.'; err.style.display = 'block'; }
+                return;
+            }
+            if (btn) { btn.disabled = true; btn.textContent = 'Deleting...'; }
+            try {
+                var res = await fetch(API_URL + '/api/auth/account', {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        confirmEmail: typed,
+                        reasons: _deleteReason.reasons,
+                        note: _deleteReason.note,
+                    }),
+                });
+                var data = await res.json().catch(function() { return {}; });
+                if (!res.ok) {
+                    if (err) { err.textContent = data.error || 'Could not delete account. Please email support@automatyn.co.'; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.textContent = 'Delete my account'; }
+                    return;
+                }
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('agentId');
+                window.location.href = '/?deleted=1';
+            } catch (e) {
+                if (err) { err.textContent = 'Network error. Please try again.'; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.textContent = 'Delete my account'; }
+            }
+        }
+
+        var _cancelReason = { reasons: [], note: '' };
+
+        async function openBillingPortal() {
+            var btn = document.getElementById('manage-billing-btn');
+            var originalText = btn ? btn.textContent : '';
+            if (btn) { btn.disabled = true; btn.textContent = 'Opening...'; }
+            try {
+                var res = await fetch(API_URL + '/api/subscription/portal', {
+                    headers: { 'Authorization': 'Bearer ' + token },
+                });
+                var data = await res.json().catch(function() { return {}; });
+                if (!res.ok || !data.portalUrl) {
+                    alert(data.error || 'Could not open billing portal. Please email support@automatyn.co.');
+                    if (btn) { btn.disabled = false; btn.textContent = originalText; }
+                    return;
+                }
+                window.open(data.portalUrl, '_blank');
+                if (btn) { btn.disabled = false; btn.textContent = originalText; }
+            } catch (e) {
+                alert('Network error. Please try again.');
+                if (btn) { btn.disabled = false; btn.textContent = originalText; }
+            }
+        }
+
+        function openCancelSubscriptionModal() {
+            _cancelReason = { reasons: [], note: '' };
+            var modal = document.getElementById('cancel-reason-modal');
+            if (modal) modal.style.display = 'flex';
+            document.querySelectorAll('#cancel-reason-modal input[type="checkbox"]').forEach(function(cb) { cb.checked = false; });
+            var note = document.getElementById('cancel-reason-note');
+            if (note) note.value = '';
+            var err = document.getElementById('cancel-reason-error');
+            if (err) err.style.display = 'none';
+        }
+
+        function closeCancelReasonModal() {
+            var modal = document.getElementById('cancel-reason-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function proceedFromCancelReason() {
+            var checked = Array.from(document.querySelectorAll('#cancel-reason-modal input[type="checkbox"]:checked')).map(function(cb) { return cb.value; });
+            var note = (document.getElementById('cancel-reason-note').value || '').trim();
+            var err = document.getElementById('cancel-reason-error');
+            if (checked.length === 0 && !note) {
+                if (err) { err.textContent = 'Please pick at least one reason or write a note.'; err.style.display = 'block'; }
+                return;
+            }
+            _cancelReason = { reasons: checked, note: note };
+            closeCancelReasonModal();
+            var modal = document.getElementById('cancel-subscription-modal');
+            if (modal) modal.style.display = 'flex';
+            var cerr = document.getElementById('cancel-subscription-error');
+            if (cerr) cerr.style.display = 'none';
+        }
+
+        function closeCancelSubscriptionModal() {
+            var modal = document.getElementById('cancel-subscription-modal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function confirmCancelSubscription() {
+            var err = document.getElementById('cancel-subscription-error');
+            var btn = document.getElementById('cancel-subscription-confirm-btn');
+            if (btn) { btn.disabled = true; btn.textContent = 'Cancelling...'; }
+            try {
+                var res = await fetch(API_URL + '/api/subscription/cancel', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        reasons: _cancelReason.reasons,
+                        note: _cancelReason.note,
+                    }),
+                });
+                var data = await res.json().catch(function() { return {}; });
+                if (!res.ok) {
+                    if (err) { err.textContent = data.error || 'Could not cancel. Please email support@automatyn.co.'; err.style.display = 'block'; }
+                    if (btn) { btn.disabled = false; btn.textContent = 'Confirm cancellation'; }
+                    return;
+                }
+                closeCancelSubscriptionModal();
+                alert(data.message || 'Subscription cancelled. You keep paid access until the end of the current billing period.');
+                window.location.reload();
+            } catch (e) {
+                if (err) { err.textContent = 'Network error. Please try again.'; err.style.display = 'block'; }
+                if (btn) { btn.disabled = false; btn.textContent = 'Confirm cancellation'; }
+            }
         }
 
         async function checkServerStatus() {
@@ -2073,6 +2245,11 @@
                 if (status.plan === 'max') {
                     const upgradeBtn = document.getElementById('upgrade-btn');
                     if (upgradeBtn) upgradeBtn.style.display = 'none';
+                }
+
+                const paidActions = document.getElementById('paid-plan-actions');
+                if (paidActions) {
+                    paidActions.style.display = ['pro', 'max'].includes(status.plan) ? 'flex' : 'none';
                 }
 
                 // Store range data for filter buttons
@@ -3119,5 +3296,98 @@
 
         init();
     </script>
+
+    <!-- Delete Reason Modal (Step 1 of 2) -->
+    <div id="delete-reason-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+        <div style="background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:14px; max-width:480px; width:100%; padding:28px; color:#e4e4e7;">
+            <h2 style="margin:0 0 8px; font-size:1.15rem; font-weight:700; color:#fff;">Before you go</h2>
+            <p style="color:#a1a1aa; font-size:0.9rem; line-height:1.55; margin:0 0 18px;">Could you share why you're leaving? It helps us make Automatyn better. (Optional &mdash; you can skip.)</p>
+            <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="too_expensive" style="margin-top:3px;"> Too expensive
+                </label>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="missing_feature" style="margin-top:3px;"> Missing a feature I need
+                </label>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="whatsapp_issues" style="margin-top:3px;"> WhatsApp connection issues
+                </label>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="not_using" style="margin-top:3px;"> Not using it enough
+                </label>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="found_alternative" style="margin-top:3px;"> Found a better alternative
+                </label>
+                <label style="display:flex; gap:10px; align-items:flex-start; font-size:0.9rem; color:#d4d4d8; cursor:pointer;">
+                    <input type="checkbox" class="delete-reason-box" value="other" style="margin-top:3px;"> Other
+                </label>
+            </div>
+            <textarea id="delete-reason-note" rows="3" placeholder="Anything else you'd like to tell us? (optional)" style="width:100%; background:#0a0a0a; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#fff; font-size:0.88rem; font-family:inherit; resize:vertical; margin-bottom:16px;"></textarea>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button onclick="closeDeleteReasonModal()" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#d4d4d8; padding:9px 16px; border-radius:8px; font-size:0.88rem; cursor:pointer;">Cancel</button>
+                <button onclick="proceedFromReason()" style="background:#dc2626; border:none; color:#fff; padding:9px 16px; border-radius:8px; font-size:0.88rem; font-weight:600; cursor:pointer;">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal (Step 2 of 2) -->
+    <div id="delete-account-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:9999; align-items:center; justify-content:center; padding:1rem;">
+        <div style="background:#111; border:1px solid rgba(248,113,113,0.3); border-radius:14px; max-width:460px; width:100%; padding:28px; color:#e4e4e7;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div style="width:40px; height:40px; border-radius:50%; background:rgba(248,113,113,0.15); display:flex; align-items:center; justify-content:center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <h2 style="margin:0; font-size:1.15rem; font-weight:700; color:#fff;">Delete your account?</h2>
+            </div>
+            <p style="color:#a1a1aa; font-size:0.92rem; line-height:1.55; margin:0 0 14px;">This is permanent. When you delete your account:</p>
+            <ul style="color:#a1a1aa; font-size:0.88rem; line-height:1.7; margin:0 0 18px; padding-left:1.1rem;">
+                <li>Your WhatsApp will be disconnected immediately</li>
+                <li>Any active paid subscription will be cancelled</li>
+                <li>Your conversations, leads, bookings, and agent config will be permanently deleted</li>
+                <li>This cannot be undone</li>
+            </ul>
+            <label style="display:block; color:#d4d4d8; font-size:0.85rem; margin-bottom:6px;">Type your email to confirm:</label>
+            <input id="delete-confirm-email" type="email" autocomplete="off" style="width:100%; background:#0a0a0a; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#fff; font-size:0.9rem; margin-bottom:10px;">
+            <div id="delete-account-error" style="display:none; color:#f87171; font-size:0.82rem; margin-bottom:10px;"></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:8px;">
+                <button onclick="closeDeleteAccountModal()" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#d4d4d8; padding:9px 16px; border-radius:8px; font-size:0.88rem; cursor:pointer;">Cancel</button>
+                <button id="delete-account-confirm-btn" onclick="confirmDeleteAccount()" style="background:#dc2626; border:none; color:#fff; padding:9px 16px; border-radius:8px; font-size:0.88rem; font-weight:600; cursor:pointer;">Delete my account</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cancel-reason-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:#0f0f0f; border:1px solid rgba(255,255,255,0.1); border-radius:14px; max-width:480px; width:100%; padding:24px;">
+            <h2 style="margin:0 0 6px; font-size:1.15rem; font-weight:700; color:#fff;">Before you cancel</h2>
+            <p style="color:#a1a1aa; font-size:0.88rem; margin:0 0 16px;">Mind sharing why? It helps us improve.</p>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="too_expensive"> Too expensive</label>
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="not_using"> Not using it enough</label>
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="missing_feature"> Missing a feature I need</label>
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="quality"> Agent quality issues</label>
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="switching"> Switching to another tool</label>
+                <label style="display:flex; align-items:center; gap:8px; color:#d4d4d8; font-size:0.88rem;"><input type="checkbox" value="other"> Other</label>
+            </div>
+            <textarea id="cancel-reason-note" placeholder="Anything else? (optional)" style="width:100%; background:#0a0a0a; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:#fff; font-size:0.88rem; min-height:70px; resize:vertical; margin-bottom:10px;"></textarea>
+            <div id="cancel-reason-error" style="display:none; color:#f87171; font-size:0.82rem; margin-bottom:10px;"></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button onclick="closeCancelReasonModal()" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#d4d4d8; padding:9px 16px; border-radius:8px; font-size:0.88rem; cursor:pointer;">Keep my plan</button>
+                <button onclick="proceedFromCancelReason()" style="background:#27272a; border:1px solid rgba(255,255,255,0.15); color:#fff; padding:9px 16px; border-radius:8px; font-size:0.88rem; cursor:pointer;">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cancel-subscription-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; padding:20px;">
+        <div style="background:#0f0f0f; border:1px solid rgba(255,255,255,0.1); border-radius:14px; max-width:440px; width:100%; padding:24px;">
+            <h2 style="margin:0 0 10px; font-size:1.15rem; font-weight:700; color:#fff;">Cancel subscription?</h2>
+            <p style="color:#a1a1aa; font-size:0.9rem; line-height:1.55; margin:0 0 14px;">Your paid features stay active until the end of the current billing period. After that, your account moves to the Free plan. No refunds for partial months.</p>
+            <p style="color:#a1a1aa; font-size:0.88rem; margin:0 0 14px;">Your data, agent config and WhatsApp connection are preserved.</p>
+            <div id="cancel-subscription-error" style="display:none; color:#f87171; font-size:0.82rem; margin-bottom:10px;"></div>
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button onclick="closeCancelSubscriptionModal()" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#d4d4d8; padding:9px 16px; border-radius:8px; font-size:0.88rem; cursor:pointer;">Never mind</button>
+                <button id="cancel-subscription-confirm-btn" onclick="confirmCancelSubscription()" style="background:#dc2626; border:none; color:#fff; padding:9px 16px; border-radius:8px; font-size:0.88rem; font-weight:600; cursor:pointer;">Confirm cancellation</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

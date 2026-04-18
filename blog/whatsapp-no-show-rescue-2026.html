@@ -103,6 +103,10 @@
     <style>
         body { font-family: 'DM Sans', sans-serif; background: #030303; color: #e4e4e7; }
         .hero-gradient { background: radial-gradient(ellipse at top, rgba(34, 211, 238, 0.06), transparent 50%), #030303; }
+        .gradient-text { background: linear-gradient(135deg, #ffffff 0%, #22d3ee 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card-glow { background: #030303; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); }
+        .toc a { color: #a1a1aa; text-decoration: none; display: block; padding: 0.35rem 0; font-size: 0.9375rem; transition: color 0.2s; }
+        .toc a:hover { color: #22d3ee; }
         .prose { color: #d4d4d8; font-size: 1.05rem; line-height: 1.75; }
         .prose h2 { color: #ffffff; font-family: 'Cabinet Grotesk', 'Sora', sans-serif; font-size: 1.85rem; font-weight: 700; margin: 3rem 0 1.25rem; letter-spacing: -0.02em; }
         .prose h3 { color: #ffffff; font-family: 'Cabinet Grotesk', 'Sora', sans-serif; font-size: 1.35rem; font-weight: 700; margin: 2.25rem 0 1rem; }
@@ -154,15 +158,58 @@
     <div style="height: 100px;"></div>
 
     <!-- Hero -->
-    <header class="px-6 py-16 max-w-4xl mx-auto">
-        <div class="text-zinc-500 text-sm mb-4">April 18, 2026 · Revenue Recovery · 9 min read</div>
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4" style="font-family: 'Cabinet Grotesk', 'Sora', sans-serif;">The £200 Problem Every Service Business Has: WhatsApp No-Show Rescue in 2026</h1>
-        <p class="text-lg text-zinc-400 leading-relaxed max-w-2xl">A customer books. The slot gets blocked on your calendar. They do not show up. You wait fifteen minutes, then twenty, then you realise they are gone. That empty chair just cost you real money. Here is how automated WhatsApp reminders and no-show rescue change the maths.</p>
-        <img src="images/whatsapp-no-show-rescue-hero.jpg" alt="WhatsApp appointment reminder on smartphone, salon booking confirmation" class="rounded-2xl mt-12 w-full">
+    <header class="hero-gradient grid-bg pt-24 pb-16 sm:pt-32 sm:pb-20">
+        <div class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6">
+            <!-- Breadcrumbs -->
+            <nav aria-label="Breadcrumb" class="mb-6">
+                <ol class="flex items-center gap-2 text-sm text-zinc-500">
+                    <li><a href="https://automatyn.co/" class="hover:text-cyan-400 transition-colors">Home</a></li>
+                    <li>/</li>
+                    <li><a href="/blog/" class="hover:text-cyan-400 transition-colors">Blog</a></li>
+                    <li>/</li>
+                    <li><span class="text-zinc-400 truncate">WhatsApp No-Show Rescue</span></li>
+                </ol>
+            </nav>
+
+            <!-- Category badge -->
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-4" style="background: rgba(34,211,238,0.1); color: #22d3ee; border: 1px solid rgba(34,211,238,0.2);">Revenue Recovery</span>
+
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight mb-4" style="font-family: 'Cabinet Grotesk', 'Sora', sans-serif;">
+                The £200 Problem Every Service Business Has: <span class="gradient-text">WhatsApp No-Show Rescue</span> in 2026
+            </h1>
+
+            <p class="text-lg text-zinc-400 mb-6 leading-relaxed max-w-2xl">A customer books. The slot gets blocked on your calendar. They do not show up. You wait fifteen minutes, then twenty, then you realise they are gone. That empty chair just cost you real money. Here is how automated WhatsApp reminders and no-show rescue change the maths.</p>
+
+            <!-- Author / Meta -->
+            <div class="flex items-center gap-4 text-sm text-zinc-500">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm" style="background: linear-gradient(135deg, #059669, #10b981);">A</div>
+                <div>
+                    <p class="text-zinc-300 font-medium">Automatyn Team</p>
+                    <p>April 18, 2026 &middot; 9 min read</p>
+                </div>
+            </div>
+        </div>
     </header>
 
+    <!-- Featured Image -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 -mt-6">
+        <img src="images/whatsapp-no-show-rescue-hero.jpg" alt="WhatsApp appointment reminder on smartphone, salon booking confirmation" class="w-full h-56 sm:h-72 md:h-80 object-cover rounded-xl border border-cyan-500/20" loading="eager">
+    </div>
+
     <!-- Article body -->
-    <article class="prose max-w-3xl mx-auto px-6 pb-16">
+    <article class="prose max-w-3xl mx-auto px-6 py-12">
+
+        <!-- Table of Contents -->
+        <div class="card-glow rounded-xl p-5 mb-10 toc">
+            <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-3" style="margin-top: 0;">In This Article</h3>
+            <a href="#profitable-problem">Why No-Shows Are Such a Profitable Problem to Fix</a>
+            <a href="#research">What the Research Actually Says</a>
+            <a href="#three-messages">The Three Messages That Do Almost All the Work</a>
+            <a href="#free-whatsapp">What You Cannot Do with the Free WhatsApp Business App</a>
+            <a href="#max-tier">The Max Tier: What We Built This For</a>
+            <a href="#this-week">What to Do This Week</a>
+            <a href="#faq">Frequently Asked Questions</a>
+        </div>
 
         <p>Every service business owner has had this week. You reshuffle your whole day around three bookings. One of them ghosts you. You sit there checking your phone, wondering if they are stuck in traffic, until you admit they are just gone. You cannot fill the slot because it is too late. That is a £60 haircut, a £150 plumber callout, or a £200 dental check-up that just evaporated.</p>
 
@@ -170,7 +217,7 @@
 
         <p>That is the gap WhatsApp automation closes, and it is the single highest-ROI thing you can add to a service business in 2026. Not marketing. Not ads. Just making sure the bookings you already have actually happen.</p>
 
-        <h2>Why No-Shows Are Such a Profitable Problem to Fix</h2>
+        <h2 id="profitable-problem">Why No-Shows Are Such a Profitable Problem to Fix</h2>
 
         <p>Here is the part most small business owners do not sit down and calculate. Let us do it now.</p>
 
@@ -196,7 +243,7 @@
 
         <p>Now compare that to what it costs to prevent. An AI-powered WhatsApp receptionist that sends automatic reminders costs less than one no-show per month. The maths is almost unfair.</p>
 
-        <h2>What the Research Actually Says</h2>
+        <h2 id="research">What the Research Actually Says</h2>
 
         <p>This is not speculation. The numbers on WhatsApp reminders are some of the cleanest in SaaS benchmarks.</p>
 
@@ -214,7 +261,7 @@
             <p style="margin: 0;">Automatyn handles your customer messages, takes bookings, and (on the Max plan) sends automatic reminders plus no-show rescue follow-ups. <a href="/signup.html">Start free &rarr;</a></p>
         </div>
 
-        <h2>The Three Messages That Do Almost All the Work</h2>
+        <h2 id="three-messages">The Three Messages That Do Almost All the Work</h2>
 
         <p>You do not need a complicated funnel. Three simple automated messages recover the vast majority of lost revenue. Here is what each one looks like and when it fires.</p>
 
@@ -242,7 +289,7 @@
 
         <p>Notice the tone. It is not aggressive. It is not making them feel bad. It is offering an out: "if something came up, let's just rebook." About 30% of people will take that out rather than permanently ghost. The rest quietly vanish, which is the same outcome you would have had anyway. You lose nothing by asking.</p>
 
-        <h2>What You Cannot Do with the Free WhatsApp Business App</h2>
+        <h2 id="free-whatsapp">What You Cannot Do with the Free WhatsApp Business App</h2>
 
         <p>This is where most small businesses get stuck. The free WhatsApp Business app has "quick replies" and "away messages," but it cannot schedule outbound messages to specific customers at specific times. It cannot detect that a customer did not show up. It cannot send a follow-up only if a condition is met.</p>
 
@@ -257,7 +304,7 @@
 
         <p>If you want the fuller picture on WhatsApp automation beyond just reminders, our <a href="whatsapp-automation-small-business-2026.html">guide on WhatsApp automation for small business</a> covers everything from setup to ongoing costs.</p>
 
-        <h2>The Max Tier: What We Built This For</h2>
+        <h2 id="max-tier">The Max Tier: What We Built This For</h2>
 
         <p>We designed Automatyn's Max plan specifically for service businesses losing real money to no-shows. Here is what is included:</p>
 
@@ -277,7 +324,7 @@
             <p style="margin: 0;">Start on the free plan today. Upgrade to Max when you see the AI handling your bookings, and unlock automatic reminders and no-show rescue. <a href="/signup.html">Get my AI receptionist &rarr;</a></p>
         </div>
 
-        <h2>What to Do This Week</h2>
+        <h2 id="this-week">What to Do This Week</h2>
 
         <p>You do not need to overhaul anything to start recovering this revenue. The minimum viable version of this system is:</p>
 
@@ -291,7 +338,7 @@
 
         <p>If you are still skeptical about whether AI receptionists work for small businesses, the <a href="ai-receptionist-small-business-2026.html">full guide to AI receptionists for small business</a> walks through the categories of work they handle, the real limitations, and how to know if your business is a good fit.</p>
 
-        <h2>Frequently Asked Questions</h2>
+        <h2 id="faq">Frequently Asked Questions</h2>
 
         <h3>Do WhatsApp appointment reminders actually reduce no-shows?</h3>
         <p>Yes. Industry data shows automated WhatsApp reminders cut no-shows by around 52%, with open rates above 98% and response rates roughly 3x faster than email. For service businesses where one missed booking costs £40 to £200, this is one of the highest-ROI changes you can make.</p>
@@ -314,6 +361,15 @@
         <div class="inline-cta" style="text-align:center;">
             <p style="margin: 0 0 1rem 0;"><strong style="color: #fff; font-size: 1.1rem;">Stop losing money to empty chairs.</strong></p>
             <a href="/signup.html" class="cta-button">Start free on WhatsApp &rarr;</a>
+        </div>
+
+        <!-- Author Bio -->
+        <div class="card-glow rounded-xl p-6 flex items-start gap-4 mt-10">
+            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0" style="background: linear-gradient(135deg, #059669, #10b981);">A</div>
+            <div>
+                <p class="text-white font-semibold mb-1">Written by Automatyn Team</p>
+                <p class="text-zinc-500 text-sm leading-relaxed">We build AI WhatsApp receptionists for small service businesses. Reminders, no-show rescue, and bookings handled automatically. <a href="/" style="color: #22d3ee;">Learn more about Automatyn.</a></p>
+            </div>
         </div>
 
     </article>

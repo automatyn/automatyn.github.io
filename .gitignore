@@ -28,6 +28,14 @@ saas-api/*.jwt-secret
 saas-api/logs/
 
 # ==========================================
+# Local-only marketing/outreach scripts (never commit)
+# ==========================================
+marketing/
+warmup.js
+run-warmup.sh
+outreach-scripts.md
+
+# ==========================================
 # Dependencies & build output
 # ==========================================
 node_modules/
