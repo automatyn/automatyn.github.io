@@ -1,12 +1,11 @@
 const { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, DisconnectReason } = require('@whiskeysockets/baileys');
-const { execSync } = require('child_process');
 const QRCode = require('qrcode');
 const pino = require('pino');
 const path = require('path');
 const fs = require('fs');
 
 const AGENTS_DIR = path.join(require('os').homedir(), '.openclaw', 'agents');
-const OPENCLAW_CONFIG = path.join(require('os').homedir(), '.openclaw', 'openclaw.json');
+const { loadConfig, saveConfig, reloadGateway, withConfigLock } = require('./provision');
 
 // Track active sessions per agent
 const activeSessions = new Map();
@@ -31,7 +30,7 @@ async function startPairingCode(agentId, phoneNumber) {
   await disconnectSession(agentId);
 
   const authDir = getAuthDir(agentId);
-  fs.mkdirSync(authDir, { recursive: true });
+  fs.mkdirSync(authDir, { recursive: true, mode: 0o700 });
 
   const logger = pino({ level: 'silent' });
   const { state, saveCreds } = await useMultiFileAuthState(authDir);
@@ -98,7 +97,7 @@ async function startQrPairing(agentId) {
   await disconnectSession(agentId);
 
   const authDir = getAuthDir(agentId);
-  fs.mkdirSync(authDir, { recursive: true });
+  fs.mkdirSync(authDir, { recursive: true, mode: 0o700 });
 
   const logger = pino({ level: 'silent' });
   const { state, saveCreds } = await useMultiFileAuthState(authDir);
@@ -236,9 +235,8 @@ function isWhatsAppConnected(agentId) {
 function registerWhatsAppWithGateway(agentId) {
   const authDir = getAuthDir(agentId);
 
-  try {
-    // Add whatsapp channel to openclaw.json
-    const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
+  return withConfigLock(() => {
+    const config = loadConfig();
 
     if (!config.channels) config.channels = {};
     if (!config.channels.whatsapp) {
@@ -248,7 +246,6 @@ function registerWhatsAppWithGateway(agentId) {
       config.channels.whatsapp.accounts = {};
     }
 
-    // Add this agent's WhatsApp account
     config.channels.whatsapp.accounts[agentId] = {
       authDir: authDir,
       dmPolicy: 'pairing',
@@ -256,18 +253,14 @@ function registerWhatsAppWithGateway(agentId) {
     };
 
     config.meta.lastTouchedAt = new Date().toISOString();
-    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
+    saveConfig(config);
 
-    // Reload gateway to pick up new channel
-    try {
-      execSync('node /usr/lib/node_modules/openclaw/openclaw.mjs gateway reload', { timeout: 10000, stdio: 'pipe' });
+    if (!reloadGateway()) {
+      console.error(`Gateway reload failed after registering WhatsApp for ${agentId}`);
+    } else {
       console.log(`WhatsApp channel registered for agent ${agentId}`);
-    } catch (err) {
-      console.error('Gateway reload failed:', err.message);
     }
-  } catch (err) {
-    console.error('Failed to register WhatsApp with gateway:', err.message);
-  }
+  });
 }
 
 /**
@@ -283,25 +276,17 @@ async function unpairWhatsApp(agentId) {
     fs.rmSync(authDir, { recursive: true, force: true });
   }
 
-  // 3. Remove from gateway config
-  try {
-    const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
+  // 3. Remove from gateway config (locked to prevent concurrent writes)
+  await withConfigLock(() => {
+    const config = loadConfig();
     if (config.channels?.whatsapp?.accounts?.[agentId]) {
       delete config.channels.whatsapp.accounts[agentId];
       config.meta.lastTouchedAt = new Date().toISOString();
-      fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
-
-      // Reload gateway
-      try {
-        execSync('node /usr/lib/node_modules/openclaw/openclaw.mjs gateway reload', { timeout: 10000, stdio: 'pipe' });
-        console.log(`WhatsApp unpaired for agent ${agentId}`);
-      } catch (err) {
-        console.error('Gateway reload failed:', err.message);
-      }
+      saveConfig(config);
+      reloadGateway();
+      console.log(`WhatsApp unpaired for agent ${agentId}`);
     }
-  } catch (err) {
-    console.error('Failed to unregister WhatsApp from gateway:', err.message);
-  }
+  });
 }
 
 /**
@@ -318,36 +303,29 @@ function setBotActive(agentId, active) {
     throw new Error('WhatsApp not connected. Pair first.');
   }
 
-  try {
-    const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
+  return withConfigLock(() => {
+    const config = loadConfig();
     if (!config.channels) config.channels = {};
     if (!config.channels.whatsapp) config.channels.whatsapp = { enabled: true, accounts: {} };
     if (!config.channels.whatsapp.accounts) config.channels.whatsapp.accounts = {};
 
     if (active) {
-      // Re-add to gateway
       config.channels.whatsapp.accounts[agentId] = {
         authDir: authDir,
         dmPolicy: 'pairing',
         agent: agentId,
       };
     } else {
-      // Remove from gateway (but keep auth files so re-enabling is instant)
       delete config.channels.whatsapp.accounts[agentId];
     }
 
     config.meta.lastTouchedAt = new Date().toISOString();
-    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
+    saveConfig(config);
 
-    // Reload gateway
-    try {
-      execSync('node /usr/lib/node_modules/openclaw/openclaw.mjs gateway reload', { timeout: 10000, stdio: 'pipe' });
-    } catch (err) {
-      console.error('Gateway reload failed:', err.message);
+    if (!reloadGateway()) {
+      throw new Error('Gateway reload failed. Your change was saved but may not take effect until the gateway restarts.');
     }
-  } catch (err) {
-    throw new Error('Failed to update bot state: ' + err.message);
-  }
+  });
 }
 
 module.exports = {

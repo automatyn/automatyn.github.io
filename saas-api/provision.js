@@ -9,6 +9,15 @@ const AGENTS_DIR = path.join(OPENCLAW_HOME, 'agents');
 const DATA_DIR = path.join(__dirname, 'data');
 const TEMPLATE_PATH = path.join(__dirname, 'soul-template.md');
 
+// Simple in-memory mutex to prevent concurrent openclaw.json writes
+let _configLock = Promise.resolve();
+function withConfigLock(fn) {
+  const prev = _configLock;
+  let release;
+  _configLock = new Promise(r => { release = r; });
+  return prev.then(fn).finally(release);
+}
+
 // Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -136,36 +145,66 @@ function provisionAgent(agentData) {
   return metadata;
 }
 
-function registerAgentInConfig(agentId, businessName, industry, workspaceDir, agentDir) {
-  const config = JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
-  const alreadyExists = config.agents.list.some(a => a.id === agentId);
-  if (!alreadyExists) {
-    const emoji = getIndustryEmoji(industry);
-    config.agents.list.push({
-      id: agentId,
-      name: businessName,
-      workspace: workspaceDir,
-      agentDir: agentDir,
-      model: 'google/gemini-2.5-flash',
-      identity: { name: businessName, emoji },
-      // WhatsApp ban-prevention safety settings (per-agent lock-in).
-      // These override any global defaults and ensure every Automatyn agent
-      // ships with human-like reply timing + typing indicators.
-      humanDelay: {
-        mode: 'natural',
-        minMs: 1500,
-        maxMs: 4000,
-      },
-    });
-    config.meta.lastTouchedAt = new Date().toISOString();
-    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(config, null, 2));
-
-    try {
-      execSync('node /usr/lib/node_modules/openclaw/openclaw.mjs gateway reload', { timeout: 10000, stdio: 'pipe' });
-    } catch (err) {
-      console.error('Warning: gateway reload failed:', err.message);
-    }
+function loadConfig() {
+  try {
+    return JSON.parse(fs.readFileSync(OPENCLAW_CONFIG, 'utf-8'));
+  } catch (err) {
+    // If config doesn't exist or is corrupted, create a valid default
+    console.error('openclaw.json missing or corrupted, creating default:', err.message);
+    const defaultConfig = {
+      meta: { version: 1, lastTouchedAt: new Date().toISOString() },
+      agents: { list: [] },
+      channels: { whatsapp: { enabled: true, accounts: {} } },
+    };
+    fs.mkdirSync(path.dirname(OPENCLAW_CONFIG), { recursive: true });
+    fs.writeFileSync(OPENCLAW_CONFIG, JSON.stringify(defaultConfig, null, 2));
+    return defaultConfig;
   }
+}
+
+function saveConfig(config) {
+  // Atomic write: write to temp file then rename
+  const tmpPath = OPENCLAW_CONFIG + '.tmp';
+  fs.writeFileSync(tmpPath, JSON.stringify(config, null, 2));
+  fs.renameSync(tmpPath, OPENCLAW_CONFIG);
+}
+
+function reloadGateway() {
+  try {
+    execSync('node /usr/lib/node_modules/openclaw/openclaw.mjs gateway reload', { timeout: 10000, stdio: 'pipe' });
+    return true;
+  } catch (err) {
+    console.error('Gateway reload failed:', err.message);
+    return false;
+  }
+}
+
+function registerAgentInConfig(agentId, businessName, industry, workspaceDir, agentDir) {
+  return withConfigLock(() => {
+    const config = loadConfig();
+    if (!config.agents) config.agents = { list: [] };
+    if (!config.agents.list) config.agents.list = [];
+    const alreadyExists = config.agents.list.some(a => a.id === agentId);
+    if (!alreadyExists) {
+      const emoji = getIndustryEmoji(industry);
+      config.agents.list.push({
+        id: agentId,
+        name: businessName,
+        workspace: workspaceDir,
+        agentDir: agentDir,
+        model: 'google/gemini-2.5-flash',
+        identity: { name: businessName, emoji },
+        humanDelay: {
+          mode: 'natural',
+          minMs: 1500,
+          maxMs: 4000,
+        },
+      });
+      config.meta.lastTouchedAt = new Date().toISOString();
+      saveConfig(config);
+      reloadGateway();
+    }
+  });
 }
 
 function updateAgent(agentId, updates) {
@@ -277,4 +316,9 @@ module.exports = {
   getAgent,
   generateAgentId,
   DATA_DIR,
+  loadConfig,
+  saveConfig,
+  reloadGateway,
+  withConfigLock,
+  OPENCLAW_CONFIG,
 };
