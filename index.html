@@ -591,7 +591,7 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed top-[36px] w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
+    <nav id="site-nav" class="fixed w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5" style="top: var(--banner-h, 36px);">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
@@ -1686,6 +1686,18 @@
             el.classList.add('reveal');
             revealObserver.observe(el);
         });
+
+        // Keep nav offset in sync with banner height (handles text wrap on narrow screens)
+        (function syncBannerHeight() {
+            const banner = document.querySelector('.urgency-banner');
+            if (!banner) return;
+            const update = () => {
+                document.documentElement.style.setProperty('--banner-h', banner.offsetHeight + 'px');
+            };
+            update();
+            window.addEventListener('resize', update);
+            if (window.ResizeObserver) new ResizeObserver(update).observe(banner);
+        })();
 
         // Mobile menu toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', function() {
