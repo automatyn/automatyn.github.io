@@ -1692,7 +1692,8 @@
             const banner = document.querySelector('.urgency-banner');
             if (!banner) return;
             const update = () => {
-                document.documentElement.style.setProperty('--banner-h', banner.offsetHeight + 'px');
+                const h = Math.ceil(banner.getBoundingClientRect().height);
+                document.documentElement.style.setProperty('--banner-h', h + 'px');
             };
             update();
             window.addEventListener('resize', update);
