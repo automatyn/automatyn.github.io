@@ -110,6 +110,24 @@ Check if any Medium drafts need publishing. Use Playwright to check https://medi
 
 Always include a hero image from blog/images/ when publishing to Medium.
 
+## Step 8b: Cold Email Outreach — overnight reply check
+
+Run the reply detector on the last 14 hours and report.
+
+```bash
+cd /home/marketingpatpat/openclaw/saas-api && node outreach/reply-detector.js 14
+```
+
+Then print a one-line status from the lead store:
+
+```bash
+cd /home/marketingpatpat/openclaw/saas-api && node -e "console.log(require('./outreach/leads-store').stats())"
+```
+
+If any replies came in overnight, flag them in the morning report — Pat needs to personally reply to those (do not auto-reply).
+
+If env vars `GMAIL_OAUTH_REFRESH_TOKEN` or `GMAIL_APP_PASSWORD` are missing, the scripts print a "skip" message. Note it in the report and move on — it's a setup gap, not a bug.
+
 ## Step 9: Report
 
 ```
@@ -117,6 +135,7 @@ MORNING REPORT — [DATE]
 ========================
 X STATUS: [suspended/reinstated]
 TRIGGERS: [status of all 3]
+OUTREACH: [replies overnight / bounces / total sent lifetime]
 TIKTOK: [X videos, Y views, Z likes]
   New carousels: [which hooks pushed to inbox]
   Top performer: [video title + views]
@@ -133,6 +152,7 @@ Append to `/home/marketingpatpat/openclaw/social-posts/session-log.md`:
 ### /morning — [DATE] [TIME UTC]
 - X status: [suspended/reinstated]
 - Triggers: [status]
+- Outreach: [replies overnight, bounces, lifetime sent]
 - TikTok: [carousels generated, stats]
 - LinkedIn: [posted/skipped]
 - Dev.to: [posted/skipped]

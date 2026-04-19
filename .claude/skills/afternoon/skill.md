@@ -82,6 +82,48 @@ Post 1 LinkedIn update via Postiz if morning didn't post one.
 Remind Pat to check TikTok DMs for potential leads. If someone asks "is this real?" or "how does this work?", reply as Natalia (happy customer), not as the founder:
 - "Yeah! I got mine set up by this guy who does it for small businesses. Want me to send you his details?"
 
+## Step 6b: Cold Email Outreach — daily send
+
+This is the main daily driver for new business. Run every afternoon.
+
+```bash
+cd /home/marketingpatpat/openclaw/saas-api
+```
+
+**Preflight:**
+1. `node -e "console.log(require('./outreach/leads-store').stats())"` — show pool size
+2. If `with_email - email1_sent_total < 30`: run enrichment to top up
+   ```bash
+   node outreach/enrich-emails.js 100
+   ```
+3. If `personalised - email1_sent_total < 15`: need more personalised leads. Run:
+   ```bash
+   node outreach/personalise.js list 20
+   ```
+   Then for each returned lead, WebSearch the business_name + city, write one specific sentence (under 25 words, no generic openers, no "I hope this finds you well"). Save each with:
+   ```bash
+   node outreach/personalise.js set <lead_id> "<your sentence>"
+   ```
+   Personalisation rules and examples: see saas-api/outreach/README.md.
+
+**Send Email 1 (fresh leads):**
+- First-ever run: do a dry-run of 3 and show Pat the output before live-sending
+  ```bash
+  node outreach/sender.js dry e1 3
+  ```
+- Once Pat has approved the copy once, live send respects the daily cap (OUTREACH_DAILY_CAP, default 15)
+  ```bash
+  node outreach/sender.js e1
+  ```
+
+**Send follow-ups (uncapped, only go to already-contacted leads):**
+```bash
+node outreach/sender.js e2   # Day 3 follow-up
+node outreach/sender.js e3   # Day 5 breakup
+```
+
+If `GMAIL_APP_PASSWORD` is not set, sender throws and prints a clear error. That's a setup blocker — stop and report to Pat, do not retry.
+
 ## Step 7: Report
 
 ```
@@ -89,6 +131,7 @@ AFTERNOON REPORT — [DATE]
 ===========================
 X STATUS: [suspended/reinstated]
 TRIGGERS: Content Machine [status]
+OUTREACH: E1 sent today: [n] / cap [N]; E2 [n]; E3 [n]; new replies [n]; pool [personalised-ready/with_email/total]
 TIKTOK: [videos, views, likes]
   New carousels: [hooks pushed]
   Top performer: [title + views]

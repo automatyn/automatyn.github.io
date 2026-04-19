@@ -51,6 +51,25 @@ Run yt-dlp for @realnataliana stats. Report:
 - Which hooks performed best today
 - Any videos trending or gaining momentum
 
+## Step 3b: Cold Email Outreach — evening sweep
+
+```bash
+cd /home/marketingpatpat/openclaw/saas-api
+
+# Sweep replies + bounces from the full day
+node outreach/reply-detector.js 24
+
+# If today is Sunday (day 0), top up the lead pool for the week
+# (JS getDay: 0=Sun)
+node -e "if(new Date().getDay()===0){process.exit(0)}else{process.exit(1)}" && \
+  node outreach/ingest.js
+
+# Email Pat the daily stats
+node outreach/daily-stats.js
+```
+
+If env is missing, the scripts self-skip with a message. Note and continue.
+
 ## Step 4: Daily Summary Stats
 
 ```
@@ -75,6 +94,16 @@ DEV.TO: [article count, total views]
 LINKEDIN: [posted today?]
 
 TRIGGERS: [all 3 status]
+
+OUTREACH:
+  E1 sent today: [n]
+  E2 sent today: [n]
+  E3 sent today: [n]
+  Replies today: [n]
+  Bounces today: [n]
+  Unsubs today: [n]
+  Lifetime sent (E1): [n]
+  Pool: [with_email/personalised/total]
 ```
 
 ## Step 5: Check All Triggers for Tomorrow
