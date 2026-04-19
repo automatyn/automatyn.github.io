@@ -23,21 +23,81 @@
         body { font-family: 'Inter', sans-serif; background: #030303; color: #fff; }
         h1, h2, h3 { font-family: 'Sora', sans-serif; letter-spacing: -0.02em; }
         .bg-card { background: #0a0a0a; }
+        .bg-surface { background: #050505; }
+
+        /* CTA buttons — MATCH HOMEPAGE green gradient */
         .cta-primary {
-            background: linear-gradient(135deg, #22d3ee 0%, #0891b2 100%);
-            color: #000;
-            border-radius: 12px;
-            font-weight: 700;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            background: linear-gradient(180deg, #85e6b5 0%, #5dd492 100%);
+            color: #0a0a0a !important;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            font-weight: 600;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 4px 16px rgba(117,224,167,0.2);
         }
-        .cta-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 30px -10px rgba(34,211,238,0.5); }
-        .cta-glow-full { box-shadow: 0 0 40px -10px rgba(34,211,238,0.4); }
+        .cta-primary:hover {
+            background: linear-gradient(180deg, #96ecc2 0%, #6bdca0 100%);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 24px rgba(117,224,167,0.3);
+        }
+        .cta-glow-full {
+            box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 0 20px rgba(117,224,167,0.25), 0 0 60px rgba(117,224,167,0.08), 0 4px 16px rgba(117,224,167,0.2);
+        }
+        .cta-glow-full:hover {
+            box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 0 30px rgba(117,224,167,0.4), 0 0 80px rgba(117,224,167,0.12), 0 8px 24px rgba(117,224,167,0.3);
+        }
+        .cta-nav { box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 2px 8px rgba(117,224,167,0.15); }
+        .cta-glow { animation: ctaBreath 3.5s ease-in-out infinite; }
+        @keyframes ctaBreath {
+            0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 0 20px rgba(117,224,167,0.25), 0 0 60px rgba(117,224,167,0.08), 0 4px 16px rgba(117,224,167,0.2); }
+            50% { box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 0 35px rgba(117,224,167,0.4), 0 0 90px rgba(117,224,167,0.15), 0 4px 24px rgba(117,224,167,0.3); }
+        }
+
         .gradient-text {
-            background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 100%);
+            background: linear-gradient(135deg, #85e6b5 0%, #22d3ee 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
+        /* Pricing cards */
+        .pricing-card {
+            transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.025);
+        }
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255,255,255,0.16);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.4);
+        }
+        .pricing-card-featured {
+            background: linear-gradient(180deg, rgba(117,224,167,0.06) 0%, rgba(34,211,238,0.03) 100%);
+            border: 1px solid rgba(117,224,167,0.3);
+            box-shadow: 0 0 0 1px rgba(117,224,167,0.08), 0 0 40px -10px rgba(117,224,167,0.12), 0 20px 60px -10px rgba(0,0,0,0.3);
+        }
+        .pricing-card-featured:hover {
+            border-color: rgba(117,224,167,0.45);
+            box-shadow: 0 0 0 1px rgba(117,224,167,0.12), 0 0 60px -10px rgba(117,224,167,0.18), 0 24px 60px -10px rgba(0,0,0,0.4);
+        }
+
+        /* WhatsApp-style chat scenario */
+        .chat-msg { opacity: 0; transform: translateY(8px); animation: msgIn 0.35s ease-out forwards; }
+        @keyframes msgIn { to { opacity: 1; transform: translateY(0); } }
+        .typing-dot {
+            display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+            background: #9ca3af; margin: 0 2px; animation: typingBounce 1.2s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-4px); opacity: 1; }
+        }
+        .chat-container { min-height: 520px; }
+
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="bg-black">
@@ -49,7 +109,7 @@
                 <a href="/" class="no-underline">
                     <span style="font-family: 'Cabinet Grotesk', sans-serif !important; letter-spacing: -0.04em;" class="text-2xl font-extrabold">Automatyn<span class="text-cyan-400">.</span></span>
                 </a>
-                <a href="/signup.html" class="cta-primary px-5 py-2 text-sm">Start Free</a>
+                <a href="/signup.html" class="cta-primary cta-nav px-5 py-2 text-sm font-semibold">Start Free</a>
             </div>
         </div>
     </nav>
@@ -57,7 +117,10 @@
     <!-- Hero -->
     <section class="pt-20 pb-14 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-flex items-center gap-2 bg-cyan-950/40 border border-cyan-800/30 px-3 py-1 rounded-full mb-6 text-xs font-semibold text-cyan-300">FOR UK PLUMBERS · FREE TIER AVAILABLE</div>
+            <div class="inline-flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/30 px-3 py-1 rounded-full mb-6 text-xs font-semibold text-emerald-300">
+                <span class="pulse inline-block w-2 h-2 bg-emerald-400 rounded-full" aria-hidden="true"></span>
+                FOR UK PLUMBERS · FREE TIER AVAILABLE
+            </div>
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-5 leading-tight">
                 You're losing jobs <span class="gradient-text">because you can't answer WhatsApp fast enough.</span>
             </h1>
@@ -65,14 +128,14 @@
                 Automatyn is an AI agent that replies to your WhatsApp enquiries in about 2 seconds, qualifies the job, and books the callout. You get a clean summary when you finish the shift.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                <a href="/signup.html" class="cta-primary cta-glow-full px-8 py-4 text-base">Start free →</a>
+                <a href="/signup.html" class="cta-primary cta-glow-full cta-glow px-8 py-4 text-base font-semibold">Start free →</a>
                 <span class="text-sm text-gray-500">No card. 10-minute setup. Uses your existing number.</span>
             </div>
         </div>
     </section>
 
     <!-- Pain points -->
-    <section class="py-14 px-4 bg-black border-y border-white/5">
+    <section class="py-14 px-4 bg-surface border-y border-white/5">
         <div class="max-w-4xl mx-auto">
             <h2 class="text-2xl sm:text-3xl font-bold text-white text-center mb-10">Sound familiar?</h2>
             <div class="grid md:grid-cols-2 gap-5">
@@ -109,7 +172,7 @@
                 <div class="grid md:grid-cols-3 gap-6 mb-8">
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">WhatsApp enquiries/week</label>
-                        <input id="roi-leads" type="range" min="1" max="200" step="1" value="40" class="w-full accent-cyan-400">
+                        <input id="roi-leads" type="range" min="1" max="200" step="1" value="40" class="w-full accent-emerald-400">
                         <div class="flex justify-between items-baseline mt-1">
                             <span class="text-xs text-gray-500">1</span>
                             <span class="text-2xl font-bold text-white" id="roi-leads-val">40</span>
@@ -118,7 +181,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Avg job value (£)</label>
-                        <input id="roi-value" type="range" min="20" max="2000" step="10" value="180" class="w-full accent-cyan-400">
+                        <input id="roi-value" type="range" min="20" max="2000" step="10" value="180" class="w-full accent-emerald-400">
                         <div class="flex justify-between items-baseline mt-1">
                             <span class="text-xs text-gray-500">£20</span>
                             <span class="text-2xl font-bold text-white">£<span id="roi-value-val">180</span></span>
@@ -127,7 +190,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-300 mb-2">Leads lost to slow reply (%)</label>
-                        <input id="roi-losspct" type="range" min="10" max="80" step="5" value="40" class="w-full accent-cyan-400">
+                        <input id="roi-losspct" type="range" min="10" max="80" step="5" value="40" class="w-full accent-emerald-400">
                         <div class="flex justify-between items-baseline mt-1">
                             <span class="text-xs text-gray-500">10%</span>
                             <span class="text-2xl font-bold text-white" id="roi-losspct-val">40%</span>
@@ -148,9 +211,9 @@
                         <div class="text-xs text-gray-500 mt-1">per month, recovered revenue</div>
                     </div>
                     <div class="bg-cyan-950/30 border border-cyan-500/30 rounded-xl p-5 text-center">
-                        <div class="text-xs uppercase tracking-wider text-cyan-300/80 font-semibold mb-2">ROI vs $29 Pro</div>
+                        <div class="text-xs uppercase tracking-wider text-cyan-300/80 font-semibold mb-2">ROI vs <span id="roi-price-label">$29</span> Pro</div>
                         <div class="text-3xl font-bold text-cyan-400"><span id="roi-multiple">0</span>x</div>
-                        <div class="text-xs text-gray-500 mt-1">return on $29/mo plan</div>
+                        <div class="text-xs text-gray-500 mt-1">return on <span class="roi-price-inline">$29</span>/mo plan</div>
                     </div>
                 </div>
 
@@ -164,6 +227,10 @@
     </section>
 
     <script>
+    // Local currency for hero region. ROI job-value stays in £ (UK focus of the page);
+    // Pro/Max plan prices and ROI multiplier update based on visitor location.
+    window.ROI = { proPrice: 29, proLabel: '$29', currencySymbol: '£' };
+
     (function() {
         const leadsEl = document.getElementById('roi-leads');
         const valueEl = document.getElementById('roi-value');
@@ -178,7 +245,7 @@
         if (!leadsEl) return;
 
         const fmt = n => Math.round(n).toLocaleString();
-        function update() {
+        window.ROI.update = function update() {
             const leadsPerWeek = +leadsEl.value;
             const jobValue = +valueEl.value;
             const lossPct = +lossEl.value / 100;
@@ -186,7 +253,9 @@
             const lostLeadsPerMonth = leadsPerMonth * lossPct;
             const lostRevenue = lostLeadsPerMonth * jobValue;
             const recovered = lostRevenue * 0.85;
-            const multiple = recovered > 0 ? (recovered / 29) : 0;
+            const proPrice = window.ROI.proPrice;
+            const proLabel = window.ROI.proLabel;
+            const multiple = recovered > 0 ? (recovered / proPrice) : 0;
 
             leadsValEl.textContent = leadsPerWeek;
             valueValEl.textContent = jobValue;
@@ -198,54 +267,200 @@
             if (multiple >= 10) {
                 paybackEl.textContent = `At ${Math.round(multiple)}x ROI, the Pro plan pays for itself ${Math.round(multiple)} times over. One recovered job covers the month.`;
             } else if (multiple >= 2) {
-                paybackEl.textContent = `Pro plan ($29/mo) pays for itself in the first ${Math.ceil(29 / jobValue)} booking${Math.ceil(29 / jobValue) > 1 ? 's' : ''} of the month.`;
+                const booksNeeded = Math.ceil(proPrice / jobValue);
+                paybackEl.textContent = `Pro plan (${proLabel}/mo) pays for itself in the first ${booksNeeded} booking${booksNeeded > 1 ? 's' : ''} of the month.`;
             } else {
                 paybackEl.textContent = `Even the free tier (25 conversations/mo) covers most of this. No credit card needed.`;
             }
-        }
-        [leadsEl, valueEl, lossEl].forEach(el => el.addEventListener('input', update));
-        update();
+        };
+        [leadsEl, valueEl, lossEl].forEach(el => el.addEventListener('input', window.ROI.update));
+        window.ROI.update();
     })();
     </script>
 
-    <!-- Scenario -->
-    <section class="py-14 px-4 bg-black">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-2xl sm:text-3xl font-bold text-white text-center mb-8">A typical Tuesday morning</h2>
-            <div class="bg-card border border-white/8 rounded-2xl p-6 space-y-4">
-                <div class="flex gap-3">
-                    <div class="w-20 text-xs text-gray-500 font-mono pt-1">08:42</div>
-                    <div class="flex-1 bg-black/50 border border-white/5 rounded-lg p-3 text-sm text-gray-300">"Hi, I've got a leak under the kitchen sink. Can someone come today? SE15."</div>
+    <!-- Animated Chat Scenario -->
+    <section class="py-14 px-4 bg-surface">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2">A typical Tuesday morning</h2>
+                <p class="text-gray-400 text-sm">Watch how Automatyn handles a real enquiry — while you're under someone's sink.</p>
+            </div>
+
+            <!-- WhatsApp-style phone mockup -->
+            <div class="bg-[#0b141a] rounded-2xl border border-white/8 shadow-2xl overflow-hidden">
+                <!-- WhatsApp header -->
+                <div class="bg-[#202c33] px-4 py-3 flex items-center gap-3 border-b border-black/30">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold">A</div>
+                    <div class="flex-1">
+                        <div class="text-white font-semibold text-sm">Automatyn Plumbing</div>
+                        <div class="text-emerald-400 text-xs" id="chat-status">online</div>
+                    </div>
                 </div>
-                <div class="flex gap-3">
-                    <div class="w-20 text-xs text-cyan-400 font-mono pt-1">08:42</div>
-                    <div class="flex-1 bg-cyan-950/20 border border-cyan-800/30 rounded-lg p-3 text-sm text-gray-200">"Hi, sorry to hear that. I can get Dave out today. Roughly what's leaking — the pipe, the trap, or the tap? And postcode SE15 what?"</div>
+                <!-- Chat body -->
+                <div class="p-4 chat-container" id="chat-body" style="background-image: linear-gradient(rgba(11,20,26,0.95), rgba(11,20,26,0.95)), url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%221%22 fill=%22rgba(255,255,255,0.02)%22/></svg>'); display:flex; flex-direction:column; gap:0.5rem;">
+                    <!-- filled by JS -->
                 </div>
-                <div class="flex gap-3">
-                    <div class="w-20 text-xs text-gray-500 font-mono pt-1">08:43</div>
-                    <div class="flex-1 bg-black/50 border border-white/5 rounded-lg p-3 text-sm text-gray-300">"SE15 4AD. It's the U-bend I think, pretty steady drip."</div>
-                </div>
-                <div class="flex gap-3">
-                    <div class="w-20 text-xs text-cyan-400 font-mono pt-1">08:43</div>
-                    <div class="flex-1 bg-cyan-950/20 border border-cyan-800/30 rounded-lg p-3 text-sm text-gray-200">"Got it. Dave can be there between 2 and 4pm. Callout is £80 plus parts, most U-bend jobs are done in 30 min. Want me to book it in?"</div>
-                </div>
-                <div class="border-t border-white/5 pt-4 mt-4">
-                    <p class="text-xs text-gray-500">While you're on the current job. No phone-checking. Dave gets a clean summary when he's free.</p>
+                <div class="bg-[#202c33] px-4 py-2 text-center">
+                    <button id="replay-chat" class="text-emerald-400 text-xs font-semibold hover:text-emerald-300 transition">↻ Replay</button>
                 </div>
             </div>
+            <p class="text-center text-gray-500 text-xs mt-4">While you're on the current job. No phone-checking. You get a clean summary when you're free.</p>
         </div>
     </section>
 
-    <!-- Pricing reassurance -->
-    <section class="py-14 px-4 bg-black border-t border-white/5">
-        <div class="max-w-3xl mx-auto text-center">
-            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Free to start. No card.</h2>
-            <p class="text-gray-400 mb-8">Starter is free forever, 25 conversations a month. Pro is $29/mo for 150. Max is $79/mo for unlimited. Cancel in one click, 7-day money-back on paid plans.</p>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="/signup.html" class="cta-primary cta-glow-full px-8 py-4 text-base">Start free →</a>
-                <a href="/pricing.html" class="px-8 py-4 rounded-xl font-semibold text-base border border-cyan-500/30 text-cyan-300 hover:text-white hover:border-cyan-400/60 hover:bg-cyan-950/30 transition">See full pricing</a>
+    <script>
+    (function() {
+        const body = document.getElementById('chat-body');
+        const status = document.getElementById('chat-status');
+        const replay = document.getElementById('replay-chat');
+        if (!body) return;
+
+        const script = [
+            { from: 'them', time: '08:42', text: "Hi, I've got a leak under the kitchen sink. Can someone come today? SE15." },
+            { typing: 1500 },
+            { from: 'us', time: '08:42', text: "Hi, sorry to hear that. I can get Dave out today. Roughly what's leaking — the pipe, the trap, or the tap? And postcode SE15 what?" },
+            { from: 'them', time: '08:43', text: "SE15 4AD. It's the U-bend I think, pretty steady drip." },
+            { typing: 1200 },
+            { from: 'us', time: '08:43', text: "Got it. Dave can be there between 2 and 4pm. Callout is £80 plus parts, most U-bend jobs are done in 30 min. Want me to book it in?" },
+            { from: 'them', time: '08:44', text: "Yes please, book me in." },
+            { typing: 900 },
+            { from: 'us', time: '08:44', text: "Booked ✓ Dave, 2–4pm today, SE15 4AD. He'll text 15 min before arrival. Anything else I can help with?" }
+        ];
+
+        function bubble(m) {
+            const wrap = document.createElement('div');
+            wrap.className = 'chat-msg flex ' + (m.from === 'us' ? 'justify-end' : 'justify-start');
+            const b = document.createElement('div');
+            b.className = 'max-w-[80%] px-3 py-2 text-sm leading-snug rounded-lg ' +
+                (m.from === 'us'
+                    ? 'bg-[#005c4b] text-white rounded-br-sm'
+                    : 'bg-[#202c33] text-gray-100 rounded-bl-sm');
+            b.innerHTML = '<div>' + m.text.replace(/</g,'&lt;') + '</div><div class="text-[10px] text-gray-400 mt-1 text-right">' + m.time + '</div>';
+            wrap.appendChild(b);
+            body.appendChild(wrap);
+            body.parentElement.scrollTop = body.parentElement.scrollHeight;
+        }
+
+        function typing() {
+            const wrap = document.createElement('div');
+            wrap.className = 'chat-msg flex justify-end';
+            wrap.id = 'typing-indicator';
+            wrap.innerHTML = '<div class="bg-[#005c4b] px-3 py-2 rounded-lg rounded-br-sm"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+            body.appendChild(wrap);
+        }
+
+        function removeTyping() {
+            const t = document.getElementById('typing-indicator');
+            if (t) t.remove();
+        }
+
+        async function play() {
+            body.innerHTML = '';
+            status.textContent = 'online';
+            for (const step of script) {
+                if (step.typing) {
+                    status.textContent = 'typing…';
+                    typing();
+                    await new Promise(r => setTimeout(r, step.typing));
+                    removeTyping();
+                    status.textContent = 'online';
+                } else {
+                    bubble(step);
+                    await new Promise(r => setTimeout(r, 650));
+                }
+            }
+        }
+
+        // Play on view
+        let played = false;
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting && !played) { played = true; play(); }
+            });
+        }, { threshold: 0.4 });
+        io.observe(body);
+
+        replay.addEventListener('click', () => play());
+    })();
+    </script>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 px-4 bg-black">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-base sm:text-xl text-gray-400">Start free. Upgrade when you need more. Cancel anytime.</p>
             </div>
-            <p class="text-xs text-gray-500 mt-6">Uses your existing WhatsApp number. 10-minute QR-code setup. GDPR-compliant, UK-based.</p>
+
+            <div class="grid md:grid-cols-3 gap-6 items-stretch">
+                <!-- Starter -->
+                <div class="pricing-card rounded-2xl border border-white/8 bg-white/[0.02] p-5 sm:p-8 flex flex-col">
+                    <div class="mb-6 min-h-[7.5rem]">
+                        <h3 class="text-lg font-semibold text-white mb-2 tracking-tight">Starter</h3>
+                        <div class="flex items-baseline gap-1"><span class="text-4xl font-bold text-white">Free</span></div>
+                        <p class="text-xs text-gray-400 mt-2">Perfect for testing with your first few customers</p>
+                    </div>
+                    <a href="/signup.html?plan=starter" class="block w-full cta-primary text-center py-3 font-semibold text-sm mb-8">Start free</a>
+                    <div class="border-t border-white/8 pt-6 mt-auto">
+                        <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3">What's included</div>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>25 conversations / month</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>AI-powered responses</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>WhatsApp connection</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Captures every lead</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Pro (featured) -->
+                <div class="pricing-card pricing-card-featured rounded-2xl p-5 sm:p-8 relative flex flex-col">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px] tracking-widest font-bold uppercase bg-emerald-400 text-black">Recommended</div>
+                    <div class="mb-6 min-h-[7.5rem]">
+                        <h3 class="text-lg font-semibold text-white mb-2 tracking-tight">Pro</h3>
+                        <div class="flex items-baseline gap-1"><span class="text-4xl font-bold text-white" id="price-pro">$29</span><span class="text-sm text-gray-400">/ month</span></div>
+                        <p class="text-xs text-gray-400 mt-2">Built for solopreneurs and small businesses</p>
+                    </div>
+                    <a href="/signup.html?plan=pro" class="block w-full cta-primary text-center py-3 font-semibold text-sm mb-8">Get started</a>
+                    <div class="border-t border-white/8 pt-6 mt-auto">
+                        <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3">Everything in Starter, plus</div>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>150 conversations / month</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Google Calendar sync</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Priority support</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>No 'Automatyn' badge</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Max -->
+                <div class="pricing-card rounded-2xl border border-white/8 bg-white/[0.02] p-5 sm:p-8 flex flex-col">
+                    <div class="mb-6 min-h-[7.5rem]">
+                        <h3 class="text-lg font-semibold text-white mb-2 tracking-tight">Max</h3>
+                        <div class="flex items-baseline gap-1"><span class="text-4xl font-bold text-white" id="price-max">$79</span><span class="text-sm text-gray-400">/ month</span></div>
+                        <p class="text-xs text-gray-400 mt-2">For busy teams handling high message volume</p>
+                    </div>
+                    <a href="/signup.html?plan=max" class="block w-full cta-primary text-center py-3 font-semibold text-sm mb-8">Get started</a>
+                    <div class="border-t border-white/8 pt-6 mt-auto">
+                        <div class="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-3">Everything in Pro, plus</div>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Unlimited conversations</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>4-hour priority support SLA</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Custom agent personality</span></li>
+                            <li class="flex items-start gap-3 text-gray-200"><svg class="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg><span>Dedicated onboarding call</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-gray-500 text-xs mt-8">All plans: 7-day money-back on paid tiers. Cancel in one click. GDPR-compliant, UK-based.</p>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-16 px-4 bg-surface border-t border-white/5">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Stop losing jobs to slow WhatsApp.</h2>
+            <p class="text-gray-400 mb-8">10-minute setup. Uses your existing number. Free to start.</p>
+            <a href="/signup.html" class="inline-flex items-center justify-center cta-primary cta-glow-full cta-glow px-8 py-4 font-semibold text-lg">Start free →</a>
         </div>
     </section>
 
@@ -290,6 +505,40 @@
             </div>
         </div>
     </footer>
+
+    <!-- Geo-pricing: show local currency for UK/EU/AU/NZ/CA visitors -->
+    <script>
+    (function() {
+        var prices = {
+            US: { pro: '$29', max: '$79', proNum: 29, sym: '$' },
+            GB: { pro: '£29', max: '£69', proNum: 29, sym: '£' },
+            EU: { pro: '€29', max: '€79', proNum: 29, sym: '€' },
+            AU: { pro: 'A$49', max: 'A$129', proNum: 49, sym: 'A$' },
+            NZ: { pro: 'NZ$49', max: 'NZ$129', proNum: 49, sym: 'NZ$' },
+            CA: { pro: 'C$39', max: 'C$99', proNum: 39, sym: 'C$' }
+        };
+        var euCountries = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE'];
+        function apply(p) {
+            var el = document.getElementById('price-pro'); if (el) el.textContent = p.pro;
+            el = document.getElementById('price-max'); if (el) el.textContent = p.max;
+            var roiLabel = document.getElementById('roi-price-label'); if (roiLabel) roiLabel.textContent = p.pro;
+            document.querySelectorAll('.roi-price-inline').forEach(function(e) { e.textContent = p.pro; });
+            if (window.ROI) {
+                window.ROI.proPrice = p.proNum;
+                window.ROI.proLabel = p.pro;
+                if (window.ROI.update) window.ROI.update();
+            }
+        }
+        fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+                var cc = d.country_code;
+                var p = prices[cc] || (euCountries.indexOf(cc) !== -1 ? prices.EU : prices.US);
+                apply(p);
+            })
+            .catch(function() {});
+    })();
+    </script>
 
 </body>
 </html>
