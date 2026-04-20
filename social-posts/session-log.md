@@ -117,3 +117,12 @@ Open items for next slot:
 - Content Machine trigger missing — decide whether to recreate
 - Blog Writer auto-disabling on repo_access — likely token expired or revoked, needs investigation
 - Outreach setup-blocked on env vars
+
+### /evening — 2026-04-20 19:30 UTC
+- X status: active, 113 followers / 474 tweets (unchanged since afternoon). Daily quota already hit (4 originals + 2 reply drafts earlier). Skipped evening X posts.
+- Reddit AI Image Pipeline fired via webhook, returned "Workflow was started" (not monitored for completion; retry-on-fail still not wired per afternoon open item).
+- TikTok: 22 videos / 6089 views (+19 since afternoon) / 72 likes. Top 5 hooks unchanged. Carousels skipped (Gemini has been 503'ing all day; no local carousel script present).
+- Outreach: reply-detector + daily-stats ran, self-skipped on missing GMAIL_APP_PASSWORD + GOOGLE_PLACES_API_KEY.
+- Triggers: Blog Writer enabled, next run 2026-04-22 10:08 UTC. Content Machine trigger still absent. Only 2 triggers listed total.
+- Transcription task: 1h35m SharePoint meeting recording (PatrickDaria/OIa intro call) downloaded, chunked, transcribed end-to-end with whisper base model. Full transcript (913 lines / 12,558 words) saved to gdrive/MyDrive.
+- Open items carried forward: Reddit pipeline Gemini retry logic, Content Machine trigger recreate decision, Blog Writer repo_access root cause, outreach env vars.
