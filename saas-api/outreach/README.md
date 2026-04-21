@@ -23,15 +23,18 @@ Add to systemd `automatyn-api.service`:
 
 ```
 Environment=GOOGLE_PLACES_API_KEY=...
-Environment=GMAIL_USER=patrick@automatyn.co
-Environment=GMAIL_APP_PASSWORD=...         # 16-char app password (Google Account → Security → App passwords)
+Environment=BREVO_API_KEY=...               # outbound sender (see note below)
 Environment=UNSUBSCRIBE_SECRET=...          # any strong random string, keep stable
 Environment=OUTREACH_DAILY_CAP=15           # bump to 30 after week 1
 Environment=OUTREACH_REPORT_TO=patricksson@gmail.com
+Environment=OUTREACH_SENDER_EMAIL=patrick@automatyn.co    # optional, default patrick@automatyn.co
+Environment=OUTREACH_SENDER_NAME="Patrick from Automatyn" # optional
 Environment=GMAIL_OAUTH_CLIENT_ID=...       # for reply-detector only
 Environment=GMAIL_OAUTH_CLIENT_SECRET=...
 Environment=GMAIL_OAUTH_REFRESH_TOKEN=...
 ```
+
+**Why Brevo, not Gmail SMTP:** `patrick@automatyn.co` is a Cloudflare Email Routing alias, not a real Google mailbox — Gmail SMTP app-password auth fails (535 BadCredentials). Brevo accepts the verified `automatyn.co` domain. Replies still route back through Cloudflare → Pat's Gmail inbox. Outbound logs live at `app.brevo.com/statistics/transactional` (NOT Gmail Sent folder).
 
 `sudo systemctl daemon-reload && sudo systemctl restart automatyn-api.service` after editing.
 
