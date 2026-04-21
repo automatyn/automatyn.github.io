@@ -138,3 +138,13 @@ Open items for next slot:
 - Outreach: reply-detector self-skipped (Gmail OAuth env not set).
 - Dev.to: last post 2026-04-20 ("Why Most Small Business AI Tools Fail in the First Week"). Within 3-day window, skipped.
 - Open items carried forward: Medium Writer + Content Machine triggers absent (decide whether to recreate), Blog Writer prompt has stale content calendar + hardcoded Gemini key, Reddit pipeline retry logic, outreach env vars.
+
+## 2026-04-21 /afternoon
+
+- Bot health: openclaw-gateway was inactive on entry, started via systemctl — now active. automatyn-api active.
+- Reddit pipeline: webhook fired OK ("Workflow was started").
+- Content Machine trigger: still 404 on RemoteTrigger get (absent from list). Open item.
+- X posting: browser-use via CDP 18800 scanned mentions + 2 live searches. 3 reply drafts pushed to Telegram gate (@SwigSwootie, @aetherisinno1, @cryptokelly53). Poller running PID 53110. Char counts 185/182/173.
+- Outreach: 6 E1 already sent this morning — no additional sends needed (cap respected). Pool: 578 leads, 77 with email, 18 personalised. 0 replies/bounces/unsubs.
+- TikTok carousels: skipped this /afternoon (context pressure + image-gen scope). Carry to next session.
+- Signups: 19 total data files, 8 real (2 Starter / 6 Free). No new signups since morning check.

@@ -1,36 +1,29 @@
 [
   {
-    "id": "m1-1776670757",
-    "type": "post",
-    "text": "An AI receptionist is only useful if the business owner can set it up in ten minutes without help. Everything else is a demo.",
-    "created": "2026-04-20",
-    "slot": "morning"
+    "id": "a1-1776757494",
+    "type": "reply",
+    "target": "https://x.com/SwigSwootie/status/2046542492602896558",
+    "targetAuthor": "@SwigSwootie",
+    "text": "The $2k/mo number only works on owners who already know their hourly cost of a missed call. Most do not. The real sale is tracking the first ten missed calls, then pricing against that.",
+    "created": "2026-04-21",
+    "slot": "afternoon"
   },
   {
-    "id": "m2-1776671094",
+    "id": "a2-1776757495",
     "type": "reply",
-    "target": "https://x.com/ShanuMathew93/status/2042720203016950238",
-    "targetAuthor": "@ShanuMathew93",
-    "text": "This is why I stopped recommending the web app to clients. The API stays consistent. The web layer is tuned for cost in the background with no changelog. Two products under one name.",
-    "created": "2026-04-20",
-    "slot": "morning"
+    "target": "https://x.com/aetherisinno1/status/2045488513529851955",
+    "targetAuthor": "@aetherisinno1",
+    "text": "For most SMB owners it is not the tech. It is the fear of an agent saying something off-brand to a regular customer. Give them a kill switch on the dashboard and the objection drops.",
+    "created": "2026-04-21",
+    "slot": "afternoon"
   },
   {
-    "id": "m3-1776671094",
+    "id": "a3-1776757496",
     "type": "reply",
-    "target": "https://x.com/MahlumAI/status/2042606692333162658",
-    "targetAuthor": "@MahlumAI",
-    "text": "Exit interview as a deployment artifact is a sharp framing. Small businesses lose more to a single resignation than to any tech gap. An agent built from that interview is defensible IP.",
-    "created": "2026-04-20",
-    "slot": "morning"
-  },
-  {
-    "id": "m4-1776671094",
-    "type": "reply",
-    "target": "https://x.com/PromptSlinger/status/2042543440555069713",
-    "targetAuthor": "@PromptSlinger",
-    "text": "Charge for the outcome, not the prompt. Owners will not pay for hours of thinking. They will pay a flat monthly fee for an agent that answers calls and books jobs. The thinking goes in the setup fee.",
-    "created": "2026-04-20",
-    "slot": "morning"
+    "target": "https://x.com/cryptokelly53/status/2046595309762232656",
+    "targetAuthor": "@cryptokelly53",
+    "text": "The MENA parallel holds. Distribution beats product once the underlying tech is commoditised. Whoever wins the local trust layer for small business agents wins the category.",
+    "created": "2026-04-21",
+    "slot": "afternoon"
   }
 ]
