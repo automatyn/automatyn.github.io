@@ -59,6 +59,24 @@ function cmdSet(id, line) {
   console.log(`OK ${id}: ${trimmed}`);
 }
 
+function cmdName(id, name) {
+  if (!id || !name) {
+    console.error('Usage: personalise.js name <lead_id> "<first_name>"');
+    process.exit(1);
+  }
+  const trimmed = name.trim();
+  if (trimmed.length < 2 || trimmed.length > 40) {
+    console.error(`first_name length ${trimmed.length} out of range (2-40)`);
+    process.exit(1);
+  }
+  const updated = store.update(id, { first_name: trimmed });
+  if (!updated) {
+    console.error(`Lead ${id} not found`);
+    process.exit(1);
+  }
+  console.log(`OK ${id}: first_name=${trimmed}`);
+}
+
 function cmdStats() {
   console.log(store.stats());
 }
@@ -66,10 +84,12 @@ function cmdStats() {
 const [cmd, ...args] = process.argv.slice(2);
 if (cmd === 'list') cmdList(parseInt(args[0], 10) || 20);
 else if (cmd === 'set') cmdSet(args[0], args.slice(1).join(' '));
+else if (cmd === 'name') cmdName(args[0], args.slice(1).join(' '));
 else if (cmd === 'stats') cmdStats();
 else {
   console.log('Commands:');
   console.log('  list [N]            — print next N leads needing intro_line as JSON');
   console.log('  set <id> "<line>"   — save intro_line for lead');
+  console.log('  name <id> "<name>"  — save scraped first_name for lead');
   console.log('  stats               — show store stats');
 }

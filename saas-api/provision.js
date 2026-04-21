@@ -104,6 +104,11 @@ function provisionAgent(agentData) {
           provider: 'google',
           key: process.env.GEMINI_API_KEY || '',
         },
+        'openai:manual': {
+          type: 'api_key',
+          provider: 'openai',
+          key: process.env.OPENAI_API_KEY || '',
+        },
       },
       usageStats: {},
     };
@@ -238,6 +243,11 @@ function updateAgent(agentId, updates) {
           type: 'api_key',
           provider: 'google',
           key: process.env.GEMINI_API_KEY || '',
+        },
+        'openai:manual': {
+          type: 'api_key',
+          provider: 'openai',
+          key: process.env.OPENAI_API_KEY || '',
         },
       },
       usageStats: {},

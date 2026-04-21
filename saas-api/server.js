@@ -2152,6 +2152,32 @@ function unsubHandler(req, res) {
 app.get('/api/unsubscribe', unsubHandler);
 app.get('/u', unsubHandler);
 
+app.post('/api/internal/cap-reached', express.json(), async (req, res) => {
+  const ip = req.ip || req.connection?.remoteAddress || '';
+  if (!ip.includes('127.0.0.1') && !ip.includes('::1')) {
+    return res.status(403).json({ error: 'forbidden' });
+  }
+  const agentId = (req.body?.agentId || '').trim();
+  if (!agentId) return res.status(400).json({ error: 'missing agentId' });
+  try {
+    const agent = getAgent(agentId);
+    if (!agent || !agent.email) return res.status(404).json({ error: 'agent not found' });
+    const plan = (agent.plan || 'free').toLowerCase();
+    const limitLabel = plan === 'pro' ? '150' : '25';
+    const business = agent.businessName || 'your business';
+    const upgradeUrl = 'https://automatyn.co/pricing.html';
+    await authLib.sendEmail({
+      to: agent.email,
+      subject: `Your AI receptionist just answered ${limitLabel} customers this month 🎉`,
+      htmlContent: `<p>Hey,</p><p>Great news — your Automatyn AI agent for <strong>${business}</strong> has handled <strong>${limitLabel} customer conversations</strong> this month. That's the full ${plan} plan allowance.</p><p>New messages from today until the monthly reset will get a polite holding reply letting customers know you'll follow up personally.</p><p>Want unlimited conversations? <a href="${upgradeUrl}">Upgrade here</a>.</p><p>— Patrick, Automatyn</p>`,
+    });
+    res.json({ ok: true });
+  } catch (e) {
+    log('error', 'cap_reached_notify_failed', { agentId, error: e.message });
+    res.status(500).json({ error: 'notify failed' });
+  }
+});
+
 // Global error handler — prevents stack traces leaking to clients
 app.use((err, req, res, next) => {
   log('error', 'unhandled_error', { error: err.message, path: req.path });

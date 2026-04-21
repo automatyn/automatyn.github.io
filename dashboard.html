@@ -2313,6 +2313,21 @@
                     bar.style.width = pct + '%';
                     if (pct > 90) bar.classList.add('danger');
                     else if (pct > 70) bar.classList.add('warning');
+
+                    const capBannerId = 'cap-reached-banner';
+                    let banner = document.getElementById(capBannerId);
+                    if (count >= limit) {
+                        if (!banner) {
+                            banner = document.createElement('div');
+                            banner.id = capBannerId;
+                            banner.style.cssText = 'background:linear-gradient(90deg,#f59e0b,#ef4444);color:#fff;padding:14px 18px;border-radius:10px;margin:12px 0;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;';
+                            banner.innerHTML = '<span>🎉 You hit your monthly conversation limit. New customers get a polite holding reply until reset. <a href="/pricing.html" style="color:#fff;text-decoration:underline;">Upgrade for unlimited</a>.</span>';
+                            const host = document.querySelector('main') || document.body;
+                            host.insertBefore(banner, host.firstChild);
+                        }
+                    } else if (banner) {
+                        banner.remove();
+                    }
                 }
 
                 if (status.resetDate) {
