@@ -122,7 +122,17 @@ node outreach/sender.js e2   # Day 3 follow-up
 node outreach/sender.js e3   # Day 5 breakup
 ```
 
-If `GMAIL_APP_PASSWORD` is not set, sender throws and prints a clear error. That's a setup blocker — stop and report to Pat, do not retry.
+Sender routes via **Brevo** (not Gmail SMTP) — sends do NOT appear in Gmail Sent folder. Check `app.brevo.com/statistics/transactional` for delivery/open/click logs. Replies still land in Pat's Gmail via Cloudflare routing of `patrick@automatyn.co`.
+
+If `BREVO_API_KEY` is not set, sender throws. That's a setup blocker — stop and report to Pat, do not retry.
+
+**Bot health sanity check (run before sending):**
+```bash
+# Confirm gateway is up and OpenAI key works — 1 free smoke test, no real customer
+curl -s http://127.0.0.1:3001/api/health 2>&1 | head -5
+systemctl is-active openclaw-gateway automatyn-api
+```
+If either is down, STOP outreach — don't send leads to a broken product. Report to Pat.
 
 ## Step 7: Report
 

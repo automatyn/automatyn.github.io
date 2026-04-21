@@ -7,21 +7,26 @@
 //   node sender.js dry e1 [limit] — render without sending
 //
 // Requires env:
-//   GMAIL_USER           — patrick@automatyn.co
-//   GMAIL_APP_PASSWORD   — app password from Google Account settings
+//   BREVO_API_KEY        — Brevo transactional API key
 //   UNSUBSCRIBE_SECRET   — HMAC secret for unsub token
 //
 // Daily caps (hard-stop):
 //   E1: 15/day week 1 → 30/day week 2 (controlled via OUTREACH_DAILY_CAP env, default 15)
 //   E2/E3: follow-ups are not capped (they go to people who already got E1)
+//
+// Sender identity: "Patrick from Automatyn <patrick@automatyn.co>", Reply-To routes
+// through Cloudflare Email Routing → Gmail inbox. Outbound sends do NOT appear in
+// Gmail Sent folder — check Brevo dashboard (app.brevo.com/statistics/transactional)
+// for delivery logs.
 
-const nodemailer = require('nodemailer');
+const https = require('https');
 const crypto = require('crypto');
 const store = require('./leads-store');
 const { buildEmail } = require('./templates');
 
-const GMAIL_USER = process.env.GMAIL_USER || 'patrick@automatyn.co';
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
+const BREVO_API_KEY = process.env.BREVO_API_KEY;
+const SENDER_EMAIL = process.env.OUTREACH_SENDER_EMAIL || 'patrick@automatyn.co';
+const SENDER_NAME = process.env.OUTREACH_SENDER_NAME || 'Patrick from Automatyn';
 const UNSUBSCRIBE_SECRET = process.env.UNSUBSCRIBE_SECRET || 'automatyn-unsub-2026-04-19';
 const DAILY_CAP = parseInt(process.env.OUTREACH_DAILY_CAP, 10) || 15;
 
@@ -30,12 +35,46 @@ function unsubToken(email) {
 }
 
 function makeTransport() {
-  if (!GMAIL_APP_PASSWORD) {
-    throw new Error('GMAIL_APP_PASSWORD not set. Add it to systemd Environment= and restart automatyn-api.service.');
+  if (!BREVO_API_KEY) {
+    throw new Error('BREVO_API_KEY not set. Add it to systemd Environment= and restart automatyn-api.service.');
   }
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: { user: GMAIL_USER, pass: GMAIL_APP_PASSWORD },
+  return { sendMail: sendViaBrevo };
+}
+
+function sendViaBrevo({ from, to, subject, text, headers }) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      sender: { name: SENDER_NAME, email: SENDER_EMAIL },
+      replyTo: { email: SENDER_EMAIL, name: SENDER_NAME.replace(/ from Automatyn$/, '') },
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+      headers: headers || {},
+    });
+    const req = https.request('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': BREVO_API_KEY,
+        'content-type': 'application/json',
+      },
+      timeout: 15000,
+    }, (res) => {
+      let d = '';
+      res.on('data', (c) => (d += c));
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try { resolve({ messageId: JSON.parse(d).messageId }); }
+          catch { resolve({ messageId: 'unknown' }); }
+        } else {
+          reject(new Error(`Brevo ${res.statusCode}: ${d}`));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.on('timeout', () => { req.destroy(); reject(new Error('Brevo timeout')); });
+    req.write(body);
+    req.end();
   });
 }
 
@@ -63,7 +102,6 @@ async function sendOne(transport, lead, step, dryRun) {
     return { ok: true, dry: true };
   }
   const info = await transport.sendMail({
-    from: `Patrick from Automatyn <${GMAIL_USER}>`,
     to: lead.email,
     subject,
     text: body,
@@ -98,10 +136,7 @@ async function run(step, limit, dryRun) {
   if (!slice.length) return;
 
   const transport = dryRun ? null : makeTransport();
-  if (!dryRun) {
-    await transport.verify();
-    console.log('SMTP verified.');
-  }
+  if (!dryRun) console.log('Using Brevo transactional API.');
 
   let sent = 0, failed = 0;
   for (const lead of slice) {

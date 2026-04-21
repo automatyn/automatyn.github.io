@@ -126,7 +126,31 @@ cd /home/marketingpatpat/openclaw/saas-api && node -e "console.log(require('./ou
 
 If any replies came in overnight, flag them in the morning report — Pat needs to personally reply to those (do not auto-reply).
 
-If env vars `GMAIL_OAUTH_REFRESH_TOKEN` or `GMAIL_APP_PASSWORD` are missing, the scripts print a "skip" message. Note it in the report and move on — it's a setup gap, not a bug.
+If env vars `GMAIL_OAUTH_REFRESH_TOKEN` or `GMAIL_APP_PASSWORD` are missing, the reply detector prints a "skip" message. Note it in the report and move on — it's a setup gap, not a bug.
+
+**Bot health check (added 2026-04-21):**
+```bash
+systemctl is-active openclaw-gateway automatyn-api
+# Both should report "active". If either is down, flag RED in report.
+
+# Cap usage across paid agents — surface any agent that hit their monthly cap overnight
+ls /home/marketingpatpat/openclaw/saas-api/data/*.json | while read f; do
+  node -e "const a = require('$f'); if (a.conversationCapNotifiedAt) console.log(a.businessName || a.agentId, '— CAP HIT', a.conversationCapNotifiedAt)"
+done
+```
+
+**New signups overnight:**
+```bash
+cd /home/marketingpatpat/openclaw/saas-api && node -e "
+const fs = require('fs'), path = require('path');
+const dir = './data';
+const since = Date.now() - 14*3600*1000;
+const news = fs.readdirSync(dir).filter(f => f.endsWith('.json')).map(f => JSON.parse(fs.readFileSync(path.join(dir, f))));
+const recent = news.filter(a => a.createdAt && new Date(a.createdAt).getTime() > since);
+console.log('Signups last 14h:', recent.length);
+recent.forEach(a => console.log(' -', a.businessName || a.agentId, '/', a.plan, '/', a.email));
+"
+```
 
 ## Step 9: Report
 

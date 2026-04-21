@@ -70,6 +70,26 @@ node outreach/daily-stats.js
 
 If env is missing, the scripts self-skip with a message. Note and continue.
 
+**Sender uses Brevo** (not Gmail SMTP) — delivery logs live at app.brevo.com/statistics/transactional, NOT in Gmail Sent folder. Replies route through Cloudflare → Pat's Gmail inbox.
+
+**Nightly bot sanity:**
+```bash
+# Any agent that hit their monthly cap today — flag in summary
+for f in /home/marketingpatpat/openclaw/saas-api/data/*.json; do
+  node -e "const a = require('$f'); const now = new Date(); if (a.conversationCapNotifiedAt && new Date(a.conversationCapNotifiedAt).toDateString() === now.toDateString()) console.log(a.businessName || a.agentId, 'HIT CAP today')"
+done
+
+# Signups today + plan breakdown
+node -e "
+const fs = require('fs'), path = require('path');
+const today = new Date().toISOString().slice(0,10);
+const agents = fs.readdirSync('/home/marketingpatpat/openclaw/saas-api/data').filter(f => f.endsWith('.json')).map(f => JSON.parse(fs.readFileSync(path.join('/home/marketingpatpat/openclaw/saas-api/data', f))));
+const newToday = agents.filter(a => a.createdAt && a.createdAt.slice(0,10) === today);
+const byPlan = agents.reduce((acc, a) => { acc[a.plan || 'free'] = (acc[a.plan || 'free'] || 0) + 1; return acc; }, {});
+console.log('Signups today:', newToday.length, '| Total agents:', agents.length, '| By plan:', byPlan);
+"
+```
+
 ## Step 4: Daily Summary Stats
 
 ```
