@@ -101,6 +101,17 @@
         @media (max-width: 768px) { .mobile-sticky-cta { display: block; } .prose h2 { font-size: 1.4rem; } }
         .toc a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; display: block; padding: 0.35rem 0; font-size: 0.9375rem; }
         .toc a:hover { color: var(--neon-purple); }
+            .cta-button {
+            background: linear-gradient(180deg, #85e6b5 0%, #5dd492 100%);
+            color: #0a0a0a !important;
+            text-decoration: none !important;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .cta-button:hover { background: linear-gradient(180deg, #96ecc2 0%, #6bdca0 100%); transform: translateY(-2px) scale(1.02); box-shadow: 0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 24px rgba(117,224,167,0.3); }
     </style>
 </head>
 <body class="antialiased">
@@ -115,7 +126,7 @@
 
     <nav class="fixed top-[36px] w-full bg-black/90 backdrop-blur-md z-50 border-b border-white/5">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="/" class="no-underline"><span style="font-family: 'Cabinet Grotesk', sans-serif; letter-spacing: -0.04em;" class="text-2xl font-extrabold text-white">Automatyn<span style="color: #22d3ee;">.</span></span></a>
+            <a href="/" class="no-underline"><span style="font-family: 'Cabinet Grotesk', sans-serif !important; letter-spacing: -0.04em;" class="text-2xl font-extrabold text-white">Automatyn<span class="text-cyan-400">.</span></span></a>
             <div class="flex items-center gap-4">
                 <a href="/plumbers.html" class="text-gray-400 hover:text-white transition text-sm">For Plumbers</a>
                 <a href="/#blog" class="text-gray-400 hover:text-white transition text-sm">Blog</a>
