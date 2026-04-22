@@ -107,15 +107,28 @@
         .card-glow { background: #030303; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); }
         .toc a { color: #a1a1aa; text-decoration: none; display: block; padding: 0.35rem 0; font-size: 0.9375rem; transition: color 0.2s; }
         .toc a:hover { color: #22d3ee; }
-        .prose { color: #d4d4d8; font-size: 1.05rem; line-height: 1.75; }
-        .prose h2 { color: #ffffff; font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.85rem; font-weight: 700; margin: 3rem 0 1.25rem; letter-spacing: -0.02em; }
+        .prose h2 {
+            font-family: 'Cabinet Grotesk', sans-serif !important;
+            font-weight: 700;
+            font-size: 1.85rem;
+            line-height: 1.3;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
         .prose h3 { color: #ffffff; font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; margin: 2.25rem 0 1rem; }
-        .prose p { margin: 1.25rem 0; }
-        .prose ul, .prose ol { margin: 1.25rem 0; padding-left: 1.5rem; }
-        .prose li { margin: 0.5rem 0; }
+        .prose p { color: #d4d4d8; line-height: 1.75; margin-bottom: 1.25rem; font-size: 1.1rem; }
+        .prose ul { color: #d4d4d8; margin-bottom: 1.25rem; padding-left: 1.5rem; }
+        .prose ul li { margin-bottom: 0.5rem; line-height: 1.75; }
         .prose a { color: #22d3ee; text-decoration: underline; }
         .prose strong { color: #ffffff; }
-        .prose blockquote { border-left: 3px solid #22d3ee; padding-left: 1.5rem; font-style: italic; color: #e4e4e7; margin: 2rem 0; }
+        .prose blockquote {
+            border-left: 3px solid #22d3ee;
+            padding-left: 1.5rem;
+            font-style: italic;
+            color: #e4e4e7;
+            margin: 2rem 0;
+        }
         .cta-button { background: linear-gradient(180deg, #85e6b5 0%, #5dd492 100%); color: #0a0a0a !important; text-decoration: none !important; border-radius: 10px; font-weight: 600; display: inline-block; transition: all 0.2s; }
         .cta-button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 24px rgba(117,224,167,0.3); }
         .inline-cta { background: rgba(34, 211, 238, 0.05); border: 1px solid rgba(34, 211, 238, 0.3); padding: 1.5rem 2rem; border-radius: 1rem; margin: 2.5rem 0; }
@@ -196,7 +209,7 @@
     </div>
 
     <!-- Article body -->
-    <article class="prose max-w-3xl mx-auto px-6 py-12">
+    <article class="prose max-w-3xl mx-auto px-6 pt-12 pb-16">
 
         <!-- Table of Contents -->
         <div class="card-glow rounded-xl p-5 mb-10 toc">
