@@ -178,7 +178,20 @@ Open items for next slot:
 - X: 486 tweets (+3 from this morning's drafts you posted — intent-URL flow working).
 - Mentions check: @cryptokelly53 replied back 13h ago with warm signal. Pushed reply draft to keep that chain alive.
 - 2 reply drafts in Telegram (warm chains): @cryptokelly53 (170 chars), @MahlumAI (157 chars).
-- Reddit pipeline: fired OK.
+- Reddit pipeline: webhook fires but workflow failing on "Generate Prompts (Gemini)" node (503 Service unavailable, no retry logic). Last successful run 06:41. Pat declined the retry-fix patch — leaving as-is.
 - Outreach: 12/15 E1 sent this morning, personalised pool exhausted (18/18). Need to personalise more leads tonight/tomorrow to keep daily cadence. 1 unsub (first recipient action seen).
 - TikTok + LinkedIn + Dev.to: deferred.
 - Open: reply-detector (Gmail OAuth), Content Machine + Medium Writer triggers missing.
+
+## 2026-04-22 /evening
+
+- Bot health: gateway + automatyn-api active (assumed from earlier /afternoon — no restart needed).
+- X: active, 112 followers, 486 tweets. No new originals this slot (afternoon drafts still in Telegram awaiting tap). Skipped evening post per daily cadence.
+- Reddit AI Image Pipeline: webhook fired OK ("Workflow was started"). Upstream Gemini 503 issue unresolved (Pat declined retry patch earlier today, carried).
+- Outreach: 12/15 E1 sent earlier. No new sends evening. Daily stats: 18 E1 lifetime, 5 opens, 0 replies, 1 unsub, personalised pool 33/77 (+15 since afternoon log). Cold email bodies still printing-only (GMAIL_APP_PASSWORD absent, Brevo path still the real sender).
+- reply-detector self-skipped (Gmail OAuth env not set) — carried open item.
+- TikTok: 21 videos / 6123 views / 73 likes. Carousels skipped (session was blog-image work).
+- Signups today: 0 new. Total 19 files, real=18 (starter=2, free=16), 1 test agent. No cap hits today.
+- Triggers: only Blog Writer enabled (next 2026-04-24 10:06 UTC). Content Machine + Medium Writer still missing from RemoteTrigger list.
+- Blog work (Pat-driven, not evening routine): automation-blog hero + 2 inline images regenerated via Forge (phone-on-stand, dual-phone comparison, cafe scene). All 44 blog images normalised to 1344x768, JPG q82/WebP q78. Fixed on-page CSS: hero now uses canonical h-56/sm:h-72/md:h-80 + object-cover (was h-auto, rendering ~50% taller than plumbers hero). ROI-calculator page fix: TOC was above header, moved below. Commits 6db9ace, 8a2bf9e, 34ecb41, 81ded40, 17c0c47, 8401a56.
+- Open items carried: reply-detector Gmail OAuth, Content Machine + Medium Writer triggers missing, Reddit pipeline Gemini retry.
