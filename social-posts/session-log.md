@@ -208,3 +208,24 @@ Open items for next slot:
 - Triggers: only Blog Writer enabled (next fire 2026-04-24 10:06 UTC). Content Machine + Medium Writer still absent from list — carry as open item.
 - LinkedIn / Dev.to / Medium: deferred this slot.
 - Open items carried: reply-detector Gmail OAuth, Content Machine + Medium Writer triggers missing, Reddit pipeline Gemini retry.
+
+## 2026-04-23 /afternoon
+
+- Bot health: openclaw-gateway + automatyn-api active.
+- X: 112f / 492t (+3 since morning — posts from morning gate were tapped). Analytics 7d: 2.5K impressions (-86%), engagement 1.9% (+149%), 10/112 verified, follows flat. **Quality mode engaged** — only >10k on-topic targets.
+- X drafts pushed: reply to @omoalhajaabiola (165k, SMB+AI contrarian take) — final version id 64, 181 chars. Skipped @Sleepy_RC (336f, below floor).
+- Reddit pipeline: webhook fired OK.
+- Content Machine trigger: still 404 (absent from list). Open item.
+- Outreach ramp: **systemd OUTREACH_DAILY_CAP persisted 15 → 30**. Ingested 6 new UK cities (Leeds/Bristol/Glasgow/Edinburgh/Liverpool/Newcastle), pool 578 → 584. Enriched 150 sites for emails: with_email 77 → 161. Personalised 114 new leads (33 + 77 + 4 Canadian skipped) via batch-scrape + site-signal hooks: personalised 33 → 147. E1 sent today: 30 (daily cap). E1 lifetime: 48. Opens 5 → 11 (+6 fresh).
+- TikTok: 22 videos / 6137 views / 75 likes (+11 views since morning). Carousels deferred (context focus on outreach ramp).
+- LinkedIn / Dev.to / Medium: deferred.
+
+## 2026-04-23 /evening
+
+- Bot health: active.
+- X: 492 tweets (unchanged since afternoon). No new mentions since morning scan. Evening X drafts skipped — quality mode + no new warm targets + daily cap already spent on 4 Telegram drafts.
+- Reddit pipeline: webhook fired OK.
+- Outreach evening sweep: 11 opens matched (was 5). Reply detector self-skipped (Gmail OAuth). Daily stats email sent via daily-stats.js.
+- Daily totals: E1 30/30 cap, opens 11, unsubs 2, replies 0, bounces 0. Personalised pool 99 ready for tomorrow (147 - 48 sent). Tomorrow can push 30 E1 again without refilling.
+- Triggers: Blog Writer enabled (next 2026-04-24 10:06 UTC). Content Machine + Medium Writer still missing.
+- Open items carried: reply-detector Gmail OAuth, Content Machine + Medium Writer triggers missing, Reddit pipeline Gemini retry.
