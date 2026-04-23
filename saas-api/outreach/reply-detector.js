@@ -1,25 +1,27 @@
 // Reply detector — polls Gmail inbox for messages from leads.
 // When a lead replies, mark replied=true so follow-ups stop.
 //
-// Uses Gmail API (OAuth) — not IMAP. Requires a refresh token for patrick@automatyn.co.
-// Env:
-//   GMAIL_OAUTH_CLIENT_ID
-//   GMAIL_OAUTH_CLIENT_SECRET
-//   GMAIL_OAUTH_REFRESH_TOKEN
-//
-// One-off setup to get a refresh token is documented in README.md.
-// Until those are set, this script exits cleanly with a message.
+// Uses Gmail API (OAuth). Credentials live on disk at saas-api/secrets/
+// (gitignored). If either file is missing, script self-skips cleanly.
 
+const fs = require('fs');
+const path = require('path');
 const { google } = require('googleapis');
 const store = require('./leads-store');
 
-const CID = process.env.GMAIL_OAUTH_CLIENT_ID;
-const CSECRET = process.env.GMAIL_OAUTH_CLIENT_SECRET;
-const RTOK = process.env.GMAIL_OAUTH_REFRESH_TOKEN;
+const CLIENT_PATH = path.join(__dirname, '..', 'secrets', 'gmail-oauth-client.json');
+const TOKEN_PATH = path.join(__dirname, '..', 'secrets', 'gmail-token.json');
 
-async function gmailClient() {
-  const oauth2 = new google.auth.OAuth2(CID, CSECRET);
-  oauth2.setCredentials({ refresh_token: RTOK });
+function loadCreds() {
+  if (!fs.existsSync(CLIENT_PATH) || !fs.existsSync(TOKEN_PATH)) return null;
+  const c = JSON.parse(fs.readFileSync(CLIENT_PATH, 'utf8')).installed;
+  const t = JSON.parse(fs.readFileSync(TOKEN_PATH, 'utf8'));
+  return { client_id: c.client_id, client_secret: c.client_secret, refresh_token: t.refresh_token };
+}
+
+async function gmailClient(creds) {
+  const oauth2 = new google.auth.OAuth2(creds.client_id, creds.client_secret);
+  oauth2.setCredentials({ refresh_token: creds.refresh_token });
   return google.gmail({ version: 'v1', auth: oauth2 });
 }
 
@@ -34,11 +36,12 @@ function extractFailedRecipient(headers, snippet) {
 }
 
 async function run(lookbackHours = 24) {
-  if (!CID || !CSECRET || !RTOK) {
-    console.log('Gmail OAuth env not set — skipping. See outreach/README.md.');
+  const creds = loadCreds();
+  if (!creds) {
+    console.log('Gmail OAuth creds not found at saas-api/secrets/. Run seo/gmail-auth flow.');
     return;
   }
-  const gmail = await gmailClient();
+  const gmail = await gmailClient(creds);
   const afterTs = Math.floor((Date.now() - lookbackHours * 3600 * 1000) / 1000);
   const q = `in:inbox after:${afterTs}`;
   let replyCount = 0, bounceCount = 0;
