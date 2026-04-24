@@ -229,3 +229,18 @@ Open items for next slot:
 - Daily totals: E1 30/30 cap, opens 11, unsubs 2, replies 0, bounces 0. Personalised pool 99 ready for tomorrow (147 - 48 sent). Tomorrow can push 30 E1 again without refilling.
 - Triggers: Blog Writer enabled (next 2026-04-24 10:06 UTC). Content Machine + Medium Writer still missing.
 - Open items carried: reply-detector Gmail OAuth, Content Machine + Medium Writer triggers missing, Reddit pipeline Gemini retry.
+
+## 2026-04-24 /morning
+
+- Bot health: openclaw-gateway + automatyn-api active.
+- X: active, 112 followers, 498 tweets (+6 since yesterday evening). Analytics 7d: **2.6K imp (-74%)**, engagement 2% (+308%), 4 replies (+300%). Quality mode engaged.
+- X mentions: 5 fetched via API, all >48h (out of <6h recency window). 3 original X draft candidates pushed to Telegram gate (175/172/181 chars).
+- Reply detector: **now fully working**. Scanned 10 inbox msgs, 0 replies matched — confirms zero-reply rate is real, not a detection bug.
+- Outreach: E1 batch started in background (30 sends, variant-tracked — **first ever variant rotation batch**). Daily-report.js diagnosed 48 prior unlabelled sends as FIX CTA.
+- SEO (GSC 7d): 277 imp / 0 clicks / avg pos 60.4. Chatbot-pricing cluster surging.
+- Signups last 24h: 0 new (18 real + 1 test total).
+- Reddit pipeline: webhook fired OK.
+- TikTok: deferred (Postiz analytics 500).
+- Triggers: 5 total. 2 enabled (SEO Daily + SEO Day-14).
+- Larry-brain framework applied to email outreach (commit 3ac25f2): 3 subjects × 4 CTAs deterministically rotated, daily-report.js diagnoses per (subject × CTA) pair.
+- Open items: Postiz TikTok analytics 500, Content Machine + Medium Writer triggers missing, X Article on OpenClaw vs Hermes drafted to Telegram (no pre-fill URL exists — manual paste required).
