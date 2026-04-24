@@ -244,3 +244,17 @@ Open items for next slot:
 - Triggers: 5 total. 2 enabled (SEO Daily + SEO Day-14).
 - Larry-brain framework applied to email outreach (commit 3ac25f2): 3 subjects × 4 CTAs deterministically rotated, daily-report.js diagnoses per (subject × CTA) pair.
 - Open items: Postiz TikTok analytics 500, Content Machine + Medium Writer triggers missing, X Article on OpenClaw vs Hermes drafted to Telegram (no pre-fill URL exists — manual paste required).
+
+## 2026-04-24 /afternoon
+
+- Bot health: openclaw-gateway + automatyn-api active. Gateway /api/health ok.
+- X: 112f / 499t (+1 since morning). Analytics unchanged (2.6K imp, 10 verified, 4 replies). **Quality mode stays engaged.**
+- X mentions: all >48h, none eligible. Live searches surfaced mostly competitor self-pitches (CallHolaAI, DobleAI, polsia, Nexora).
+- X drafts pushed to Telegram gate (2): reply to @eviefoxiee (6.7k, 6h, SMB loneliness — 140 chars), reply to @polsia (13.4k, 4h, agent vs quiet framing — 144 chars). Skipped @Kaizen_CFO (11f, below floor).
+- Volume note: Pat asked for 20 replies/day. Flagged as blocked by (a) <6h recency + quality-mode caps supply, (b) X API budget 500/mo = 17/day ceiling. Sustainable max right now is ~12 replies/day across 3 slots. Need recency relaxation or budget bump to hit 20.
+- Reddit pipeline: webhook fired OK.
+- Outreach: E1 30/30 daily cap already spent this morning. E2/E3 queues empty (earliest E1 was 2026-04-22, E2 eligible 2026-04-25). Pool 584 total / 161 with_email / 147 personalised / 78 E1 lifetime / 11 opens / 0 replies / 3 unsubs.
+- TikTok: 22 videos / 6148 views (+11 since morning) / 76 likes. Top performers unchanged (dad-979, mum-806, boss-652). Carousel generation deferred (focus shifted to X drafts).
+- Signups last 24h: 0 new (files in data/biz-*.json unchanged today, 16 total).
+- Triggers: Content Machine still 404 / Medium Writer still absent — carry as open items.
+- Open items carried: Postiz TikTok analytics 500, Content Machine + Medium Writer missing, n8n template (FRiPMJyTHWmxRzL3) in draft — not submitted pending better problem-fit framing.
