@@ -275,3 +275,21 @@ Open items for next slot:
 - Triggers state: SEO Daily enabled (next 2026-04-25 10:00 UTC), SEO Day-14 enabled (one-shot 2026-05-07), Locations one-shot disabled (already built per Task A check), SEO Audit weekly disabled, Publish-blog one-shot used.
 - Open items: SEO Daily silent failure (no blog out today), Content Machine + Medium Writer triggers absent, Postiz TikTok analytics 500, n8n template (FRiPMJyTHWmxRzL3) in draft pending reframe, X-posting-flow.md updated to intent-URL pattern (commit pending).
 - X 20-replies/day target flagged blocked by recency rule + sustainable supply (~12/day max across 3 slots).
+
+## 2026-04-25 /morning
+
+- Bot health: openclaw-gateway + automatyn-api active. /api/health ok.
+- X: **111f / 500t (-1 follower since yesterday)**. Analytics 7d: 2.6K imp (flat), 10/111 verified, engagements 57, 4 replies. **Quality mode stays engaged.**
+- X drafts pushed: 1 reply to @Ushka02 (2.4k, 1h, AI receptionist GP-surgery pain — 182 chars after length correction). Skipped @Traveltoolhub (183f), @fortuneishaku (231f) below 1k floor. Initial draft sent at 222ch was over limit; corrected version is msg 88.
+- Reddit pipeline: webhook fired OK.
+- Outreach overnight: reply detector scanned 16 inbox msgs, 0 new replies, 0 bounces.
+- Outreach morning send: e1+e2 batch running in background (cap=15 E1, ≤10 E2).
+- Outreach lifetime (pre-morning-send): 93 E1 / 6 E2 / 0 E3 / 17 opens / 0 replies / 4 unsubs / 0 bounces. Pool 584/161/147.
+- **Variant diagnostic (14d):** All 12 (subject × CTA) pairs at INSUFFICIENT DATA (each has <10 sends; need more volume per pair before signal). Aggregate diagnosis FULL RESET (low open + low reply on overall) but that's distorted by the 48 unlabelled pre-variant baseline. CTA leaderboard: C4_link 19 sends 26.3% open, C2_reverse 13 sends 15.4%, C3/C1 ~11%. C4_link is winning opens but needs more sends to confirm reply behaviour.
+- SEO (GSC 7d): top page /blog/how-much-does-ai-chatbot-cost-2026.html — **242 impressions / 0 clicks / pos 81.1**. Big chatbot-pricing keyword surge (15+ unique queries hitting that page). Position 81 = page 8 — needs CTR optimisation + on-page tune. No quick-wins at pos 8-15 yet. Homepage stable pos 3.3. /blog/passive-income-ai-agents-2026.html dropped to 11 imp (was top page, now decaying).
+- Signups last 14h: 0 new (16 total — 14 free, 2 starter).
+- TikTok: 22 videos / 6154 views / 76 likes (+1 view since evening). Top 3 unchanged.
+- Blog: SEO Daily trigger next fires 2026-04-25 10:00 UTC (~75min). **Yesterday's run still unaccounted for** — open item.
+- Triggers: 5 total. SEO Daily enabled (next 2026-04-25 10:00 UTC), SEO Day-14 enabled (one-shot 2026-05-07), other 3 disabled/used.
+- LinkedIn / Dev.to / Medium: deferred (SEO Daily handles distribution).
+- Open items: SEO Daily silent failure 2026-04-24 needs investigation, Content Machine + Medium Writer triggers absent, Postiz TikTok analytics 500, X 20-replies/day target blocked by recency+budget, n8n template (FRiPMJyTHWmxRzL3) in draft.
