@@ -1,0 +1,134 @@
+{
+  "updated_at": "2026-04-29T17:44:31.673Z",
+  "window_days": 14,
+  "totals": {
+    "sends": 147,
+    "opens": 27,
+    "replies": 0
+  },
+  "subjects": {
+    "S2": {
+      "sends": 40,
+      "opens": 7,
+      "replies": 0
+    },
+    "S1": {
+      "sends": 33,
+      "opens": 2,
+      "replies": 0
+    },
+    "S3": {
+      "sends": 26,
+      "opens": 5,
+      "replies": 0
+    }
+  },
+  "ctas": {
+    "C4_link": {
+      "sends": 29,
+      "opens": 3,
+      "replies": 0
+    },
+    "C3_qualifier": {
+      "sends": 23,
+      "opens": 3,
+      "replies": 0
+    },
+    "C2_reverse": {
+      "sends": 22,
+      "opens": 4,
+      "replies": 0
+    },
+    "C1_binary": {
+      "sends": 25,
+      "opens": 4,
+      "replies": 0
+    }
+  },
+  "pairs": {
+    "S2|C4_link": {
+      "subjectId": "S2",
+      "ctaId": "C4_link",
+      "sends": 13,
+      "opens": 2,
+      "replies": 0
+    },
+    "S1|C3_qualifier": {
+      "subjectId": "S1",
+      "ctaId": "C3_qualifier",
+      "sends": 7,
+      "opens": 1,
+      "replies": 0
+    },
+    "S1|C2_reverse": {
+      "subjectId": "S1",
+      "ctaId": "C2_reverse",
+      "sends": 9,
+      "opens": 0,
+      "replies": 0
+    },
+    "S3|C4_link": {
+      "subjectId": "S3",
+      "ctaId": "C4_link",
+      "sends": 5,
+      "opens": 1,
+      "replies": 0
+    },
+    "S2|C1_binary": {
+      "subjectId": "S2",
+      "ctaId": "C1_binary",
+      "sends": 13,
+      "opens": 1,
+      "replies": 0
+    },
+    "S1|C4_link": {
+      "subjectId": "S1",
+      "ctaId": "C4_link",
+      "sends": 11,
+      "opens": 0,
+      "replies": 0
+    },
+    "S2|C3_qualifier": {
+      "subjectId": "S2",
+      "ctaId": "C3_qualifier",
+      "sends": 8,
+      "opens": 2,
+      "replies": 0
+    },
+    "S3|C1_binary": {
+      "subjectId": "S3",
+      "ctaId": "C1_binary",
+      "sends": 6,
+      "opens": 2,
+      "replies": 0
+    },
+    "S3|C2_reverse": {
+      "subjectId": "S3",
+      "ctaId": "C2_reverse",
+      "sends": 7,
+      "opens": 2,
+      "replies": 0
+    },
+    "S3|C3_qualifier": {
+      "subjectId": "S3",
+      "ctaId": "C3_qualifier",
+      "sends": 8,
+      "opens": 0,
+      "replies": 0
+    },
+    "S1|C1_binary": {
+      "subjectId": "S1",
+      "ctaId": "C1_binary",
+      "sends": 6,
+      "opens": 1,
+      "replies": 0
+    },
+    "S2|C2_reverse": {
+      "subjectId": "S2",
+      "ctaId": "C2_reverse",
+      "sends": 6,
+      "opens": 2,
+      "replies": 0
+    }
+  }
+}

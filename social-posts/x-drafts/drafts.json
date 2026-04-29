@@ -1,34 +1,34 @@
 {
-  "slot": "morning",
+  "slot": "afternoon",
   "date": "2026-04-29",
   "drafts": [
     {
       "id": "o1",
       "type": "original",
-      "draft": "Most small businesses don't have a marketing problem. They have a follow-up problem. The leads are already there. Nobody chases them on Tuesday at 6pm.",
-      "char_count": 151,
-      "reason": "morning original"
+      "draft": "The boring middle layer of AI for small business (follow-up, scheduling, review chasing) is where the actual money is. The rest is theatre.",
+      "char_count": 139,
+      "reason": "afternoon original"
     },
     {
       "id": "o2",
       "type": "original",
-      "draft": "If a customer asks at 9pm and you answer at 9am, the sale is already gone. Speed has quietly become the only differentiator left.",
-      "char_count": 129,
-      "reason": "morning original"
+      "draft": "Every plumber I've talked to has the same bottleneck. Not leads, not pricing. A phone they can't pick up while they're under a sink.",
+      "char_count": 132,
+      "reason": "afternoon original"
     },
     {
       "id": "o3",
       "type": "original",
-      "draft": "Founders spend a year building the perfect onboarding then lose 40% of signups because nobody replies to 'is this legit?' for six hours.",
-      "char_count": 136,
-      "reason": "morning original"
+      "draft": "A receptionist that costs £30k/year and one that costs £30/month don't compete. The £30 one just shows up at 2am too.",
+      "char_count": 117,
+      "reason": "afternoon original"
     },
     {
       "id": "r01",
       "type": "reply",
       "target_handle": "OpenAIDevs",
       "target_followers": null,
-      "target_age": "1.8h",
+      "target_age": "2.7h",
       "target_url": "https://x.com/OpenAIDevs/status/2049505143218217048",
       "tweet_id": "2049505143218217048",
       "target_text": "Add Codex seats with a $0 seat fee for a limited time.\n\nThrough the end of June, eligible ChatGPT Business and Enterprise customers can add Codex-only seats, making it easier to give more developers a",
@@ -39,22 +39,9 @@
     {
       "id": "r02",
       "type": "reply",
-      "target_handle": "AishwaryaDevv",
-      "target_followers": null,
-      "target_age": "5.1h",
-      "target_url": "https://x.com/AishwaryaDevv/status/2049456577246335245",
-      "tweet_id": "2049456577246335245",
-      "target_text": "2010:\n“Let’s hire a huge engineering team.”\n\n2026:\n“Wait… Claude can build most of this.”\n\n2030:\n“Yeah we probably need humans again.”",
-      "draft": "The pendulum on this swings hard both ways every six months. The teams shipping the most output have stopped paying attention to either side of the argument.",
-      "char_count": 157,
-      "reason": "AI-jobs nuance"
-    },
-    {
-      "id": "r03",
-      "type": "reply",
       "target_handle": "hnshah",
       "target_followers": null,
-      "target_age": "0.6h",
+      "target_age": "1.5h",
       "target_url": "https://x.com/hnshah/status/2049522903369277946",
       "tweet_id": "2049522903369277946",
       "target_text": "User research and testing should never be an afterthought.",
@@ -63,11 +50,24 @@
       "reason": "product-craft angle"
     },
     {
+      "id": "r03",
+      "type": "reply",
+      "target_handle": "AishwaryaDevv",
+      "target_followers": null,
+      "target_age": "6h",
+      "target_url": "https://x.com/AishwaryaDevv/status/2049456577246335245",
+      "tweet_id": "2049456577246335245",
+      "target_text": "2010:\n“Let’s hire a huge engineering team.”\n\n2026:\n“Wait… Claude can build most of this.”\n\n2030:\n“Yeah we probably need humans again.”",
+      "draft": "The pendulum on this swings hard both ways every six months. The teams shipping the most output have stopped paying attention to either side of the argument.",
+      "char_count": 157,
+      "reason": "AI-jobs nuance"
+    },
+    {
       "id": "r04",
       "type": "reply",
       "target_handle": "TKopelman",
       "target_followers": null,
-      "target_age": "1.8h",
+      "target_age": "2.7h",
       "target_url": "https://x.com/TKopelman/status/2049504876489585021",
       "tweet_id": "2049504876489585021",
       "target_text": "Completely agree with this\n\nMoney won’t make you happy\n\nEspecially if you trade all your time for it\n\nBut it for sure makes your life way better and less stressful when used well",
@@ -80,7 +80,7 @@
       "type": "reply",
       "target_handle": "shawnchauhan1",
       "target_followers": null,
-      "target_age": "2.4h",
+      "target_age": "3.3h",
       "target_url": "https://x.com/shawnchauhan1/status/2049496466100769070",
       "tweet_id": "2049496466100769070",
       "target_text": "CATL just signed a three-year, 60 gigawatt-hour sodium-ion battery deal - the largest commercial sodium-ion agreement in history.\n\nSodium is cheaper, more abundant, and less geographically concentrate",
@@ -90,8 +90,8 @@
     }
   ],
   "source": {
-    "candidates_scraped_at": "2026-04-29T16:55:42.816Z",
-    "candidates_count": 9,
+    "candidates_scraped_at": "2026-04-29T17:49:32.835Z",
+    "candidates_count": 12,
     "drafts_emitted": 8,
     "replies_emitted": 5
   }

@@ -313,3 +313,19 @@ Open items for next slot:
 - Signups last 14h: 0 new (21 total agents).
 - Commits overnight: a7a2eea mobile CTA, bda59c6 + a386e20 geopricing, 636a97e X drafts page.
 - Open items: SEO collapse (impressions down 91%), pool refill before afternoon, X target supply low, Postiz TikTok analytics 500.
+
+## 2026-04-29 /afternoon
+
+- Bot health: openclaw-gateway + automatyn-api active. /api/health ok.
+- X status: @patrickssons OK, **119 followers / 564 tweets** (-1f, +64t since morning).
+- X drafts pipeline: scrape 35 handles → 12 candidates kept (22 errors, browser degraded). Drafter emitted 8 drafts (3 originals + 5 replies). Quality bar held — 7 candidates skipped (no angle match). Page at https://automatyn.co/x-private/xmQmQLv0YpSd02zlZUTXqw/. Telegram link sent.
+- Reddit pipeline: webhook fired OK.
+- **Outreach this slot:** enrichment added 26 emails (161→187 with_email), batch-personalised 20 (rating/review-based sentences, no WebSearch). E1 sent **20** (today **44**, lifetime **167**), E2 **10** (today 27, lifetime 43), E3 **10** (today 26, lifetime 26). Pool now exhausted (0 eligible).
+- **Outreach lifetime:** 167 E1 / 43 E2 / 26 E3 / 27 E1 opens (~16%) / 7 E2 opens / 3 E3 opens / 7 unsubs / 0 replies / 0 bounces.
+- Brevo open fetch: 33 events, 21 matched to leads.
+- Variant diagnostic (14d): all pairs INSUFFICIENT DATA (5-7 sends each). Aggregate FULL RESET distorted by old baseline.
+- TikTok: 22 / 6156 / 76 (unchanged). No carousels this slot.
+- LinkedIn / Dev.to / Medium: deferred.
+- Signups: 21 total (no new).
+- **150-replies/day target: BLOCKED.** Free path ceiling is ~5-15 quality replies/slot. X API reads ($45-90/mo) ruled out. Need Pat decision: lower target or accept paid reads.
+- Open items: pool exhausted again, SEO collapsed (untouched), X scrape yield ceiling, Content Machine trigger 404.
