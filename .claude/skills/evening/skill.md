@@ -29,6 +29,17 @@ Verify every target's follower count via `curl -s https://api.fxtwitter.com/<han
 
 **Recency check — MANDATORY (feedback_x_reply_recency.md):** Reply target post must be <6h old. Verify via `curl -s https://api.fxtwitter.com/status/<tweet_id>` → check `created_at`, reject older. Use `x.com/search?...&f=live` (Latest) for discovery. Skip author entirely if latest post >6h old. Warm-chain exempt up to 24h. Log rejected-by-age count.
 
+## Step 1aa: Auto-generate X drafts pipeline
+
+```bash
+cd /home/marketingpatpat/openclaw/social-posts/x-drafts
+timeout 700 node scrape-targets.js 24 5
+node draft-from-candidates.js evening
+node build-page.js
+```
+
+Quality bar held in `draft-from-candidates.js` — only emits replies with a real angle. Don't lower the bar to inflate volume. If `kept` is 0, skip Telegram send and log it.
+
 ## Step 1b: Trigger Reddit AI Image Pipeline (n8n)
 
 Fire the `Reddit AI Image Pipeline` workflow via webhook. No API key needed.

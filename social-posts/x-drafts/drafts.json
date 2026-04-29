@@ -3,116 +3,96 @@
   "date": "2026-04-29",
   "drafts": [
     {
-      "id": "d01",
+      "id": "o1",
       "type": "original",
-      "draft": "Most small businesses don't have a marketing problem. They have a follow-up problem. The leads are already coming in. Nobody's chasing them on Tuesday at 6pm.",
-      "char_count": 158,
-      "reason": "SMB pain frame, time-specific"
+      "draft": "Most small businesses don't have a marketing problem. They have a follow-up problem. The leads are already there. Nobody chases them on Tuesday at 6pm.",
+      "char_count": 151,
+      "reason": "morning original"
     },
     {
-      "id": "d02",
+      "id": "o2",
       "type": "original",
-      "draft": "If your customer asks a question at 9pm and you answer at 9am, the sale is gone. Speed has quietly become the only differentiator left.",
-      "char_count": 134,
-      "reason": "Speed as moat, no jargon"
+      "draft": "If a customer asks at 9pm and you answer at 9am, the sale is already gone. Speed has quietly become the only differentiator left.",
+      "char_count": 129,
+      "reason": "morning original"
     },
     {
-      "id": "d03",
+      "id": "o3",
       "type": "original",
-      "draft": "Founders spend years building the perfect onboarding flow then lose 40% of signups because nobody replies to the first 'is this legit?' email for 6 hours.",
-      "char_count": 154,
-      "reason": "Specific funnel pain, no banned words"
+      "draft": "Founders spend a year building the perfect onboarding then lose 40% of signups because nobody replies to 'is this legit?' for six hours.",
+      "char_count": 136,
+      "reason": "morning original"
     },
     {
-      "id": "d04",
+      "id": "r01",
       "type": "reply",
-      "target_handle": "downtimeinc",
-      "target_followers": 51,
-      "target_age": "5h",
-      "target_url": "https://x.com/downtimeinc/status/2049324044118581504",
-      "tweet_id": "2049324044118581504",
-      "target_text": "Honest take on AI for small business in 2026: Most of the hype is still hype. But automated follow-up, review management...",
-      "draft": "Agreed. The boring middle layer (follow-up, scheduling, review chasing) is where AI actually pays back. Demos and chat-bots are theater.",
-      "char_count": 138,
-      "reason": "On-topic SMB, agree-and-extend (sub-1k but on-message and fresh)"
-    },
-    {
-      "id": "d05",
-      "type": "reply",
-      "target_handle": "MahlumAI",
+      "target_handle": "OpenAIDevs",
       "target_followers": null,
-      "target_age": "warm chain",
-      "target_url": "https://x.com/MahlumAI/status/2047014935423795332",
-      "tweet_id": "2047014935423795332",
-      "target_text": "Compounding loss is underrated. 15-yr field tech at a manufacturer walks out = ~8k undocumented decisions gone.",
-      "draft": "The frame I keep coming back to: tribal knowledge isn't lost when someone leaves, it's lost the day they stopped writing it down.",
-      "char_count": 130,
-      "reason": "Warm chain, pushes the metaphor forward"
+      "target_age": "1.8h",
+      "target_url": "https://x.com/OpenAIDevs/status/2049505143218217048",
+      "tweet_id": "2049505143218217048",
+      "target_text": "Add Codex seats with a $0 seat fee for a limited time.\n\nThrough the end of June, eligible ChatGPT Business and Enterprise customers can add Codex-only seats, making it easier to give more developers a",
+      "draft": "The interesting unlock isn't writing code faster. It's that the cost of throwing away the first attempt has dropped to almost zero.",
+      "char_count": 131,
+      "reason": "AI-coding angle"
     },
     {
-      "id": "d06",
-      "type": "reply",
-      "target_handle": "rxhit05",
-      "target_followers": null,
-      "target_age": "warm chain",
-      "target_url": "https://x.com/rxhit05/status/2048838344478781649",
-      "tweet_id": "2048838344478781649",
-      "target_text": "capital ain't infinite",
-      "draft": "And it always runs out a week before the thing that would've worked starts working.",
-      "char_count": 84,
-      "reason": "Warm chain, builder relatability"
-    },
-    {
-      "id": "d07",
+      "id": "r02",
       "type": "reply",
       "target_handle": "AishwaryaDevv",
       "target_followers": null,
-      "target_age": "warm chain",
-      "target_url": "https://x.com/AishwaryaDevv/status/2048715899683950618",
-      "tweet_id": "2048715899683950618",
-      "target_text": "support becomes the actual product",
-      "draft": "The companies that figured this out early stopped calling it support and started calling it the onboarding team.",
-      "char_count": 113,
-      "reason": "Warm chain, agree-and-extend"
+      "target_age": "5.1h",
+      "target_url": "https://x.com/AishwaryaDevv/status/2049456577246335245",
+      "tweet_id": "2049456577246335245",
+      "target_text": "2010:\n“Let’s hire a huge engineering team.”\n\n2026:\n“Wait… Claude can build most of this.”\n\n2030:\n“Yeah we probably need humans again.”",
+      "draft": "The pendulum on this swings hard both ways every six months. The teams shipping the most output have stopped paying attention to either side of the argument.",
+      "char_count": 157,
+      "reason": "AI-jobs nuance"
     },
     {
-      "id": "d08",
+      "id": "r03",
       "type": "reply",
-      "target_handle": "TTrimoreau",
+      "target_handle": "hnshah",
       "target_followers": null,
-      "target_age": "warm chain",
-      "target_url": "https://x.com/TTrimoreau/status/2048343082555351473",
-      "tweet_id": "2048343082555351473",
-      "target_text": "Looks simple like that",
-      "draft": "Until the third rewrite. Then it's actually simple.",
-      "char_count": 51,
-      "reason": "Warm chain, builder humour"
+      "target_age": "0.6h",
+      "target_url": "https://x.com/hnshah/status/2049522903369277946",
+      "tweet_id": "2049522903369277946",
+      "target_text": "User research and testing should never be an afterthought.",
+      "draft": "The thing nobody can fake: software that respects your time. Most 'feel' debates are downstream of that one decision.",
+      "char_count": 117,
+      "reason": "product-craft angle"
     },
     {
-      "id": "d09",
+      "id": "r04",
       "type": "reply",
-      "target_handle": "aminnnn_09",
-      "target_followers": 313,
-      "target_age": "warm chain",
-      "target_url": "https://x.com/aminnnn_09/status/2048247599958999418",
-      "tweet_id": "2048247599958999418",
-      "target_text": "warm chain",
-      "draft": "Building public is easy. Writing about what didn't work is the harder, more useful version.",
-      "char_count": 92,
-      "reason": "Warm chain, on-topic for builder audience"
+      "target_handle": "TKopelman",
+      "target_followers": null,
+      "target_age": "1.8h",
+      "target_url": "https://x.com/TKopelman/status/2049504876489585021",
+      "tweet_id": "2049504876489585021",
+      "target_text": "Completely agree with this\n\nMoney won’t make you happy\n\nEspecially if you trade all your time for it\n\nBut it for sure makes your life way better and less stressful when used well",
+      "draft": "The framing that finally clicked for me: time and money trade against each other until you build something that runs without you. That's the actual asset.",
+      "char_count": 154,
+      "reason": "wealth/money angle"
     },
     {
-      "id": "d10",
+      "id": "r05",
       "type": "reply",
-      "target_handle": "eke_ng_",
-      "target_followers": 2319,
-      "target_age": "1h",
-      "target_url": "https://x.com/eke_ng_/status/2049388108496748927",
-      "tweet_id": "2049388108496748927",
-      "target_text": "building in public",
-      "draft": "Building in public is undefeated for one reason: nobody else is willing to show the receipts.",
-      "char_count": 94,
-      "reason": "2.3k follower builder, fresh, BIP frame"
+      "target_handle": "shawnchauhan1",
+      "target_followers": null,
+      "target_age": "2.4h",
+      "target_url": "https://x.com/shawnchauhan1/status/2049496466100769070",
+      "tweet_id": "2049496466100769070",
+      "target_text": "CATL just signed a three-year, 60 gigawatt-hour sodium-ion battery deal - the largest commercial sodium-ion agreement in history.\n\nSodium is cheaper, more abundant, and less geographically concentrate",
+      "draft": "The part of these announcements that ages best: not the headline number, but who's now locked into a multi-year roadmap they can't easily change.",
+      "char_count": 145,
+      "reason": "tech-news angle"
     }
-  ]
+  ],
+  "source": {
+    "candidates_scraped_at": "2026-04-29T16:55:42.816Z",
+    "candidates_count": 9,
+    "drafts_emitted": 8,
+    "replies_emitted": 5
+  }
 }

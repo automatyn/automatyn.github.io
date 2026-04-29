@@ -56,6 +56,21 @@ Log the analytics numbers in the session log every routine so we can see trend a
 
 **Recency check — MANDATORY (feedback_x_reply_recency.md):** Every reply target post must be <6h old. Verify via `curl -s https://api.fxtwitter.com/status/<tweet_id>` → check `created_at`, reject if older. For discovery use `https://x.com/search?q=<term>&f=live` (Latest tab). If author's latest post is >6h old, skip the author entirely — do not fall back to older posts. Warm-chain replies (someone engaged @patrickssons) exempt up to 24h. Log rejected-by-age count in session log.
 
+## Step 3aa: Auto-generate X drafts pipeline
+
+Run the scrape → draft → build-page pipeline. Output is `social-posts/x-drafts/index.html` (scroll page consumed via Cloudflare tunnel + Telegram link).
+
+```bash
+cd /home/marketingpatpat/openclaw/social-posts/x-drafts
+timeout 700 node scrape-targets.js 24 5    # ~6-8min, scrapes ~35 handles via CDP 18800
+node draft-from-candidates.js morning      # filters to angles, writes drafts.json
+node build-page.js                         # renders index.html
+```
+
+Quality bar is held in `draft-from-candidates.js` — drafts are only emitted when the candidate text matches a real angle. If output is small (e.g. 5-8 drafts/slot), that's the honest yield from a degraded browser session, not a bug. Don't lower the quality bar to inflate volume.
+
+After build, tunnel + send Telegram approval link as before. If `kept` is 0 in candidates.json, skip the Telegram send and log it.
+
 ## Step 3b: Trigger Reddit AI Image Pipeline (n8n)
 
 Fire the `Reddit AI Image Pipeline` workflow via webhook. No API key needed.

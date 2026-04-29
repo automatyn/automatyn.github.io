@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "updated": "2026-04-29",
+  "notes": "Pruned to 30 active, high-yield handles. Paced scrape (10s/handle) avoids X anti-scrape wall.",
+  "groups": {
+    "smb_founders": [
+      "patio11", "levelsio", "marc_louvion", "jasonlk",
+      "nikitabier", "sahilbloom", "GergelyOrosz", "swyx",
+      "dvassallo", "rauchg"
+    ],
+    "ai_builders": [
+      "OpenAIDevs", "AnthropicAI", "alexalbert__", "karpathy",
+      "simonw", "amasad", "mckaywrigley", "AravSrinivas", "shawnchauhan1"
+    ],
+    "saas_indie": [
+      "arvidkahl", "jonyongfook", "mijustin", "csallen",
+      "TKopelman", "hnshah", "gregisenberg", "harryjdry",
+      "dharmesh", "lennysan"
+    ],
+    "warm_chain": [
+      "MahlumAI", "rxhit05", "AishwaryaDevv", "TTrimoreau",
+      "aminnnn_09", "Duemers_"
+    ]
+  }
+}
