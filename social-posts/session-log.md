@@ -329,3 +329,20 @@ Open items for next slot:
 - Signups: 21 total (no new).
 - **150-replies/day target: BLOCKED.** Free path ceiling is ~5-15 quality replies/slot. X API reads ($45-90/mo) ruled out. Need Pat decision: lower target or accept paid reads.
 - Open items: pool exhausted again, SEO collapsed (untouched), X scrape yield ceiling, Content Machine trigger 404.
+
+## 2026-04-30 /morning
+
+- Bot health: openclaw-gateway + automatyn-api active.
+- X status: @patrickssons OK, **119 followers / 570 tweets** (flat from yesterday, +6t overnight).
+- X drafts: scrape collapsed (28/35 errors, anti-scrape wall). 4 candidates → 4 drafts (3 originals + 1 reply). Page at https://automatyn.co/x-private/2lhwVGdLFeJZdV6hCkJ82A/. Telegram link sent.
+- Reddit pipeline: webhook fired OK.
+- **Outreach this slot:** E2 sent **30** (15+15 staggered, 25min gap). E1 **0** (pool depleted, ingest needed). E3 sent **20**. Reply detector overnight: 0 new replies, 0 bounces.
+- **Outreach lifetime:** 167 E1 / 76 E2 / 46 E3 / 31 E1 opens (~18%) / 9 E2 opens / 6 E3 opens / 7 unsubs / 0 replies / 0 bounces. Pool 584/187/167.
+- **Boost Plumbing autoresponder false positive:** Reply detector flagged Boost Plumbing as "replied" 2026-04-29 — was an out-of-office from owner Darren (mobile 07834633376 noted). Flag reset, will continue E2/E3 cadence. Detector should be patched to skip autoresponder subject lines.
+- **Variant diagnostic (14d):** Many pairs FULL RESET (low open + low reply on aggregate, distorted by 48 unlabelled pre-variant baseline). Standout opens: S3×C1_binary 37.5% (8 sends), S2×C2_reverse 22.2% (9 sends, Adam's combo). All pairs still INSUFFICIENT DATA for reply diagnosis.
+- SEO 7d: **259 imp / 1 click / pos 75.5**. Chatbot-cost cluster dominant (215 imp on /blog/how-much-does-ai-chatbot-cost-2026.html at pos 87.5). No quick-wins at pos 8-15. SEO Daily trigger fires 10:07 UTC.
+- TikTok: 22 / 6156 / 76 (unchanged from 2026-04-29). No carousels this slot.
+- LinkedIn / Dev.to / Medium: deferred (SEO Daily handles distribution).
+- Triggers: SEO Daily enabled (next 10:07 UTC), SEO Day-14 enabled (one-shot 2026-05-07). Others disabled/used.
+- Signups last 14h: **0 new** (22 total, Adam still WA-not-connected, conv=0).
+- Open items: scrape errors 28/35 (browser session degrading), E1 pool depleted (ingest required), reply detector autoresponder false-positive bug, X 30-replies/day plan held at $4.50 budget (project decision: stay free, accept goal slip).
