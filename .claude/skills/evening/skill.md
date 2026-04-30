@@ -29,16 +29,17 @@ Verify every target's follower count via `curl -s https://api.fxtwitter.com/<han
 
 **Recency check — MANDATORY (feedback_x_reply_recency.md):** Reply target post must be <6h old. Verify via `curl -s https://api.fxtwitter.com/status/<tweet_id>` → check `created_at`, reject older. Use `x.com/search?...&f=live` (Latest) for discovery. Skip author entirely if latest post >6h old. Warm-chain exempt up to 24h. Log rejected-by-age count.
 
-## Step 1aa: Auto-generate X drafts pipeline
+## Step 1aa: Dual-channel X reply pipeline (15 API + 15 scrape = 30/slot)
+
+See /morning skill Step 3aa for full procedure. Same flow:
 
 ```bash
 cd /home/marketingpatpat/openclaw/social-posts/x-drafts
-timeout 700 node scrape-targets.js 24 5
-node draft-from-candidates.js evening
-node build-page.js
+X_BEARER_TOKEN='<see reference_x_api_keys.md>' node scrape-via-api.js 15 24   # API source (~$0.07)
+timeout 700 node scrape-targets.js 24 5                                       # Browser scrape source (free)
 ```
 
-Quality bar held in `draft-from-candidates.js` — only emits replies with a real angle. Don't lower the bar to inflate volume. If `kept` is 0, skip Telegram send and log it.
+Then draft 15 reply-bait replies per source (all questions to author, <200c, no em dashes, no AI buzzwords) and send each as Telegram message to @automatyntweetbot with intent URL button. Verify <6h age + >1k followers per target. If either source returns 0, skip and log.
 
 **Publish to GitHub Pages (mandatory — automatyn.co is GH Pages, link 404s without push):**
 ```bash

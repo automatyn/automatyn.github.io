@@ -56,20 +56,33 @@ Log the analytics numbers in the session log every routine so we can see trend a
 
 **Recency check — MANDATORY (feedback_x_reply_recency.md):** Every reply target post must be <6h old. Verify via `curl -s https://api.fxtwitter.com/status/<tweet_id>` → check `created_at`, reject if older. For discovery use `https://x.com/search?q=<term>&f=live` (Latest tab). If author's latest post is >6h old, skip the author entirely — do not fall back to older posts. Warm-chain replies (someone engaged @patrickssons) exempt up to 24h. Log rejected-by-age count in session log.
 
-## Step 3aa: Auto-generate X drafts pipeline
+## Step 3aa: Dual-channel X reply pipeline (15 API + 15 scrape = 30/slot)
 
-Run the scrape → draft → build-page pipeline. Output is `social-posts/x-drafts/index.html` (scroll page consumed via Cloudflare tunnel + Telegram link).
+Two sources, both produce intent-URL drafts (no API writes). Target: 30 reply candidates per slot.
 
+**Source 1 — X API read (15/slot, ~$0.07):**
 ```bash
 cd /home/marketingpatpat/openclaw/social-posts/x-drafts
-timeout 700 node scrape-targets.js 24 5    # ~6-8min, scrapes ~35 handles via CDP 18800
-node draft-from-candidates.js morning      # filters to angles, writes drafts.json
-node build-page.js                         # renders index.html
+X_BEARER_TOKEN='<see reference_x_api_keys.md>' node scrape-via-api.js 15 24
+# Reads ~$0.005 each. Budget cap: 900 reads/$4.50/month enforced in script.
+# Output: candidates.json (sorted by engagement)
 ```
 
-Quality bar is held in `draft-from-candidates.js` — drafts are only emitted when the candidate text matches a real angle. If output is small (e.g. 5-8 drafts/slot), that's the honest yield from a degraded browser session, not a bug. Don't lower the quality bar to inflate volume.
+**Source 2 — Browser-use scrape (15/slot, free):**
+```bash
+timeout 700 node scrape-targets.js 24 5   # CDP 18800, ~35 handles
+```
 
-After build, tunnel + send Telegram approval link as before. If `kept` is 0 in candidates.json, skip the Telegram send and log it.
+**Draft + send to Telegram (both sources):**
+- Read top 15 from each source's candidates.json
+- Verify each target's age <6h via fxtwitter (mandatory, feedback_x_reply_recency.md)
+- Verify follower count >1k unless warm chain (feedback_x_analytics_gated_drafts.md)
+- Draft replies that **make the author reply back** — direct questions to author, mild contrarian takes, asks for their data/anecdote. Reply-bait > observation. (Algo: reply-back = 150x impressions per reference_x_algorithm.md)
+- All drafts <200 chars, no em dashes, no AI buzzwords
+- Send each as Telegram message to @automatyntweetbot with intent URL button:
+  `https://twitter.com/intent/tweet?in_reply_to=<tweet_id>&text=<encoded_reply>`
+
+If either source returns 0 candidates, skip that source and log; do not lower quality bar.
 
 ## Step 3b: Trigger Reddit AI Image Pipeline (n8n)
 
