@@ -346,3 +346,18 @@ Open items for next slot:
 - Triggers: SEO Daily enabled (next 10:07 UTC), SEO Day-14 enabled (one-shot 2026-05-07). Others disabled/used.
 - Signups last 14h: **0 new** (22 total, Adam still WA-not-connected, conv=0).
 - Open items: scrape errors 28/35 (browser session degrading), E1 pool depleted (ingest required), reply detector autoresponder false-positive bug, X 30-replies/day plan held at $4.50 budget (project decision: stay free, accept goal slip).
+
+## 2026-04-30 /afternoon
+
+- Bot health: openclaw-gateway + automatyn-api active. /api/health ok.
+- X status: @patrickssons OK, **119 followers / 570 tweets** (flat).
+- X drafts: scrape 35 → 9 candidates kept (24 errors, browser still degraded but better than morning's 4). 5 drafts (3 originals + 2 replies). Page at https://automatyn.co/x-private/4i3ChTzrzTJuxQ_WltV4ag/. Telegram link sent.
+- Reddit pipeline: webhook fired OK.
+- **Outreach this slot:** E2 sent **15** (afternoon batch), E3 sent **12**, E1 0 (pool depleted). Ingest pulled +32 leads (584→616). Enrichment +1 email (most plumbers don't list publicly). New leads need manual personalisation.
+- **Outreach today total:** E1 **0** / E2 **45** / E3 **32** = **77 emails sent today**.
+- **Outreach lifetime:** 167 E1 / 91 E2 / 58 E3 / 31 E1 opens (~18%) / 9 E2 opens / 6 E3 opens / 7 unsubs / 0 replies / 0 bounces. Pool 616/188/167.
+- **Adam onboarding:** WhatsApp nudge email manually sent (drip system uses in-RAM setTimeout, lost on automatyn-api restart 2026-04-29 evening). drip-state.json updated to record. Drip persistence bug NOT yet patched — pending evening routine.
+- TikTok: 22 / 6156 / 76 (unchanged from morning).
+- LinkedIn / Dev.to / Medium: deferred (SEO Daily handles distribution at 10:07 UTC, fired this morning).
+- Signups: **0 new** (22 total, Adam still WA-not-connected, conv=0).
+- Open items: drip system needs to be persistent (RAM-only setTimeouts lose pending nudges on restart), browser scrape error rate still 60-80%, E1 pool needs personalisation pass before next slot can send fresh leads.
