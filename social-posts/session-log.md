@@ -2,6 +2,18 @@
 
 Each command writes its results here after completing. The next command reads the most recent entry as a recap.
 
+### /seo-daily — 2026-05-01 (manual run, scheduled trigger fired but failed silently)
+- 3 new SMB-intent blog posts published, all ~3500-3700 HTML words, full template (breadcrumb, badge, gradient H1, TOC, inline CTAs to /pricing.html, FAQ, JSON-LD Article+Breadcrumb+FAQ).
+  - `/blog/missed-call-automation-uk-plumbers-2026.html` — "Missed Call Automation for UK Plumbers: The 2026 Playbook"
+  - `/blog/real-cost-of-missed-calls-uk-small-business-2026.html` — "The Real Cost of Missed Calls for UK Small Businesses"
+  - `/blog/how-long-ai-receptionist-setup-takes-2026.html` — "How Long Does AI Receptionist Setup Actually Take in 2026?"
+- 3 hero images generated via Forge (JuggernautXL, 1344x768 JPG + WEBP). Audited — all faceless / on-brand cyan accent. Cost-of-missed-calls hero regenerated once to swap a banker face for hi-vis tradesperson.
+- `/blog/index.html` — 3 new cards inserted as the first 3 cards (latest-first ordering preserved).
+- `/index.html` (homepage) — replaced the old 3 blog cards with the 3 new ones (latest 3 only on homepage).
+- `sitemap.xml` — 3 new URLs added with lastmod 2026-05-01.
+- IndexNow ping HTTP 200 for the 3 new URLs + /blog/ + sitemap.xml.
+- Content rules pass: no em dashes, no banned words, prices link to /pricing.html (no hardcoded GBP).
+
 ### /morning — 2026-04-11 08:30 UTC
 - Triggers: All 3 enabled. Medium Writer fires at 08:00 UTC, Content Machine at 14:00 UTC.
 - X Health: 41.2K impressions (7D, up from 29.7K), 0.9% engagement, 68 profile visits, 111 followers
