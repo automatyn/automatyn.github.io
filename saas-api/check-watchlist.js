@@ -94,7 +94,7 @@ function ageStr(ms) {
     const nowSilent = !cur.lastHit || (now - cur.lastHit > 3600000);
     const becameActive = cur.lastHit && (now - cur.lastHit < 1800000) && (!prev.lastHit || (now - prev.lastHit > 3600000));
 
-    if (becameActive) events.push(`👀 back on dashboard (${ageStr(now - cur.lastHit)}, ${cur.hitsLastHr} hits/hr)`);
+    if (becameActive) events.push(`👀 site traffic resumed (last visitor ${ageStr(now - cur.lastHit)} ago, ${cur.hitsLastHr} hits/hr)`);
 
     // Stuck signals (only if NOT connected)
     if (!cur.whatsappConnected) {

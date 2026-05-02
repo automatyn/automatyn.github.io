@@ -57,7 +57,7 @@ function bu(args) {
 (async () => {
   const candidates = [];
   const perHandle = {};
-  let scanned = 0, kept = 0, skippedAge = 0, skippedContent = 0, errors = 0, skippedReply = 0;
+  let scanned = 0, kept = 0, skippedAge = 0, skippedContent = 0, broken = 0, skippedReply = 0, noRecent = 0;
   const cutoff = Date.now() - hoursWindow * 3600 * 1000;
 
   for (const handle of handles) {
@@ -82,13 +82,15 @@ function bu(args) {
           try { posts = JSON.parse(pyToJson(raw)); } catch (e) {}
         }
       }
-      if (!posts || posts.length === 0) { errors++; perHandle[handle] = 'empty'; process.stdout.write('x'); execSync('sleep 4'); continue; }
+      if (!posts || posts.length === 0) { broken++; perHandle[handle] = 'broken'; process.stdout.write('!'); execSync('sleep 4'); continue; }
       let kfh = 0;
+      let inWindow = 0;
       for (const p of posts) {
         if (kfh >= maxPerHandle) break;
         if (!p.ts) continue;
         const ageMs = Date.now() - new Date(p.ts).getTime();
         if (ageMs > hoursWindow * 3600 * 1000) { skippedAge++; continue; }
+        inWindow++;
         if (p.isRep || p.isRT) { skippedReply++; continue; }
         if (shouldSkip(p.tx)) { skippedContent++; continue; }
         const aria = p.aria || '';
@@ -105,11 +107,12 @@ function bu(args) {
         });
         kept++; kfh++;
       }
+      if (inWindow === 0) { noRecent++; perHandle[handle] = 'noRecent'; process.stdout.write('-'); execSync('sleep 4'); continue; }
       perHandle[handle] = `ok(${kfh})`;
       process.stdout.write('.');
       execSync('sleep 4');
     } catch (e) {
-      errors++; perHandle[handle] = 'exception'; process.stdout.write('x');
+      broken++; perHandle[handle] = 'exception'; process.stdout.write('!');
       execSync('sleep 4');
     }
   }
@@ -124,10 +127,11 @@ function bu(args) {
   fs.writeFileSync(path.join(dir, 'candidates.json'), JSON.stringify({
     scraped_at: new Date().toISOString(),
     window_hours: hoursWindow,
-    stats: { scanned, kept, skippedAge, skippedContent, skippedReply, errors },
+    stats: { scanned, kept, skippedAge, skippedContent, skippedReply, noRecent, broken },
     perHandle,
     candidates
   }, null, 2));
-  console.log(`scanned=${scanned} kept=${kept} skipAge=${skippedAge} skipReply=${skippedReply} skipContent=${skippedContent} err=${errors}`);
+  console.log(`scanned=${scanned} kept=${kept} skipAge=${skippedAge} skipReply=${skippedReply} skipContent=${skippedContent} noRecent=${noRecent} broken=${broken}`);
+  console.log(`legend: . ok | - noRecent (handle hasn't posted in window) | ! broken (page wouldn't load)`);
   console.log(`wrote candidates.json (${candidates.length} candidates)`);
 })();

@@ -437,3 +437,26 @@ Open items for next slot:
 - Outreach: E1=15, E2=2, E3=20 (37 total)
 - Reply detector: SKIPPED (Gmail OAuth invalid_grant — token needs refresh)
 - Lead pool: 188 with_email, 167 e1_sent, 21 remaining (need ingest soon)
+
+### /afternoon — 2026-05-02 16:25 UTC
+- Bot health: openclaw-gateway + automatyn-api both active. /api/health ok.
+- X status: @patrickssons OK, **118 followers / 605 tweets** (flat from morning, no movement). Quality mode warranted.
+- SEO Daily trigger: enabled, fired today 10:15 UTC — but **0 blog posts produced today** (newest blog files dated 2026-05-01 19:29). Same Forge-unreachable root cause as Reddit pipeline.
+- Reddit pipeline: webhook fired OK (HTTP 200), expect failure at Convert to Binary node (Forge down on Pat's laptop). Confirmed root cause earlier this session: error `"No image from Forge"` at Convert to Binary, NOT a webhook bug. Memory note about "webhook + no execution" was wrong (execution latency, not severance).
+- **X dual-channel:** API scrape **5 candidates** ($0.02, $0.07/$4.50 month). Browser scrape kept 1/35 (mostly noRecent — diagnosed: logged-out X view shows mix of pinned/popular, not chrono recent). 5 reply drafts sent to @automatyntweetbot (msg 137) as intent URLs for manual phone post (cold targets, can't post via API per reply-restriction memory).
+- **Outreach this slot:** E1 **6** (drained personalised pool), E2 **7**, E3 **3** = **16 emails live sent**. All Brevo, 0 failures.
+- **Outreach today total:** E1 **6** / E2 **31** / E3 **15** = **52 emails sent today**.
+- **Outreach lifetime:** 188 E1 / 134 E2 / 103 E3 / 34 E1 opens (~18%) / 23 E2 opens / 15 E3 opens / 7 unsubs / 0 replies / 0 bounces. Pool 188/188/188 (E1 fully drained — needs ingest+personalisation before next slot).
+- TikTok stats: yt-dlp returned 0 videos (scrape blocked). Skipped.
+- TikTok carousels (Step 3): SKIPPED — Postiz subscription paused, no point burning Gemini credits on output that can't post.
+- LinkedIn (Step 5): SKIPPED — same reason (Postiz).
+- **Adam status check:** lastLoginAt 2026-05-02 05:59 UTC, hasn't been back. WhatsApp still unpaired. Site traffic healthy (245 hits/24h). Still in onboarding limbo.
+- **Code changes shipped this slot:**
+  - `check-watchlist.js`: renamed misleading "back on dashboard" alert text to "site traffic resumed" (it was alerting visitor traffic, not Adam logging in — was confusing the Telegram notifications).
+  - `scrape-targets.js`: split `err` counter into `noRecent` (handle didn't post in window — normal) vs `broken` (page failed to load — actual issue). Stops the team chasing a phantom "browser degrading" diagnosis.
+  - `/etc/automatyn-api.env`: added `X_BEARER_TOKEN` so scrape-via-api.js doesn't 401 next slot.
+- Open items:
+  - Forge unreachable on Pat's laptop — blocking SEO Daily Task C and Reddit pipeline. Needs Pat to restart.
+  - Drip persistence bug from 04-30 still NOT patched.
+  - Reply detector autoresponder false-positive from 04-30 still NOT patched.
+  - E1 pool needs ingest + personalisation before next slot can send.

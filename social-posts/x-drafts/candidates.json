@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-02T11:37:12.634Z",
+  "scraped_at": "2026-05-02T16:39:16.019Z",
   "window_hours": 24,
   "stats": {
     "scanned": 35,
@@ -53,11 +53,11 @@
       "url": "https://x.com/OpenAIDevs/status/2050275713824211041",
       "text": "Pets. Now in Codex.\n\nUse /pet to wake your pet.",
       "created_at": "2026-05-01T18:06:37.000Z",
-      "age_hours": 17.4,
-      "likes": 7542,
-      "replies": 620,
-      "reposts": 1283,
-      "views": 1693560
+      "age_hours": 22.5,
+      "likes": 8131,
+      "replies": 682,
+      "reposts": 1394,
+      "views": 2101973
     }
   ]
 }
