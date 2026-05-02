@@ -26,6 +26,9 @@ service-account*.json
 saas-api/data/
 saas-api/*.jwt-secret
 saas-api/logs/
+saas-api/outreach/data/
+saas-api/outreach/reports/
+saas-api/outreach/state/
 
 # ==========================================
 # Local-only marketing/outreach scripts (never commit)
@@ -74,3 +77,6 @@ venv/
 saas-api/secrets/
 gsc-*.json
 gsc-token.json
+
+# Claude Code local state
+.claude/
