@@ -1,0 +1,13 @@
+{
+  "scraped_at": "2026-05-02T23:09:43.915Z",
+  "hours_window": 3,
+  "stats": {
+    "scanned": 30,
+    "kept": 0,
+    "skipAge": 0,
+    "skipReply": 0,
+    "skipNoTweet": 0,
+    "broken": 30
+  },
+  "candidates": []
+}

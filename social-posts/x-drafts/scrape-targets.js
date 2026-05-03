@@ -21,6 +21,9 @@ for (const group of Object.values(targets.groups)) for (const h of group) {
 
 console.log(`Scraping ${handles.length} handles, last ${hoursWindow}h, up to ${maxPerHandle} posts each...`);
 
+// Reset any stale browser-use session config from a previous run.
+spawnSync('browser-use', ['close'], { encoding: 'utf8', timeout: 10000 });
+
 const skipPatterns = [
   /^gm\b/i, /^gn\b/i, /\bgiveaway\b/i,
   /\b(crypto|airdrop|presale|memecoin)\b/i,
@@ -35,7 +38,7 @@ function shouldSkip(text) {
 }
 
 // Single-line JS expression for browser-use eval
-const EVAL_JS = `Array.from(document.querySelectorAll('article')).slice(0,8).map(a=>{const u=a.querySelector('a[href*="/status/"]')?.href;const id=u?(u.match(/status\\/(\\d+)/)||[])[1]:null;const ts=a.querySelector('time')?.getAttribute('datetime');const tx=a.querySelector('[data-testid="tweetText"]')?.innerText||'';const isRep=/^Replying to /m.test(a.innerText);const isRT=a.innerText.split('\\n')[0].includes('reposted');const aria=a.querySelector('[role="group"]')?.getAttribute('aria-label')||'';return {id,ts,tx:tx.slice(0,280),isRep,isRT,aria,url:u}}).filter(x=>x.id&&x.tx)`;
+const EVAL_JS = `JSON.stringify(Array.from(document.querySelectorAll('article')).slice(0,8).map(a=>{const u=a.querySelector('a[href*="/status/"]')?.href;const id=u?(u.match(/status\\/(\\d+)/)||[])[1]:null;const ts=a.querySelector('time')?.getAttribute('datetime');const tx=a.querySelector('[data-testid="tweetText"]')?.innerText||'';const isRep=/^Replying to /m.test(a.innerText);const isRT=a.innerText.split('\\n')[0].includes('reposted');const aria=a.querySelector('[role="group"]')?.getAttribute('aria-label')||'';return {id,ts,tx:tx.slice(0,280),isRep,isRT,aria,url:u}}).filter(x=>x.id&&x.tx))`;
 
 function pyToJson(s) {
   // Convert Python-style dict output (single quotes, True/False/None) to JSON
@@ -63,13 +66,15 @@ function bu(args) {
   for (const handle of handles) {
     scanned++;
     try {
+      // Close held session before each open (browser-use refuses with stale config otherwise)
+      spawnSync('browser-use', ['close'], { encoding: 'utf8', timeout: 5000 });
       bu(['open', `https://x.com/${handle}`]);
       execSync('sleep 6');
       let out = bu(['eval', EVAL_JS]);
       let idx = out.indexOf('result:');
       let raw = idx === -1 ? '' : out.slice(idx + 7).trim();
       let posts = null;
-      try { posts = JSON.parse(pyToJson(raw)); } catch (e) {}
+      try { posts = JSON.parse(raw); } catch (e) {}
       if (!posts || posts.length === 0) {
         const probe = bu(['eval', `document.body.innerText.includes('Something went wrong')`]);
         if (/true/i.test(probe)) {
@@ -79,7 +84,7 @@ function bu(args) {
           out = bu(['eval', EVAL_JS]);
           idx = out.indexOf('result:');
           raw = idx === -1 ? '' : out.slice(idx + 7).trim();
-          try { posts = JSON.parse(pyToJson(raw)); } catch (e) {}
+          try { posts = JSON.parse(raw); } catch (e) {}
         }
       }
       if (!posts || posts.length === 0) { broken++; perHandle[handle] = 'broken'; process.stdout.write('!'); execSync('sleep 4'); continue; }

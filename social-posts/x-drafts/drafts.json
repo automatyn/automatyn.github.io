@@ -1,46 +1,73 @@
 {
-  "slot": "morning",
-  "date": "2026-05-02",
+  "slot": "evening",
+  "date": "2026-05-03",
   "drafts": [
     {
       "id": "o1",
       "type": "original",
-      "draft": "Most small businesses don't have a marketing problem. They have a follow-up problem. The leads are already there. Nobody chases them on Tuesday at 6pm.",
-      "char_count": 151,
-      "reason": "morning original"
+      "draft": "The smallest businesses get the worst tools. Enterprise gets a Salesforce admin team. A solo electrician gets a notebook and a missed-call list.",
+      "char_count": 144,
+      "reason": "evening original"
     },
     {
       "id": "o2",
       "type": "original",
-      "draft": "If a customer asks at 9pm and you answer at 9am, the sale is already gone. Speed has quietly become the only differentiator left.",
-      "char_count": 129,
-      "reason": "morning original"
+      "draft": "What SMBs want isn't an 'AI agent'. They want a thing that picks up the phone, books the job, and stops bothering them.",
+      "char_count": 119,
+      "reason": "evening original"
     },
     {
       "id": "o3",
       "type": "original",
-      "draft": "Founders spend a year building the perfect onboarding then lose 40% of signups because nobody replies to 'is this legit?' for six hours.",
-      "char_count": 136,
-      "reason": "morning original"
+      "draft": "Speed of reply beats quality of reply. A two-line answer in two minutes converts better than a perfect answer at lunch tomorrow.",
+      "char_count": 128,
+      "reason": "evening original"
     },
     {
       "id": "r01",
       "type": "reply",
-      "target_handle": "shawnchauhan1",
+      "target_handle": "levelsio",
       "target_followers": null,
-      "target_age": "0.2h",
-      "target_url": "https://x.com/shawnchauhan1/status/2050534845928165674",
-      "tweet_id": "2050534845928165674",
-      "target_text": "Meta lost 20 million daily active users last quarter and responded by raising its AI spend.\n\n2026 capital expenditures are now guided at $125 to $145 billion - $10 billion higher than expected.\n\nReali",
-      "draft": "The part of these announcements that ages best: not the headline number, but who's now locked into a multi-year roadmap they can't easily change.",
-      "char_count": 145,
-      "reason": "tech-news angle"
+      "target_age": "1.5h",
+      "target_url": "https://x.com/levelsio/status/2051005531364397327",
+      "tweet_id": "2051005531364397327",
+      "target_text": " So I switched away from Optimum Nutrition's creatine because they oddly stopped using Creapure creatine and on Amazon they say they are kinda trying to hide that they stopped using Creapure and every",
+      "draft": "The market for things at £30/month for SMBs is huge and almost completely ignored. Everyone is busy chasing £3k MRR per logo.",
+      "char_count": 125,
+      "reason": "pricing angle"
+    },
+    {
+      "id": "r04",
+      "type": "reply",
+      "target_handle": "lennysan",
+      "target_followers": null,
+      "target_age": "1.7h",
+      "target_url": "https://x.com/lennysan/status/2051004840457990208",
+      "tweet_id": "2051004840457990208",
+      "target_text": "\"We already have universal basic income. It's called knowledge work.\"\n\nMax Schoening (\n@mschoening\n) is one of the deepest thinkers on how AI is changing how we build and use software. He's also what ",
+      "draft": "The thing nobody can fake: software that respects your time. Most 'feel' debates are downstream of that one decision.",
+      "char_count": 117,
+      "reason": "product-craft angle"
+    },
+    {
+      "id": "r05",
+      "type": "reply",
+      "target_handle": "jasonlk",
+      "target_followers": null,
+      "target_age": "4.3h",
+      "target_url": "https://x.com/jasonlk/status/2050964417224057279",
+      "tweet_id": "2050964417224057279",
+      "target_text": "A big question for the week is — were public software companies oversold, at least in the aggregate?\n\nNow we have two great case studies:\n\n- Twilio has reaccelerated growth to 20%+ from single digits ",
+      "draft": "The thing nobody can fake: software that respects your time. Most 'feel' debates are downstream of that one decision.",
+      "char_count": 117,
+      "reason": "product-craft angle"
     }
   ],
   "source": {
-    "candidates_scraped_at": "2026-05-02T11:28:24.683Z",
-    "candidates_count": 5,
-    "drafts_emitted": 4,
-    "replies_emitted": 1
+    "candidates_scraped_at": "2026-05-03T20:06:54.379Z",
+    "candidates_count": 37,
+    "drafts_emitted": 6,
+    "replies_emitted": 3,
+    "recency_filter": "applied: only <6h kept"
   }
 }

@@ -48,7 +48,7 @@ function shouldSkip(text) {
   return false;
 }
 
-const EVAL_JS = `Array.from(document.querySelectorAll('article')).slice(0,40).map(a=>{const u=a.querySelector('a[href*="/status/"]')?.href;const id=u?(u.match(/status\\/(\\d+)/)||[])[1]:null;const ts=a.querySelector('time')?.getAttribute('datetime');const tx=a.querySelector('[data-testid="tweetText"]')?.innerText||'';const txt=a.innerText||'';const aria=a.querySelector('[role="group"]')?.getAttribute('aria-label')||'';return {id,ts,tx:tx.slice(0,400),txt:txt.slice(0,200),aria,url:u}}).filter(x=>x.id&&x.tx)`;
+const EVAL_JS = `JSON.stringify(Array.from(document.querySelectorAll('article')).slice(0,40).map(a=>{const u=a.querySelector('a[href*="/status/"]')?.href;const id=u?(u.match(/status\\/(\\d+)/)||[])[1]:null;const ts=a.querySelector('time')?.getAttribute('datetime');const tx=a.querySelector('[data-testid="tweetText"]')?.innerText||'';const txt=a.innerText||'';const aria=a.querySelector('[role="group"]')?.getAttribute('aria-label')||'';return {id,ts,tx:tx.slice(0,400),txt:txt.slice(0,200),aria,url:u}}).filter(x=>x.id&&x.tx))`;
 
 function pyToJson(s) {
   return s
@@ -75,6 +75,9 @@ function bu(args) {
 
   console.log(`Scraping ${queries.length} search queries, last ${hoursWindow}h...`);
 
+  // Reset any stale browser-use session config from a previous run.
+  spawnSync('browser-use', ['close'], { encoding: 'utf8', timeout: 10000 });
+
   for (const q of queries) {
     const url = `https://x.com/search?q=${encodeURIComponent(q)}&src=typed_query&f=live`;
     try {
@@ -91,7 +94,7 @@ function bu(args) {
       if (idx === -1) { errors++; perQuery[q] = 'no-result'; process.stdout.write('x'); execSync('sleep 5'); continue; }
       const raw = out.slice(idx + 7).trim();
       let posts;
-      try { posts = JSON.parse(pyToJson(raw)); } catch (e) { errors++; perQuery[q] = 'parse-fail'; process.stdout.write('x'); execSync('sleep 5'); continue; }
+      try { posts = JSON.parse(raw); } catch (e) { errors++; perQuery[q] = 'parse-fail'; process.stdout.write('x'); execSync('sleep 5'); continue; }
       let qKept = 0;
       totalRaw += posts.length;
       for (const p of posts) {
