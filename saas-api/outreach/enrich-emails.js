@@ -13,6 +13,8 @@ const JUNK_DOMAINS = new Set([
   'sentry.io', 'sentry-next.wixpress.com', 'wixpress.com', 'example.com',
   'example.co.uk', 'domain.com', 'yourdomain.com', 'email.com',
   'sentry.wixpress.com', 'wix.com', 'squarespace.com',
+  'mysite.com', 'yoursite.com', 'test.com', 'test.co.uk',
+  'sample.com', 'placeholder.com',
 ]);
 
 const JUNK_LOCAL_PARTS = [

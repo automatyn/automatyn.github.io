@@ -78,10 +78,33 @@ function sendViaBrevo({ from, to, subject, text, headers }) {
   });
 }
 
+// Generic mailboxes get worse reply rates — they often forward to a non-decision-maker
+// or sit in a shared inbox nobody reads. We don't drop these (some plumbers really do
+// only have info@), but we send to named local-parts first.
+const GENERIC_LOCAL_PARTS = new Set([
+  'info', 'sales', 'contact', 'enquiries', 'enquiry', 'hello', 'admin',
+  'office', 'reception', 'support', 'mail', 'general',
+]);
+
+function isGenericMailbox(email) {
+  if (!email) return false;
+  const local = email.split('@')[0].toLowerCase();
+  return GENERIC_LOCAL_PARTS.has(local);
+}
+
+// Sort named-mailbox leads first within each queue.
+function preferNamed(queue) {
+  return queue.slice().sort((a, b) => {
+    const ag = isGenericMailbox(a.email) ? 1 : 0;
+    const bg = isGenericMailbox(b.email) ? 1 : 0;
+    return ag - bg;
+  });
+}
+
 function pickQueue(step) {
-  if (step === 1) return store.listReadyForEmail1(Infinity);
-  if (step === 2) return store.listReadyForEmail2(Infinity, 3);
-  if (step === 3) return store.listReadyForEmail3(Infinity, 5);
+  if (step === 1) return preferNamed(store.listReadyForEmail1(Infinity));
+  if (step === 2) return preferNamed(store.listReadyForEmail2(Infinity, 3));
+  if (step === 3) return preferNamed(store.listReadyForEmail3(Infinity, 5));
   throw new Error('step must be 1, 2, or 3');
 }
 

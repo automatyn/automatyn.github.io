@@ -22,28 +22,34 @@ function render(template, vars) {
 }
 
 // E1 SUBJECT VARIANTS (hooks)
+// New copy 2026-05-04: money-loss framing, named-business specificity, no jargon.
 const SUBJECTS_E1 = {
-  S1: 'quick question about {{business_name}}',
-  S2: '{{business_name}} — missed evening enquiries?',
-  S3: 'after-hours WhatsApp for {{business_name}}',
+  S1: '{{business_name}} after-hours bookings',
+  S2: 'saw {{business_name}} on Google, quick idea',
+  S3: 'the £200 missed call',
 };
 
 // E1 CTA VARIANTS (close — slot into the end of the body)
-// All honest, using only real assets (signup link, setup offer, qualifier).
+// New copy 2026-05-04: removed binary/qualifier asks. Replaced with reply-friendly
+// or genuinely passive options. Easier asks convert.
 const CTAS_E1 = {
-  C1_binary: `Want me to set yours up this week — yes or no?`,
-  C2_reverse: `Are you already replying to WhatsApp within 5 minutes? If yes, ignore this.`,
-  C3_qualifier: `Are you on WhatsApp Business, or the personal app?`,
+  C1_short: `Worth a 5-minute look?`,
+  C2_reply: `Reply with the word "send" and I'll mail back the setup link.`,
+  C3_passive: `If it's useful: automatyn.co/plumbers. If not, no follow-up from me.`,
   C4_link: `automatyn.co/plumbers if you want to skip the pitch.`,
 };
 
 // E1 body skeleton — CTA is appended at the end.
+// New body 2026-05-04: lead with their loss + concrete £, drop "I built a tool"
+// language, add Adam social proof, mechanism in one line.
 function renderE1Body(vars, cta) {
   return `${vars.greeting}${vars.intro_line}
 
-Quick one. When someone WhatsApps ${vars.business_name} at 7am with a burst pipe, who answers before you're up?
+Most plumbers I talk to lose 2 or 3 evening enquiries a week. At £150-£300 a job, that's the kind of money you'd notice if it was sitting on the kitchen table.
 
-I built a tool that pairs to your WhatsApp Business in about 2 minutes, answers after-hours messages, takes bookings, and pings you with the lead.
+Automatyn answers ${vars.business_name}'s WhatsApp out of hours, books the job, and texts you the lead before you're back at the van.
+
+Adam at AB Plumbing in Birmingham signed up last week. Setup took two minutes.
 
 ${cta}
 
@@ -53,30 +59,34 @@ ${vars.unsubscribe_line}`;
 }
 
 // EMAIL 2 — Day 3 follow-up
+// New copy 2026-05-04: open with a real question, not "bumping this up". Keep specific.
 const EMAIL_2 = {
-  subject: 're: {{business_name}}',
-  body: `{{greeting}}Bumping this up in case it got buried.
+  subject: 'did you see this{{comma_first_name}}?',
+  body: `{{greeting}}One follow-up, then I'll leave you to it.
 
-The tool sits on your existing WhatsApp Business number — you don't need a new phone or app. When a customer messages after hours, it replies instantly ("I'm out on a job, Patrick will confirm in the morning"), captures their details and the problem, and you see everything when you wake up.
+Quick question: when someone messages {{business_name}} on WhatsApp at 8pm asking about a leaking radiator, what happens right now? Do they get a reply that night, or wait until the morning?
 
-Takes two minutes to try. If it's not useful, you unpair it and nothing changes.
+If it's the morning, they've probably rung the next plumber by then.
 
-automatyn.co/plumbers — link's here if you want to skip the pitch.
+Automatyn handles that 8pm message for you, books them in, and sends you a summary so you wake up to a job, not a chase. Sits on your existing WhatsApp Business number, two-minute setup.
+
+automatyn.co/plumbers if you want a look.
 
 Patrick
 {{unsubscribe_line}}`,
 };
 
 // EMAIL 3 — Day 5 breakup
+// New copy 2026-05-04: lead with a concrete story, not a hypothetical.
 const EMAIL_3 = {
   subject: 'last one',
-  body: `{{greeting}}Last email from me, promise.
+  body: `{{greeting}}Last note, promise.
 
-If missed evening enquiries aren't costing you bookings, ignore this. If they are — it's 2 minutes to set up and free forever on the starter tier.
+Adam runs a plumbing firm in Birmingham. Same size, same evening-enquiry problem. He set Automatyn up on his WhatsApp the day he signed up, and it now handles every message that comes in after he's wrapped his last job.
+
+If {{business_name}} has the same gap, the link is below. If not, ignore this and have a solid week.
 
 automatyn.co/plumbers
-
-Either way, wishing {{business_name}} a solid week.
 
 Patrick
 {{unsubscribe_line}}`,
@@ -121,6 +131,8 @@ function buildEmail(step, lead, unsubscribeToken, opts = {}) {
   const name = lead.first_name && lead.first_name.trim() ? lead.first_name.trim() : '';
   const vars = {
     first_name: name,
+    first_name_or_there: name || 'there',
+    comma_first_name: name ? `, ${name}` : '',
     greeting: name ? `Hi ${name},\n\n` : '',
     business_name: lead.business_name || 'your business',
     intro_line: lead.intro_line || '',
@@ -129,9 +141,9 @@ function buildEmail(step, lead, unsubscribeToken, opts = {}) {
 
   if (step === 1) {
     const subjectId = opts.subjectId || 'S1';
-    const ctaId = opts.ctaId || 'C1_binary';
+    const ctaId = opts.ctaId || 'C1_short';
     const subjectTpl = SUBJECTS_E1[subjectId] || SUBJECTS_E1.S1;
-    const ctaText = CTAS_E1[ctaId] || CTAS_E1.C1_binary;
+    const ctaText = CTAS_E1[ctaId] || CTAS_E1.C1_short;
     return {
       subject: render(subjectTpl, vars),
       body: renderE1Body(vars, render(ctaText, vars)),
