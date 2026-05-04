@@ -530,3 +530,25 @@ Open items for next slot:
 
 - E3 final batch landed post-summary: 10 more sent (Liverpool/Sheffield plumbers via Brevo, 0 failed). Today E3 total = 19 not 9. Lifetime E3 = 122.
 - **DOUBLE-SEND BUG (must fix):** Two concurrent `node outreach/sender.js e3 10` processes ran in parallel because the first (bsgazjiq9, fired earlier from wrong cwd then re-fired from saas-api) and the cadence-delayed (bhknt5ze1) both completed. **8 leads got E3 twice within minutes**: prontoplumbing, liverpoolheating, priceplumbing, abc-gas, yorkandyoung, plumberfix, rphss, emergencysheffield. Sender does not lock or check "already sent today" between process boundaries. Lifetime E3 actual = **130** (122 unique + 8 double-counted). Spam complaint risk. Open item: add a per-lead lock or a fast pre-flight "has this recipient received this template in the last 24h" check before send.
+
+### /morning — 2026-05-04 15:10 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active.
+- X status: @patrickssons OK, **124 followers / 651 tweets** (-1f, +2t since /evening).
+- X analytics 7d: **20.7K imp ↑377%**, eng rate 1.3% ↓25%, profile visits 51 ↑183%, replies 23 ↑109%, likes 113 ↑352%, **20/124 verified followers** (+2 verified). Strong upward trend → **normal mode**.
+- X dual-channel: API source 5 candidates ($0.23/$4.50 month). Browser scrape **33/35 kept** (best result in days). After dedupe + fxtwitter follower checks, **8 unified drafts** sent: 1 original + 7 replies (3 browser-source + 4 API-source). Targets: sahilbloom 1.16M, levelsio 862k, gregisenberg 638k, lennysan 345k, GergelyOrosz 332k, jasonlk 239k, simonw 173k, shawnchauhan1 32k. All <6h, all ≥1k followers.
+- Drafts page: https://automatyn.co/x-private/vDhNDaGmyj7I03Q/. Telegram msg 156 sent.
+- Reddit pipeline: webhook fired OK (HTTP 200, {"message":"Workflow was started"}).
+- Reply detector: **WORKED** (Gmail OAuth restored). 16 inbox msgs scanned, 0 new replies, 0 bounces.
+- **Outreach this slot:** E1 0 (pool depleted, ingest deferred to /afternoon), E2 0 (none at day-3 cadence), **E3 20** sent (single sender, 0 failures, no double-send). Skipped staggered batches 1-3 — no supply. Single sender only per double-send memory.
+- **Outreach today total:** E1 **0** / E2 **15** (background cadence) / E3 **20** = **35 emails sent today**.
+- **Outreach lifetime:** 188 E1 / 176 E2 / 135 E3 / 36 E1 opens (~19%) / 41 E2 opens / 20 E3 opens / 7 unsubs / 0 replies / 0 bounces. Pool 667/188/188.
+- Brevo opens: 41 events, 26 matched (48h window).
+- Variant diagnostic (14d): Overall FULL RESET. Standout opens: S1×C1_binary 33% (9 sends, INSUFFICIENT), S3×C1_binary 30% (10 sends, FIX CTA — swap CTA, keep subject). S1×C3_qualifier FIX CTA at 20% open. Most pairs FULL RESET due to old baseline distortion.
+- SEO 7d: **138 imp / 1 click / pos 40.9** (recovery vs 2026-04-30's 259/1/75.5 — pos improved). Top page `/blog/passive-income-ai-agents-2026.html` at **pos 13.9** (85 imp) — **quick-win candidate (pos 8-15)**. SEO Daily fired at 10:03 UTC (Audit Mon/Thu — Mon today, audit should run).
+- TikTok: yt-dlp not installed on VM (open item from /evening). Stats unchanged from /evening. Carousels SKIPPED (Postiz paused per memory).
+- LinkedIn / Dev.to / Medium: deferred to SEO Daily Task D (already fired 10:03 UTC).
+- Triggers: 3 enabled (SEO Daily next 2026-05-05 10:03, SEO Audit weekly next 2026-05-11 09:02, SEO Day-14 one-shot 2026-05-07). 2 disabled (used). Skill's Content Machine / Medium Writer / Blog Writer trigger IDs still 404 (stale).
+- Signups last 14h: **0 new** (23 total agents). 1 cap hit (Test Agent — historical 04-21).
+- Env vars status (vs /evening): **GOOGLE_PLACES_API_KEY now set ✓**, **GMAIL_APP_PASSWORD now set ✓** (reply detector worked), **X_BEARER_TOKEN set ✓**, GEMINI_API_KEY set ✓, BREVO_API_KEY set ✓. Postiz key correctly absent (subscription paused).
+- Open items carried: yt-dlp install (TikTok stats), Forge unreachable on Pat's laptop, drip persistence bug (RAM-only setTimeouts), reply-detector autoresponder false-positive bug, double-send concurrency lock for outreach, E1 pool refill (run ingest in /afternoon now that GOOGLE_PLACES_API_KEY is set).
+

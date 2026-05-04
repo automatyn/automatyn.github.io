@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X drafts — morning 2026-05-04</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; margin: 0; padding: 16px; max-width: 720px; margin: 0 auto; }
+header { position: sticky; top: 0; background: #0a0a0a; padding: 12px 0; border-bottom: 1px solid #222; z-index: 10; }
+h1 { font-size: 20px; margin: 0 0 8px; }
+.progress { font-size: 14px; color: #a855f7; }
+.card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 14px; margin: 12px 0; transition: opacity 0.3s; }
+.card.done { opacity: 0.35; border-color: #16a34a; }
+.card.skipped { opacity: 0.25; border-color: #444; }
+.card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; margin-bottom: 8px; }
+.num { color: #666; font-weight: 600; }
+.badge { padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+.badge.reply { background: #1e3a8a; color: #93c5fd; }
+.badge.original { background: #581c87; color: #c4b5fd; }
+.meta { color: #888; }
+.char-count { margin-left: auto; color: #888; font-variant-numeric: tabular-nums; }
+.target { background: #1a1a1a; border-left: 3px solid #3b82f6; padding: 8px 10px; margin: 8px 0; border-radius: 4px; font-size: 13px; }
+.target a { color: #60a5fa; font-size: 11px; text-decoration: none; }
+.draft-text { background: #0f0f0f; border: 1px solid #2a2a2a; padding: 12px; border-radius: 8px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; margin: 10px 0; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.post-btn { flex: 1; background: #1d9bf0; color: white; padding: 12px; border-radius: 999px; text-align: center; text-decoration: none; font-weight: 600; font-size: 15px; }
+.post-btn:active { background: #1a8cd8; }
+.skip-btn { background: transparent; color: #888; border: 1px solid #333; padding: 12px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; }
+.reset { background: transparent; border: none; color: #666; font-size: 12px; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>X drafts — morning 2026-05-04</h1>
+  <div class="progress"><span id="done-count">0</span>/8 posted · <span id="skipped-count">0</span> skipped · <button class="reset" onclick="resetState()">reset</button></div>
+</header>
+<div id="cards">
+
+<div class="card" data-id="d1" id="card-d1">
+  <div class="card-head">
+    <span class="num">#1</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@gregisenberg</span>
+    <span class="char-count">173c</span>
+  </div>
+  <div class="target"><a href="https://x.com/gregisenberg/status/2051276466692820992" target="_blank">view post →</a></div>
+  <div class="draft-text">Wild stat. Was the 67% on cases where o1 had access to imaging notes and labs the same way doctors did, or text-only? The legal-can&#x27;t-use-it gap is the real story but quiet.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051276466692820992&amp;text=Wild%20stat.%20Was%20the%2067%25%20on%20cases%20where%20o1%20had%20access%20to%20imaging%20notes%20and%20labs%20the%20same%20way%20doctors%20did%2C%20or%20text-only%3F%20The%20legal-can%27t-use-it%20gap%20is%20the%20real%20story%20but%20quiet." target="_blank" onclick="markDone('d1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d2" id="card-d2">
+  <div class="card-head">
+    <span class="num">#2</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@sahilbloom</span>
+    <span class="char-count">165c</span>
+  </div>
+  <div class="target"><a href="https://x.com/sahilbloom/status/2051263857272713392" target="_blank">view post →</a></div>
+  <div class="draft-text">How long did it take before the early waking actually felt good vs forced? I keep bouncing between 5am and 7am and never sticking. Curious what locked it in for you.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051263857272713392&amp;text=How%20long%20did%20it%20take%20before%20the%20early%20waking%20actually%20felt%20good%20vs%20forced%3F%20I%20keep%20bouncing%20between%205am%20and%207am%20and%20never%20sticking.%20Curious%20what%20locked%20it%20in%20for%20you." target="_blank" onclick="markDone('d2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d3" id="card-d3">
+  <div class="card-head">
+    <span class="num">#3</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@shawnchauhan1</span>
+    <span class="char-count">181c</span>
+  </div>
+  <div class="target"><a href="https://x.com/shawnchauhan1/status/2051270197751636480" target="_blank">view post →</a></div>
+  <div class="draft-text">Got a link to the paper? Curious if they tested orchestrator-style multi-agent or just naive parallel. The benchmarks I trust most are tasks with real verifiable outputs, not vibes.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051270197751636480&amp;text=Got%20a%20link%20to%20the%20paper%3F%20Curious%20if%20they%20tested%20orchestrator-style%20multi-agent%20or%20just%20naive%20parallel.%20The%20benchmarks%20I%20trust%20most%20are%20tasks%20with%20real%20verifiable%20outputs%2C%20not%20vibes." target="_blank" onclick="markDone('d3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d4" id="card-d4">
+  <div class="card-head">
+    <span class="num">#4</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@levelsio</span>
+    <span class="char-count">152c</span>
+  </div>
+  <div class="target"><a href="https://x.com/levelsio/status/2051309341035085898" target="_blank">view post →</a></div>
+  <div class="draft-text">53 weekly events in your house is wild. Did you have to set any rules to keep it from drifting into work-talk or selling, or does it just self-regulate?</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051309341035085898&amp;text=53%20weekly%20events%20in%20your%20house%20is%20wild.%20Did%20you%20have%20to%20set%20any%20rules%20to%20keep%20it%20from%20drifting%20into%20work-talk%20or%20selling%2C%20or%20does%20it%20just%20self-regulate%3F" target="_blank" onclick="markDone('d4')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d4')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d5" id="card-d5">
+  <div class="card-head">
+    <span class="num">#5</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@GergelyOrosz</span>
+    <span class="char-count">157c</span>
+  </div>
+  <div class="target"><a href="https://x.com/GergelyOrosz/status/2051310865333272704" target="_blank">view post →</a></div>
+  <div class="draft-text">Curious where you draw the line. Outline AI-assisted, then full rewrite by hand: still slop, or fine? Or is it the templated voice itself that gives it away?</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051310865333272704&amp;text=Curious%20where%20you%20draw%20the%20line.%20Outline%20AI-assisted%2C%20then%20full%20rewrite%20by%20hand%3A%20still%20slop%2C%20or%20fine%3F%20Or%20is%20it%20the%20templated%20voice%20itself%20that%20gives%20it%20away%3F" target="_blank" onclick="markDone('d5')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d5')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d6" id="card-d6">
+  <div class="card-head">
+    <span class="num">#6</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@simonw</span>
+    <span class="char-count">166c</span>
+  </div>
+  <div class="target"><a href="https://x.com/simonw/status/2051310232022986772" target="_blank">view post →</a></div>
+  <div class="draft-text">Indexed arrays + text grep feels like Redis admitting half its users were doing this with hacks. Have you tried the grep on bigger blobs yet, perf vs ripgrep on disk?</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051310232022986772&amp;text=Indexed%20arrays%20%2B%20text%20grep%20feels%20like%20Redis%20admitting%20half%20its%20users%20were%20doing%20this%20with%20hacks.%20Have%20you%20tried%20the%20grep%20on%20bigger%20blobs%20yet%2C%20perf%20vs%20ripgrep%20on%20disk%3F" target="_blank" onclick="markDone('d6')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d6')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d7" id="card-d7">
+  <div class="card-head">
+    <span class="num">#7</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@jasonlk</span>
+    <span class="char-count">165c</span>
+  </div>
+  <div class="target"><a href="https://x.com/jasonlk/status/2051313457870651806" target="_blank">view post →</a></div>
+  <div class="draft-text">Curious which one of the two needed the most prompt-tuning to stop hallucinating. Marketing AIs usually drift into buzzword spam fast. Did Qbee need more guardrails?</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?in_reply_to=2051313457870651806&amp;text=Curious%20which%20one%20of%20the%20two%20needed%20the%20most%20prompt-tuning%20to%20stop%20hallucinating.%20Marketing%20AIs%20usually%20drift%20into%20buzzword%20spam%20fast.%20Did%20Qbee%20need%20more%20guardrails%3F" target="_blank" onclick="markDone('d7')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d7')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="d8" id="card-d8">
+  <div class="card-head">
+    <span class="num">#8</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    <span class="char-count">189c</span>
+  </div>
+  
+  <div class="draft-text">Half my outreach replies arrive as out-of-office. Most reply detectors flag them as conversions and ruin the open rate signal. Built a subject-line skip list, replies metric finally honest.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://twitter.com/intent/tweet?text=Half%20my%20outreach%20replies%20arrive%20as%20out-of-office.%20Most%20reply%20detectors%20flag%20them%20as%20conversions%20and%20ruin%20the%20open%20rate%20signal.%20Built%20a%20subject-line%20skip%20list%2C%20replies%20metric%20finally%20honest." target="_blank" onclick="markDone('d8')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('d8')">Skip</button>
+  </div>
+</div>
+</div>
+<script>
+const KEY = 'x-drafts-morning-2026-05-04';
+const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function refresh() {
+  let done = 0, skipped = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const id = c.dataset.id;
+    c.classList.remove('done', 'skipped');
+    if (state[id] === 'done') { c.classList.add('done'); done++; }
+    if (state[id] === 'skipped') { c.classList.add('skipped'); skipped++; }
+  });
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('skipped-count').textContent = skipped;
+}
+function markDone(id) { state[id] = 'done'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function markSkipped(id) { state[id] = 'skipped'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function resetState() { if (confirm('Reset all progress?')) { localStorage.removeItem(KEY); location.reload(); } }
+refresh();
+</script>
+</body>
+</html>
