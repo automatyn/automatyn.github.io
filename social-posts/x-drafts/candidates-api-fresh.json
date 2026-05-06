@@ -1,69 +1,82 @@
 {
-  "scraped_at": "2026-05-06T08:59:05.081Z",
+  "scraped_at": "2026-05-06T18:21:00.022Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
     "reads_charged": 5,
-    "kept": 4,
-    "skippedContent": 1
+    "kept": 5,
+    "skippedContent": 0
   },
   "budget": {
-    "used": 70,
+    "used": 75,
     "cap": 900,
-    "remaining": 830
+    "remaining": 825
   },
   "candidates": [
     {
-      "handle": "swyx",
-      "tweet_id": "2051874556831469604",
-      "url": "https://x.com/swyx/status/2051874556831469604",
-      "text": "typical @evanjconrad W https://t.co/i3MoFxmvDz https://t.co/VMsweM1QGv",
-      "created_at": "2026-05-06T03:59:50.000Z",
-      "age_hours": 5,
-      "likes": 31,
+      "handle": "patio11",
+      "tweet_id": "2052063050023194789",
+      "url": "https://x.com/patio11/status/2052063050023194789",
+      "text": "In the defense of the unnamed bank, His Holiness is, under U.S. law, ~certainly a politically exposed person (PEP) as a head of state, and therefore a wide range of routine things need enhanced due diligence.\n\nAlso, possible the banker's UI did not anticipate that would happen. h",
+      "created_at": "2026-05-06T16:28:51.000Z",
+      "age_hours": 1.9,
+      "likes": 592,
+      "replies": 14,
+      "reposts": 25,
+      "views": 48836,
+      "author_followers": 193748
+    },
+    {
+      "handle": "alexalbert__",
+      "tweet_id": "2052065953173872912",
+      "url": "https://x.com/alexalbert__/status/2052065953173872912",
+      "text": "More chips, more Claude https://t.co/IMmFe68v7H",
+      "created_at": "2026-05-06T16:40:23.000Z",
+      "age_hours": 1.7,
+      "likes": 350,
+      "replies": 35,
+      "reposts": 4,
+      "views": 14174,
+      "author_followers": 138981
+    },
+    {
+      "handle": "simonw",
+      "tweet_id": "2052055655230706032",
+      "url": "https://x.com/simonw/status/2052055655230706032",
+      "text": "I'm at the Claude w/ Code event in San Francisco, and I'll be live blogging the keynote here https://t.co/6U1Amd2XSZ",
+      "created_at": "2026-05-06T15:59:28.000Z",
+      "age_hours": 2.4,
+      "likes": 102,
+      "replies": 3,
+      "reposts": 6,
+      "views": 6548,
+      "author_followers": 173208
+    },
+    {
+      "handle": "alexalbert__",
+      "tweet_id": "2052067009605861764",
+      "url": "https://x.com/alexalbert__/status/2052067009605861764",
+      "text": "I'll be at Code with Claude all day today so come find me and let's chat about Claude!\n\nI'll also be giving a talk on the main stage at 530pm PT so tune in, it will be on the livestream! https://t.co/yhoNEjhsKp",
+      "created_at": "2026-05-06T16:44:35.000Z",
+      "age_hours": 1.6,
+      "likes": 65,
       "replies": 6,
-      "reposts": 3,
-      "views": 7013,
-      "author_followers": 156003
-    },
-    {
-      "handle": "jasonlk",
-      "tweet_id": "2051862260054909275",
-      "url": "https://x.com/jasonlk/status/2051862260054909275",
-      "text": "“eBay doesn’t need 11,000+ employees. It hasn’t changed since 2005.\n\nI could run it from my house.” @ryancohen \n\nHe’s got my vote! https://t.co/BZW5i4MkM6",
-      "created_at": "2026-05-06T03:10:59.000Z",
-      "age_hours": 5.8,
-      "likes": 21,
-      "replies": 4,
       "reposts": 0,
-      "views": 4423,
-      "author_followers": 239314
+      "views": 3855,
+      "author_followers": 138981
     },
     {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2051882169317110127",
-      "url": "https://x.com/shawnchauhan1/status/2051882169317110127",
-      "text": "OpenAI and Anthropic announced almost identical enterprise deployment ventures in the same week.\n\nThat is not a coincidence.\n\nBoth are racing to lock up PE portfolio companies as distribution channels before the other side does.\n\nThe AI race stopped being about benchmarks the htt",
-      "created_at": "2026-05-06T04:30:05.000Z",
-      "age_hours": 4.5,
-      "likes": 4,
+      "handle": "TKopelman",
+      "tweet_id": "2052055346856812684",
+      "url": "https://x.com/TKopelman/status/2052055346856812684",
+      "text": "I talk to a lot of people who consider themselves very risk averse\n\n- They keep large amounts of cash\n- They rush to pay off low interest debt\n- They avoid investing because they are afraid of market volatility\n\nYet when we actually look at their financial life, they are exposed",
+      "created_at": "2026-05-06T15:58:14.000Z",
+      "age_hours": 2.4,
+      "likes": 8,
       "replies": 0,
       "reposts": 1,
-      "views": 167,
-      "author_followers": 32113
-    },
-    {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2051935026661773534",
-      "url": "https://x.com/shawnchauhan1/status/2051935026661773534",
-      "text": "Google, Microsoft, xAI, OpenAI, and Anthropic all agreed this week to give the US government early access to unreleased AI models.\n\nEvery major frontier lab. Same week.\n\nThe Trump administration, which came in explicitly against AI regulation, is now drafting an executive order h",
-      "created_at": "2026-05-06T08:00:08.000Z",
-      "age_hours": 1,
-      "likes": 1,
-      "replies": 0,
-      "reposts": 0,
-      "views": 82,
-      "author_followers": 32113
+      "views": 1399,
+      "author_followers": 39868
     }
   ]
 }
