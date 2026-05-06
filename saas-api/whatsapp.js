@@ -95,6 +95,7 @@ async function startPairingCode(agentId, phoneNumber) {
     }, 180000);
 
     let currentState = state;
+    let saw515 = false;
     const onUpdate = (update) => {
       const { connection, lastDisconnect } = update;
       if (connection === 'open') {
@@ -109,8 +110,13 @@ async function startPairingCode(agentId, phoneNumber) {
         const statusCode = lastDisconnect?.error?.output?.statusCode;
         const errMsg = lastDisconnect?.error?.message || 'connection closed';
         console.log(`[whatsapp:${agentId}] connection close — code=${statusCode} msg=${errMsg} registered=${currentState.creds.registered}`);
-        if (statusCode === 515 || statusCode === DisconnectReason.restartRequired || (!statusCode && !currentState.creds.registered)) {
-          console.log(`[whatsapp:${agentId}] reconnecting after ${statusCode || 'silent-close'}`);
+        const is515 = statusCode === 515 || statusCode === DisconnectReason.restartRequired;
+        if (is515) saw515 = true;
+        // Reconnect only on explicit 515, or silent-close that immediately follows
+        // a 515 (Baileys' post-restart cycle). Pre-scan silent closes spawn
+        // duplicate sockets that fight each other and cause "QR refs attempts ended".
+        if (is515 || (!statusCode && saw515 && !currentState.creds.registered)) {
+          console.log(`[whatsapp:${agentId}] reconnecting after ${statusCode || 'post-515-silent-close'}`);
           (async () => {
             // Reload state fresh from disk — partial creds were saved during pair
             const reloaded = await useMultiFileAuthState(authDir);
@@ -128,6 +134,11 @@ async function startPairingCode(agentId, phoneNumber) {
             const stored = activeSessions.get(agentId);
             if (stored) stored.sock = newSock;
           })().catch((e) => { clearTimeout(timeout); reject(e); });
+          return;
+        }
+        if (!currentState.creds.registered && !statusCode) {
+          // Pre-pair silent close — pairing code becomes stale. User must request a new one.
+          console.log(`[whatsapp:${agentId}] socket closed pre-pair, awaiting new pairing-code request`);
           return;
         }
         clearTimeout(timeout);
@@ -209,6 +220,7 @@ async function startQrPairing(agentId) {
 
     // QR pair: reload state from disk on 515 reconnect, only resolve when registered=true.
     let qrCurrentState = state;
+    let saw515 = false;
     const connectionPromise = new Promise((connResolve, connReject) => {
       const onUpdate = (update) => {
         const { connection, lastDisconnect } = update;
@@ -222,8 +234,14 @@ async function startQrPairing(agentId) {
           const statusCode = lastDisconnect?.error?.output?.statusCode;
           const errMsg = lastDisconnect?.error?.message || 'connection closed';
           console.log(`[whatsapp:${agentId}] QR close — code=${statusCode} msg=${errMsg} registered=${qrCurrentState.creds.registered}`);
-          if (statusCode === 515 || statusCode === DisconnectReason.restartRequired || (!statusCode && !qrCurrentState.creds.registered)) {
-            console.log(`[whatsapp:${agentId}] QR reconnecting after ${statusCode || 'silent-close'}`);
+          const is515 = statusCode === 515 || statusCode === DisconnectReason.restartRequired;
+          if (is515) saw515 = true;
+          // Reconnect only on the explicit 515 from WA, OR on the silent-close that
+          // immediately follows a 515 during the post-pair restart cycle.
+          // Pre-scan silent closes are NOT a reconnect signal — they spawn duplicate
+          // sockets that fight each other and cause "QR refs attempts ended".
+          if (is515 || (!statusCode && saw515 && !qrCurrentState.creds.registered)) {
+            console.log(`[whatsapp:${agentId}] QR reconnecting after ${statusCode || 'post-515-silent-close'}`);
             (async () => {
               const reloaded = await useMultiFileAuthState(authDir);
               qrCurrentState = reloaded.state;
@@ -249,6 +267,10 @@ async function startQrPairing(agentId) {
               const authDir2 = getAuthDir(agentId);
               if (fs.existsSync(authDir2)) fs.rmSync(authDir2, { recursive: true, force: true });
             } catch {}
+          } else if (!qrCurrentState.creds.registered && !statusCode) {
+            // Pre-scan silent close from WA. QR becomes stale; user must request a new one.
+            // Do NOT reject — that would surface an error before they've even tried.
+            console.log(`[whatsapp:${agentId}] QR socket closed pre-scan, awaiting new QR request`);
           } else {
             connReject(new Error(`Pairing failed (${statusCode || 'no-code'}): ${errMsg}`));
           }
