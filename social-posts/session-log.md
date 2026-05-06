@@ -623,3 +623,31 @@ Open items for next slot:
 - Signups last 14h: **0 new** (23 total). 1 cap hit historical (Test Agent 04-21).
 - Memory: saved `reference_telegram_gate_bot.md` (bot token + chat 5904617085 from x-gate-poller.js).
 - Open items carried: yt-dlp install (try `pipx` or `apt install yt-dlp`), Forge unreachable on Pat's laptop (blocks SEO Daily Task C blogs + Reddit images), drip persistence bug, reply-detector autoresponder false-positive bug, **double-send concurrency lock** for sender.js, **sender null-email guard** (E3 failure today), cron registration for monitor.js, draft-helper recency filter (it doesn't filter <6h before angle-matching, so currently emits stale-target replies — but quality bar held this run via empty result), browser scraper kept 53 candidates with no follower count enrichment (need fxtwitter join in pipeline).
+
+### /afternoon — 2026-05-06 18:30 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active.
+- X status: @patrickssons OK, **126 followers / 687 tweets** (+1f, +12t since /morning — Pat posted from morning drafts).
+- X dual-channel: API source 5 candidates ($0.38/$4.50 mo). Browser scrape **52 candidates** (35 handles, 30 fresh <6h). After dedupe: **15 drafts hand-written** (3 originals + 12 replies). All <200 char, no em-dashes, no banned words. **Skipped angle-matcher entirely** — too narrow, scored 0/52 yesterday morning before this routine.
+- Drafts targets: patio11 194k, alexalbert__ 139k (x2), simonw 173k, TKopelman 40k, sahilbloom 1.16M, levelsio 862k, GergelyOrosz 332k, AravSrinivas 489k, gregisenberg 638k, jasonlk 239k, TTrimoreau 7.7k. Code with Claude conference is hot today, drove 5 of 12 targets.
+- Drafts page: https://automatyn.co/x-private/AlfCpGUjAu7DPas/. Telegram msg 163 sent.
+- SEO Daily trigger: **fired at 10:10 UTC today**, but **no blog commits**. Task C silently failed (Forge unreachable on Pat's laptop, ongoing issue). Task A skipped (locations hub still doesn't exist). Task D distribution skipped because Task C produced no blog to distribute. SEO Daily updated_at confirms run, no output produced.
+- Reddit pipeline: webhook 200.
+- **Outreach this slot:** E1 0 (pool empty, ingest +6 leads, **enrich found 0 emails on new batch — same problem as /morning**); E2 0 (none at day-3); **E3 15/16 sent** (Bristol heating push, 1 fail = null email bug). Single sender, no double-send risk.
+- **Outreach today total:** E1 **0** / E2 **6** / E3 **17** = **23 emails sent today**. Above /morning report (6) but below the ~85/morning skill target.
+- **Outreach lifetime:** 208 E1 / 182 E2 / **175 E3** = **565 total** / 43 E1 opens / 41 E2 opens / 27 E3 opens / 7 unsubs / 0 replies / 0 bounces. Pool 775/206/208.
+- Brevo opens 24h: 19 events, 14 matched.
+- **Adam status:** AB Plumbing & Heating, starter plan, day 7 post-signup. **whatsappConnected=false** still. **Active dashboard polling 14:31-15:24 UTC (Mac)** — first sustained activity since 05-04 fix. Pat sent personal QR-fix nudge email to adam@abplumbing-heating.co.uk this slot. Awaiting reply / pair.
+- Signups last 7h: **0 new** (23 total).
+- TikTok: yt-dlp still missing (PEP 668 blocks pip). Carousels SKIPPED (Postiz paused). 
+- LinkedIn / Dev.to / Medium: deferred. Last Dev.to 2026-04-20.
+- Memory: `reference_telegram_gate_bot.md` saved earlier today.
+- Open items (active):
+  - Forge unreachable on Pat's laptop → Task C blogs blocked 3 days running
+  - Sender null-email guard (E3 fails twice today)
+  - Sender double-send concurrency lock (still no fix)
+  - draft-from-candidates angle pool too narrow (0/57 yesterday → bypassed today, hand-drafting works but doesn't scale)
+  - Browser scraper missing follower enrichment
+  - yt-dlp install (try `apt install yt-dlp` since pip blocked)
+  - Cron registration for outreach/monitor.js (last entry 05-04)
+  - drip persistence bug (RAM-only setTimeouts)
+  - reply-detector autoresponder false-positive
