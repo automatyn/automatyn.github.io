@@ -735,3 +735,38 @@ Open items for next slot:
   - Cron registration for outreach/monitor.js (last entry 2026-05-04).
   - drip persistence bug (RAM-only setTimeouts).
   - reply-detector autoresponder false-positive bug.
+
+### /afternoon — 2026-05-07 13:48 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active. /api/health 200 ok.
+- X status: @patrickssons OK, **128 followers / 725 tweets** (+0f, +6t since /morning — Pat posted ~6 of 8 morning drafts).
+- **Triggers fired but produced nothing today:**
+  - **SEO Day-14** (one-shot): updated_at 2026-05-07T09:08, ran for ~2 min, **no `social-posts/seo-day14-report.md` file written, no Telegram message, no commit.** Silent failure inside agent run. Trigger now `next_run_at: 2027-05-07` (one-shot done).
+  - **SEO Daily**: updated_at 2026-05-07T10:02, ran for ~2 min, **no blog commits despite Forge being UP today.** Same silent-fail pattern as 3 prior days.
+- Forge: still UP (verified earlier today) but trigger didn't use it. So it's not Forge anymore — it's the agent run failing for a different reason.
+- X dual-channel:
+  - API source: 5 reads / 5 candidates kept ($0.45 / $4.50 month). All <2.5h fresh.
+  - Browser scrape: 55 candidates from 35 handles, 25 fresh <6h (much better window than morning's 9).
+  - **Renamed API output to `candidates-api-fresh.json`** (manual one-off) so browser scrape didn't clobber it. Script bug still needs proper fix.
+- **12 unified drafts** (3 originals + 9 hand-drafted replies). Hit normal-mode target.
+- Drafts targets: levelsio 863k, SahilBloom 1.16M, AnthropicAI 1.23M, TKopelman 40k, shawnchauhan1 32k, GergelyOrosz 332k (x2), swyx 156k, TTrimoreau 8k. AnthropicAI direct-on-topic for Automatyn brand.
+- Drafts page: https://automatyn.co/x-private/afternoon-vnZj26zW/. Telegram msg 171 sent.
+- Reddit pipeline: webhook 200.
+- Reply detector 7h: 18 inbox msgs scanned, 0 replies, 0 bounces.
+- **Outreach this slot:** SKIPPED ALL BATCHES, but **fixed E3 dead-loop bug:**
+  - E3 ready=1 was the same null-email lead (`Harbour Plumbing & Heating, lead_a994ec5b5e3b`) that had been crashing E3 every slot since 2026-05-04.
+  - Root cause found: a `_junk_email_purged_at` job on 2026-05-04 nulled the email field but didn't mark the lead bounced/unsubscribed. So the lead stayed in the E3-ready queue with no way to send.
+  - Hot fix: `s.update(id, {bounced: true, status: 'bounced_post_purge'})`. E3 ready now=0.
+  - **Underlying bug still there**: the purge job needs to also flip `bounced` flag. Logging.
+  - E1 ready=0, E2 ready=0 (pool dry, same as /morning).
+- **Enrichment running in background** (`enrich-emails.js 30`, 10-min timeout). Yesterday and morning's runs timed out at 180s. The script does up to 7 fetches × 10s timeout per lead = 70s/lead worst case, so 30 leads need ~30 min realistically. Will check at /evening.
+- **Outreach today total: E1 0 / E2 0 / E3 0 = 0 emails sent today** (pool dry both slots).
+- **Outreach lifetime:** 208 E1 / 182 E2 / 175 E3 = 565 / 43 E1 opens / 41 E2 opens / 28 E3 opens / 7 unsubs / 0 replies / **1 bounced (just marked)**.
+- Brevo opens 24h: 4 events, 3 matched.
+- Signups last 7h: **0 new** (23 total). 0 caps.
+- TikTok: yt-dlp still missing. Carousels SKIPPED (Postiz paused).
+- LinkedIn / Dev.to / Medium: SKIPPED — depend on Task C blogs which keep failing.
+- Open items added today:
+  - **SEO Day-14 trigger silently failed** — agent ran 2 min and produced no report file or Telegram. Need to investigate trigger run logs (claude.ai dashboard) for the error.
+  - **SEO Daily trigger silently failed** even with Forge UP — different root cause than Forge unavailability. Same 2-min run pattern.
+  - **`_junk_email_purged_at` job leaves leads in queue with email=null** — needs to flip `bounced=true` on purge.
+  - candidates.json file collision still present (manual workaround used today).
