@@ -770,3 +770,13 @@ Open items for next slot:
   - **SEO Daily trigger silently failed** even with Forge UP — different root cause than Forge unavailability. Same 2-min run pattern.
   - **`_junk_email_purged_at` job leaves leads in queue with email=null** — needs to flip `bounced=true` on purge.
   - candidates.json file collision still present (manual workaround used today).
+
+### enrichment finding 2026-05-07 — UK trades have no website email
+- enrich-emails.js 30 finished: **0 emails found / 30 missed.** All leads were plumbing/heating businesses in Birmingham + Leeds.
+- This is not a script bug. UK trades businesses hide email behind contact-form widgets, phone-only, or WhatsApp. mailto: links basically don't exist on these sites.
+- Implication: ingesting more Google Places leads will not unblock outreach. The pool is dry because the channel is wrong for this audience.
+- Strategic options for Pat:
+  1. Pivot outreach channel: switch from email to WhatsApp / SMS / phone (matches trade buying behaviour, but new infra needed).
+  2. Pivot ICP: target audiences that have email on websites (tech, SaaS, agencies, professional services).
+  3. Add contact-form submission to enrich-emails: detect form, fill it as outreach (legally grey, deliverability unknown).
+- Decision needed before /evening to avoid wasting another routine on dry pool.
