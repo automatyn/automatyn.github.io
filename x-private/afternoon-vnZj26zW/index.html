@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X drafts — afternoon 2026-05-07</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; margin: 0; padding: 16px; max-width: 720px; margin: 0 auto; }
+header { position: sticky; top: 0; background: #0a0a0a; padding: 12px 0; border-bottom: 1px solid #222; z-index: 10; }
+h1 { font-size: 20px; margin: 0 0 8px; }
+.progress { font-size: 14px; color: #a855f7; }
+.card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 14px; margin: 12px 0; transition: opacity 0.3s; }
+.card.done { opacity: 0.35; border-color: #16a34a; }
+.card.skipped { opacity: 0.25; border-color: #444; }
+.card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; margin-bottom: 8px; }
+.num { color: #666; font-weight: 600; }
+.badge { padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+.badge.reply { background: #1e3a8a; color: #93c5fd; }
+.badge.original { background: #581c87; color: #c4b5fd; }
+.meta { color: #888; }
+.char-count { margin-left: auto; color: #888; font-variant-numeric: tabular-nums; }
+.target { background: #1a1a1a; border-left: 3px solid #3b82f6; padding: 8px 10px; margin: 8px 0; border-radius: 4px; font-size: 13px; }
+.target a { color: #60a5fa; font-size: 11px; text-decoration: none; }
+.target-text { color: #aaa; margin-top: 4px; }
+.draft-text { background: #0f0f0f; border: 1px solid #2a2a2a; padding: 12px; border-radius: 8px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; margin: 10px 0; }
+.reason { font-size: 11px; color: #666; font-style: italic; margin: 6px 0 10px; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.post-btn { flex: 1; background: #1d9bf0; color: white; padding: 12px; border-radius: 999px; text-align: center; text-decoration: none; font-weight: 600; font-size: 15px; }
+.post-btn:active { background: #1a8cd8; }
+.skip-btn { background: transparent; color: #888; border: 1px solid #333; padding: 12px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; }
+.reset { background: transparent; border: none; color: #666; font-size: 12px; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>X drafts — afternoon 2026-05-07</h1>
+  <div class="progress"><span id="done-count">0</span>/12 posted · <span id="skipped-count">0</span> skipped · <button class="reset" onclick="resetState()">reset</button></div>
+</header>
+<div id="cards">
+
+<div class="card" data-id="o1" id="card-o1">
+  <div class="card-head">
+    <span class="num">#1</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">194c</span>
+  </div>
+  
+  <div class="draft-text">Built an AI agent for an electrician. Day 3, a customer asked about boilers. We dont do boilers. The agent confidently quoted £4500 to install a Worcester. Now I gate every quote behind a human.</div>
+  <div class="reason">Concrete failure-mode story. Hooks anyone shipping production agents.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=Built%20an%20AI%20agent%20for%20an%20electrician.%20Day%203%2C%20a%20customer%20asked%20about%20boilers.%20We%20dont%20do%20boilers.%20The%20agent%20confidently%20quoted%20%C2%A34500%20to%20install%20a%20Worcester.%20Now%20I%20gate%20every%20quote%20behind%20a%20human." target="_blank" onclick="markDone('o1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o2" id="card-o2">
+  <div class="card-head">
+    <span class="num">#2</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">199c</span>
+  </div>
+  
+  <div class="draft-text">Smallest win for a small business AI agent: ask the owner the 5 questions they answer most this month. Hardcode those 5. The model handles the rest. Most builders skip this because it isnt glamorous.</div>
+  <div class="reason">Practical SMB advice. Mild contrarian against pure-LLM purists.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=Smallest%20win%20for%20a%20small%20business%20AI%20agent%3A%20ask%20the%20owner%20the%205%20questions%20they%20answer%20most%20this%20month.%20Hardcode%20those%205.%20The%20model%20handles%20the%20rest.%20Most%20builders%20skip%20this%20because%20it%20isnt%20glamorous." target="_blank" onclick="markDone('o2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o3" id="card-o3">
+  <div class="card-head">
+    <span class="num">#3</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">158c</span>
+  </div>
+  
+  <div class="draft-text">WhatsApp AI for a hair salon: 60 percent of inbound is rebooks. Train on the rebook flow first. The other 40 percent is just edge cases pretending to be hard.</div>
+  <div class="reason">Specific industry insight with concrete percentages. SMB-targeted.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=WhatsApp%20AI%20for%20a%20hair%20salon%3A%2060%20percent%20of%20inbound%20is%20rebooks.%20Train%20on%20the%20rebook%20flow%20first.%20The%20other%2040%20percent%20is%20just%20edge%20cases%20pretending%20to%20be%20hard." target="_blank" onclick="markDone('o3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r1" id="card-r1">
+  <div class="card-head">
+    <span class="num">#4</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@levelsio</span>
+    <span class="meta">863018f</span>
+    <span class="meta">2.1h</span>
+    <span class="char-count">190c</span>
+  </div>
+  <div class="target"><a href="https://x.com/levelsio/status/2052353678598696992" target="_blank">view post →</a><div class="target-text">I think sociopaths are particularly attracted to stoicism because they dont feel emotions</div></div>
+  <div class="draft-text">Or stoicism is the only philosophy that pretends an emotion you cant control should be ignored. Anyone who feels deeply knows thats impossible. Whats the closest stoic idea you actually use?</div>
+  <div class="reason">Mild contrarian + question to author. levelsio engages on philosophy threads.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052353678598696992&text=Or%20stoicism%20is%20the%20only%20philosophy%20that%20pretends%20an%20emotion%20you%20cant%20control%20should%20be%20ignored.%20Anyone%20who%20feels%20deeply%20knows%20thats%20impossible.%20Whats%20the%20closest%20stoic%20idea%20you%20actually%20use%3F" target="_blank" onclick="markDone('r1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r2" id="card-r2">
+  <div class="card-head">
+    <span class="num">#5</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@SahilBloom</span>
+    <span class="meta">1158294f</span>
+    <span class="meta">1.0h</span>
+    <span class="char-count">187c</span>
+  </div>
+  <div class="target"><a href="https://x.com/SahilBloom/status/2052371633327779996" target="_blank">view post →</a><div class="target-text">Sauna is a skin cheat code. My protocol: 20 min sauna at 210, 3 min cold plunge, face routine.</div></div>
+  <div class="draft-text">How long before the cold plunge stops feeling like punishment? Mine took about 4 weeks of doing it daily before the post-plunge euphoria kicked in. Curious if its similar for most people.</div>
+  <div class="reason">Personal anecdote + direct question. Largest target today (1.16M).</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052371633327779996&text=How%20long%20before%20the%20cold%20plunge%20stops%20feeling%20like%20punishment%3F%20Mine%20took%20about%204%20weeks%20of%20doing%20it%20daily%20before%20the%20post-plunge%20euphoria%20kicked%20in.%20Curious%20if%20its%20similar%20for%20most%20people." target="_blank" onclick="markDone('r2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r3" id="card-r3">
+  <div class="card-head">
+    <span class="num">#6</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@AnthropicAI</span>
+    <span class="meta">1233164f</span>
+    <span class="meta">0.0h</span>
+    <span class="char-count">188c</span>
+  </div>
+  <div class="target"><a href="https://x.com/AnthropicAI/status/2052385812881228218" target="_blank">view post →</a><div class="target-text">Were sharing the research agenda of The Anthropic Institute (TAI). 4 areas: economic diffusion, threats and resilience, AI systems in the wild, AI-driven R&amp;D</div></div>
+  <div class="draft-text">Glad economic diffusion is on the list. Most SMB owners I work with still think AI is for tech companies. Whats the early signal you think will be hardest to read accurately at this stage?</div>
+  <div class="reason">On-topic SMB framing on Anthropic post. Brand-relevant target. Posted 0h ago.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052385812881228218&text=Glad%20economic%20diffusion%20is%20on%20the%20list.%20Most%20SMB%20owners%20I%20work%20with%20still%20think%20AI%20is%20for%20tech%20companies.%20Whats%20the%20early%20signal%20you%20think%20will%20be%20hardest%20to%20read%20accurately%20at%20this%20stage%3F" target="_blank" onclick="markDone('r3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r4" id="card-r4">
+  <div class="card-head">
+    <span class="num">#7</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@TKopelman</span>
+    <span class="meta">39884f</span>
+    <span class="meta">1.6h</span>
+    <span class="char-count">184c</span>
+  </div>
+  <div class="target"><a href="https://x.com/TKopelman/status/2052362362859003935" target="_blank">view post →</a><div class="target-text">My favorite tax planning moves that most high income DIYers are missing: 1. S Corp 2. Solo 401k</div></div>
+  <div class="draft-text">How early in the year do you actually run the S Corp election math? Once a year in December feels like the obvious answer but Ive seen people miss the boat by waiting until tax filing.</div>
+  <div class="reason">Specific tax timing question. TKopelman replies frequently.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052362362859003935&text=How%20early%20in%20the%20year%20do%20you%20actually%20run%20the%20S%20Corp%20election%20math%3F%20Once%20a%20year%20in%20December%20feels%20like%20the%20obvious%20answer%20but%20Ive%20seen%20people%20miss%20the%20boat%20by%20waiting%20until%20tax%20filing." target="_blank" onclick="markDone('r4')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r4')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r5" id="card-r5">
+  <div class="card-head">
+    <span class="num">#8</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@shawnchauhan1</span>
+    <span class="meta">32113f</span>
+    <span class="meta">1.0h</span>
+    <span class="char-count">192c</span>
+  </div>
+  <div class="target"><a href="https://x.com/shawnchauhan1/status/2052365438026445175" target="_blank">view post →</a><div class="target-text">Apple announced it will let users choose their AI model inside iOS 27. Not Apple Intelligence only. A model picker.</div></div>
+  <div class="draft-text">A model picker on iOS is the closest Apple has come to admitting it lost the AI race. The interesting bit is which model becomes default. Default is 80 percent of share. Whats your prediction?</div>
+  <div class="reason">Sharper take + prediction question. Algo-strong: opinion-bait.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052365438026445175&text=A%20model%20picker%20on%20iOS%20is%20the%20closest%20Apple%20has%20come%20to%20admitting%20it%20lost%20the%20AI%20race.%20The%20interesting%20bit%20is%20which%20model%20becomes%20default.%20Default%20is%2080%20percent%20of%20share.%20Whats%20your%20prediction%3F" target="_blank" onclick="markDone('r5')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r5')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r6" id="card-r6">
+  <div class="card-head">
+    <span class="num">#9</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@GergelyOrosz</span>
+    <span class="meta">332172f</span>
+    <span class="meta">4.1h</span>
+    <span class="char-count">196c</span>
+  </div>
+  <div class="target"><a href="https://x.com/GergelyOrosz/status/2052325113794633910" target="_blank">view post →</a><div class="target-text">Anthropic bans xAI from using Claude... xAI gives every Claude user $4k credits...</div></div>
+  <div class="draft-text">The xAI loophole is hilarious. The same week Cluely got banned, every cracked-engineer-with-a-resume hopped on the affiliate program. The real ban Anthropic should write next is on Distillers Inc.</div>
+  <div class="reason">Light humour + builds on Gergelys take. He engages on AI-industry threads.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052325113794633910&text=The%20xAI%20loophole%20is%20hilarious.%20The%20same%20week%20Cluely%20got%20banned%2C%20every%20cracked-engineer-with-a-resume%20hopped%20on%20the%20affiliate%20program.%20The%20real%20ban%20Anthropic%20should%20write%20next%20is%20on%20Distillers%20Inc." target="_blank" onclick="markDone('r6')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r6')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r7" id="card-r7">
+  <div class="card-head">
+    <span class="num">#10</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@GergelyOrosz</span>
+    <span class="meta">332172f</span>
+    <span class="meta">4.4h</span>
+    <span class="char-count">199c</span>
+  </div>
+  <div class="target"><a href="https://x.com/GergelyOrosz/status/2052320109054632281" target="_blank">view post →</a><div class="target-text">Looking at the texts between Mira Murati and Sam Altman from the OpenAI trial: the only adult in the room was Mira</div></div>
+  <div class="draft-text">Mira reads as the only one with a clear sense of which fights are worth having. The wild part is that Sam keeps replying as if he hasnt read his own previous message. Whats your read on the timeline?</div>
+  <div class="reason">Substantive read on the released texts. Direct question.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052320109054632281&text=Mira%20reads%20as%20the%20only%20one%20with%20a%20clear%20sense%20of%20which%20fights%20are%20worth%20having.%20The%20wild%20part%20is%20that%20Sam%20keeps%20replying%20as%20if%20he%20hasnt%20read%20his%20own%20previous%20message.%20Whats%20your%20read%20on%20the%20timeline%3F" target="_blank" onclick="markDone('r7')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r7')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r8" id="card-r8">
+  <div class="card-head">
+    <span class="num">#11</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@swyx</span>
+    <span class="meta">156153f</span>
+    <span class="meta">4.7h</span>
+    <span class="char-count">161c</span>
+  </div>
+  <div class="target"><a href="https://x.com/swyx/status/2052315684139679845" target="_blank">view post →</a><div class="target-text">congrats to @mattpocockuk for crossing 1m views across his two sessions in &lt;2 weeks</div></div>
+  <div class="draft-text">Whats matt doing in the talks that other instructors arent? Hard to imagine pure topic-pick alone gets to 1m in 2 weeks, theres usually a delivery move under it.</div>
+  <div class="reason">Asks swyx for the actual mechanism, not the outcome. swyx replies to craft questions.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052315684139679845&text=Whats%20matt%20doing%20in%20the%20talks%20that%20other%20instructors%20arent%3F%20Hard%20to%20imagine%20pure%20topic-pick%20alone%20gets%20to%201m%20in%202%20weeks%2C%20theres%20usually%20a%20delivery%20move%20under%20it." target="_blank" onclick="markDone('r8')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r8')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r9" id="card-r9">
+  <div class="card-head">
+    <span class="num">#12</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@TTrimoreau</span>
+    <span class="meta">7958f</span>
+    <span class="meta">3.0h</span>
+    <span class="char-count">163c</span>
+  </div>
+  <div class="target"><a href="https://x.com/TTrimoreau/status/2052342685147742560" target="_blank">view post →</a><div class="target-text">Your product is ready. What are you fixing first? - onboarding - pricing - distribution - retention</div></div>
+  <div class="draft-text">Distribution. The other three you can keep iterating after launch. Distribution decides whether anyone notices the iteration. Whats your default channel right now?</div>
+  <div class="reason">Strong opinion + question to author. TTrimoreau replies to engaged answers.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052342685147742560&text=Distribution.%20The%20other%20three%20you%20can%20keep%20iterating%20after%20launch.%20Distribution%20decides%20whether%20anyone%20notices%20the%20iteration.%20Whats%20your%20default%20channel%20right%20now%3F" target="_blank" onclick="markDone('r9')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r9')">Skip</button>
+  </div>
+</div>
+</div>
+<script>
+const KEY = 'x-drafts-afternoon-2026-05-07';
+const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function refresh() {
+  let done = 0, skipped = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const id = c.dataset.id;
+    c.classList.remove('done', 'skipped');
+    if (state[id] === 'done') { c.classList.add('done'); done++; }
+    if (state[id] === 'skipped') { c.classList.add('skipped'); skipped++; }
+  });
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('skipped-count').textContent = skipped;
+}
+function markDone(id) { state[id] = 'done'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function markSkipped(id) { state[id] = 'skipped'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function resetState() { if (confirm('Reset all progress?')) { localStorage.removeItem(KEY); location.reload(); } }
+refresh();
+</script>
+</body>
+</html>
