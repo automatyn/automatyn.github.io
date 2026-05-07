@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-07T13:52:16.077Z",
+  "scraped_at": "2026-05-07T21:32:23.200Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
@@ -8,75 +8,75 @@
     "skippedContent": 0
   },
   "budget": {
-    "used": 90,
+    "used": 95,
     "cap": 900,
-    "remaining": 810
+    "remaining": 805
   },
   "candidates": [
     {
-      "handle": "levelsio",
-      "tweet_id": "2052353678598696992",
-      "url": "https://x.com/levelsio/status/2052353678598696992",
-      "text": "I think sociopaths are particularly attracted to stoicism because they don't feel emotions https://t.co/hRiZJip1jD",
-      "created_at": "2026-05-07T11:43:42.000Z",
-      "age_hours": 2.1,
-      "likes": 474,
-      "replies": 55,
-      "reposts": 5,
-      "views": 35436,
-      "author_followers": 863018
-    },
-    {
-      "handle": "SahilBloom",
-      "tweet_id": "2052371633327779996",
-      "url": "https://x.com/SahilBloom/status/2052371633327779996",
-      "text": "Sauna is a skin cheat code:\n\n- Improves blood flow\n- Promotes collagen\n- Detox\n\nMy protocol:\n\n- 20 min sauna at 210\n- 3 min cold plunge\n- Face wash + anti-aging serum + moisturizer\n\nThe Wild Roman Face Routine. 100% natural. 4.94 stars.\n\nGet it ($25 off): https://t.co/IH96aya7qf ",
-      "created_at": "2026-05-07T12:55:03.000Z",
-      "age_hours": 1,
-      "likes": 76,
-      "replies": 40,
-      "reposts": 5,
-      "views": 12178,
-      "author_followers": 1158294
-    },
-    {
       "handle": "AnthropicAI",
-      "tweet_id": "2052385812881228218",
-      "url": "https://x.com/AnthropicAI/status/2052385812881228218",
-      "text": "We’re sharing the research agenda of The Anthropic Institute, or TAI.\n\nTAI will focus on four areas:\n\n1) Economic diffusion\n2) Threats and resilience\n3) AI systems in the wild\n4) AI-driven R&amp;D\n\nRead the full agenda: https://t.co/TvUINlE7Ae",
-      "created_at": "2026-05-07T13:51:23.000Z",
-      "age_hours": 0,
-      "likes": 21,
-      "replies": 2,
-      "reposts": 3,
-      "views": 549,
-      "author_followers": 1233164
+      "tweet_id": "2052494460966019137",
+      "url": "https://x.com/AnthropicAI/status/2052494460966019137",
+      "text": "We’re donating Petri, our open-source alignment tool, to @meridianlabs_ai, so its development can continue independently.\n\nWorking with Meridian Labs, we’ve also released a major update that improves the adaptability, realism, and depth of Petri’s tests.\n\nhttps://t.co/CyicsIScJi",
+      "created_at": "2026-05-07T21:03:07.000Z",
+      "age_hours": 0.5,
+      "likes": 300,
+      "replies": 20,
+      "reposts": 26,
+      "views": 19396,
+      "author_followers": 1236707
+    },
+    {
+      "handle": "levelsio",
+      "tweet_id": "2052493896970555902",
+      "url": "https://x.com/levelsio/status/2052493896970555902",
+      "text": "Maybe Claude is just tired? https://t.co/sbSrqqqanK",
+      "created_at": "2026-05-07T21:00:53.000Z",
+      "age_hours": 0.5,
+      "likes": 43,
+      "replies": 18,
+      "reposts": 0,
+      "views": 7378,
+      "author_followers": 863096
+    },
+    {
+      "handle": "levelsio",
+      "tweet_id": "2052498163693457522",
+      "url": "https://x.com/levelsio/status/2052498163693457522",
+      "text": "Man this makes sense, European evening now, American day, maybe that's why Claude is bad https://t.co/msn6prMScW",
+      "created_at": "2026-05-07T21:17:50.000Z",
+      "age_hours": 0.2,
+      "likes": 26,
+      "replies": 16,
+      "reposts": 0,
+      "views": 5818,
+      "author_followers": 863096
+    },
+    {
+      "handle": "AravSrinivas",
+      "tweet_id": "2052497181702250503",
+      "url": "https://x.com/AravSrinivas/status/2052497181702250503",
+      "text": "Monitor the Situation \nhttps://t.co/TLkTfvJLLR",
+      "created_at": "2026-05-07T21:13:56.000Z",
+      "age_hours": 0.3,
+      "likes": 28,
+      "replies": 3,
+      "reposts": 4,
+      "views": 1928,
+      "author_followers": 493705
     },
     {
       "handle": "TKopelman",
-      "tweet_id": "2052362362859003935",
-      "url": "https://x.com/TKopelman/status/2052362362859003935",
-      "text": "My favorite tax planning moves that most high income DIYers are missing:\n\n1. S Corp\n- reducing self employment tax \n- utilizing PTET\n- maxing out QBID\n\n2. Solo 401k\n- maxing this out pretax at $70k\n- needing less wages or profit than SEP IRA due to employee side\n- less QBID",
-      "created_at": "2026-05-07T12:18:13.000Z",
-      "age_hours": 1.6,
-      "likes": 21,
-      "replies": 3,
-      "reposts": 1,
-      "views": 2041,
-      "author_followers": 39884
-    },
-    {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2052365438026445175",
-      "url": "https://x.com/shawnchauhan1/status/2052365438026445175",
-      "text": "Apple announced it will let users choose their AI model inside iOS 27.\n\nNot Apple Intelligence only. Not a locked ecosystem. A model picker.\n\nThis is a significant strategic reversal for a company that has spent forty years controlling every layer of the stack.\n\nThe implication h",
-      "created_at": "2026-05-07T12:30:26.000Z",
-      "age_hours": 1.4,
-      "likes": 4,
+      "tweet_id": "2052500269515014517",
+      "url": "https://x.com/TKopelman/status/2052500269515014517",
+      "text": "Most wealth individuals work with some who does their taxes\n\nBut they don't have someone that does their \"tax planning\" \n\nTaxes are one of the most controllable parts of your financial life\n\nYou need filing and you need planning",
+      "created_at": "2026-05-07T21:26:12.000Z",
+      "age_hours": 0.1,
+      "likes": 1,
       "replies": 0,
-      "reposts": 2,
-      "views": 244,
-      "author_followers": 32113
+      "reposts": 0,
+      "views": 149,
+      "author_followers": 39889
     }
   ]
 }

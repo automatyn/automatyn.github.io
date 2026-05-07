@@ -780,3 +780,64 @@ Open items for next slot:
   2. Pivot ICP: target audiences that have email on websites (tech, SaaS, agencies, professional services).
   3. Add contact-form submission to enrich-emails: detect form, fill it as outreach (legally grey, deliverability unknown).
 - Decision needed before /evening to avoid wasting another routine on dry pool.
+
+### /evening — 2026-05-07 21:40 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active.
+- X status: @patrickssons OK, **129 followers / 725 tweets** (+1f, +0t since /afternoon — Pat hasn't posted afternoon drafts yet).
+- X dual-channel:
+  - API source 5 reads / 5 candidates kept ($0.48 / $4.50 month). All <2.5h fresh.
+  - **Saved API output to candidates-api-fresh.json before browser scrape overwrote it** (manual workaround for the file-collision bug — same fix used at /afternoon).
+  - Browser scrape 54 candidates / 35 handles, 33 unique <6h after dedupe with API.
+- **11 unified drafts** (3 originals + 8 hand-drafted replies). Above 8-12 normal-mode target.
+- Drafts targets (by follower count):
+  - AnthropicAI 1.23M (Petri donation)
+  - levelsio 863k (Claude tired joke)
+  - AravSrinivas 493k (Monitor the Situation)
+  - dharmesh 376k (skipped — exactly at 6h boundary)
+  - GergelyOrosz 332k (indie hackers AI bots)
+  - OpenAIDevs 329k (Codex Chrome plugin)
+  - simonw 173k (ChatGPT voice mode)
+  - TKopelman 40k (tax planning analogy → trades)
+  - TTrimoreau 8k (users you wanted, what to improve)
+- Drafts page: https://automatyn.co/x-private/evening-4q-NiYQfF-I/. Telegram msg 172 sent.
+- **Today's X total: 31 unique drafts (9 originals + 22 hand-drafted replies) across morning/afternoon/evening.** On target for 30-50/day.
+- Reddit pipeline: webhook 200 ({"message":"Workflow was started"}).
+- Reply detector 24h: **34 inbox msgs scanned, 0 new replies, 0 bounces.**
+- Brevo opens 48h: 22 events, 16 matched.
+- **Outreach this slot — finally a sending day:**
+  - E1: 0 ready (pool dry, expected — UK trades enrich blocker still active).
+  - E2: **10/10 sent, 0 fail.** Bristol/Nottingham/Leeds plumbing+heating leads. First successful E2 batch in 4 days.
+  - E3: **6/6 sent, 0 fail.** All Bristol plumbing+heating. **Confirms /afternoon's E3 dead-loop fix worked** — null-email lead no longer crashes the queue.
+- **Outreach today total:** E1 **0** / E2 **10** / E3 **6** = **16 emails sent today**. First non-zero day after 2 dry slots.
+- **Outreach lifetime:** 208 E1 / **192** E2 / **181** E3 = **581 total** / 43 E1 opens / 41 E2 opens / 28 E3 opens / 7 unsubs / 0 replies / 1 bounced. Pool 781 / 206 with email / 208 personalised.
+- **Daily-stats email: GMAIL_APP_PASSWORD env not set, stats printed only.** Same as /morning + /afternoon. Setting env var is an open item.
+- **Outreach monitor: NOT running.** Last entry 2026-05-04 18:12. Cron registration still pending. Brevo 24h health currently unknown but sender succeeded so service is up.
+- **Triggers (5 total): 3 enabled, 2 disabled.**
+  - SEO Daily next 2026-05-08 10:03 UTC. Fired today 10:02 UTC, **agent ran 2 min, no blog commits** (silent fail, same pattern as last 4 days even with Forge UP).
+  - SEO Audit weekly next 2026-05-11 09:02 UTC.
+  - SEO Day-14 ONE-SHOT — fired today 09:08, **silent fail (no report file, no Telegram, no commit)**, next_run rolled to 2027-05-07.
+  - Locations hub one-shot: disabled (built earlier).
+  - Blog publish (Apr 14): disabled (used).
+  - **None auto-disabled.** No re-enables needed.
+- TikTok: yt-dlp still missing (PEP 668 blocks pip). Carousels SKIPPED (Postiz paused).
+- LinkedIn / Dev.to / Medium: SKIPPED — all depend on Task C blogs which the SEO Daily agent run keeps silent-failing on.
+- Signups today: **0 new** (23 total: 18 free / 4 starter / 1 pro). 0 caps hit today.
+- **Adam (AB Plumbing): no update this slot.** Was throttled per /evening 05-06 note + /morning + /afternoon waits. No new dashboard polling logged today. Pat: ping Adam to retry QR via Phone Number tab tomorrow morning UK.
+- Tomorrow prep:
+  - SEO Daily fires 10:03 UTC tomorrow. Investigate today's silent-fail before tomorrow if possible.
+  - SEO Day-14 done (one-shot). Future Day-14 reviews need a fresh trigger if Pat wants them recurring.
+  - X drafts: continue hand-drafting until LLM angle-matcher is upgraded.
+- Open items carried (active):
+  - **SEO Daily silent-failing** even with Forge UP — agent runs 2 min and produces nothing. Need to read trigger run logs in claude.ai dashboard.
+  - **SEO Day-14 silent-failed** today — same pattern.
+  - **scrape-via-api.js → candidates.json file collision** (still using manual workaround).
+  - Sender null-email guard (root cause of E3 dead-loop, hot-fixed but underlying purge job still leaves null-emails un-bounced).
+  - Sender double-send concurrency lock (no fix yet, but E2/E3 don't overlap so today was safe).
+  - Enrich-emails finds 0 emails on UK trades (channel mismatch, not script bug — Pat needs ICP/channel decision).
+  - draft-from-candidates angle pool too narrow (100% hand-drafted week).
+  - Browser scraper missing follower enrichment.
+  - GMAIL_APP_PASSWORD not set — daily-stats email only prints.
+  - Cron registration for outreach/monitor.js (last entry 2026-05-04).
+  - yt-dlp install (snap or apt, pip blocked).
+  - drip persistence bug (RAM-only setTimeouts).
+  - reply-detector autoresponder false-positive bug.
