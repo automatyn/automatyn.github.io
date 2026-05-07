@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X drafts — morning 2026-05-07</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; margin: 0; padding: 16px; max-width: 720px; margin: 0 auto; }
+header { position: sticky; top: 0; background: #0a0a0a; padding: 12px 0; border-bottom: 1px solid #222; z-index: 10; }
+h1 { font-size: 20px; margin: 0 0 8px; }
+.progress { font-size: 14px; color: #a855f7; }
+.card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 14px; margin: 12px 0; transition: opacity 0.3s; }
+.card.done { opacity: 0.35; border-color: #16a34a; }
+.card.skipped { opacity: 0.25; border-color: #444; }
+.card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; margin-bottom: 8px; }
+.num { color: #666; font-weight: 600; }
+.badge { padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+.badge.reply { background: #1e3a8a; color: #93c5fd; }
+.badge.original { background: #581c87; color: #c4b5fd; }
+.meta { color: #888; }
+.char-count { margin-left: auto; color: #888; font-variant-numeric: tabular-nums; }
+.target { background: #1a1a1a; border-left: 3px solid #3b82f6; padding: 8px 10px; margin: 8px 0; border-radius: 4px; font-size: 13px; }
+.target a { color: #60a5fa; font-size: 11px; text-decoration: none; }
+.target-text { color: #aaa; margin-top: 4px; }
+.draft-text { background: #0f0f0f; border: 1px solid #2a2a2a; padding: 12px; border-radius: 8px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; margin: 10px 0; }
+.reason { font-size: 11px; color: #666; font-style: italic; margin: 6px 0 10px; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.post-btn { flex: 1; background: #1d9bf0; color: white; padding: 12px; border-radius: 999px; text-align: center; text-decoration: none; font-weight: 600; font-size: 15px; }
+.post-btn:active { background: #1a8cd8; }
+.skip-btn { background: transparent; color: #888; border: 1px solid #333; padding: 12px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; }
+.reset { background: transparent; border: none; color: #666; font-size: 12px; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>X drafts — morning 2026-05-07</h1>
+  <div class="progress"><span id="done-count">0</span>/8 posted · <span id="skipped-count">0</span> skipped · <button class="reset" onclick="resetState()">reset</button></div>
+</header>
+<div id="cards">
+
+<div class="card" data-id="o1" id="card-o1">
+  <div class="card-head">
+    <span class="num">#1</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">191c</span>
+  </div>
+  
+  <div class="draft-text">Hardest part of running an AI agent for an SMB is not the model. Its when a customer asks the owner something, owner answers off-script, and the agent invents a different answer the next day.</div>
+  <div class="reason">Conversation-starter on real SMB agent failure mode. Bait for replies from agent builders.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=Hardest%20part%20of%20running%20an%20AI%20agent%20for%20an%20SMB%20is%20not%20the%20model.%20Its%20when%20a%20customer%20asks%20the%20owner%20something%2C%20owner%20answers%20off-script%2C%20and%20the%20agent%20invents%20a%20different%20answer%20the%20next%20day." target="_blank" onclick="markDone('o1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o2" id="card-o2">
+  <div class="card-head">
+    <span class="num">#2</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">188c</span>
+  </div>
+  
+  <div class="draft-text">A plumber I set up last week told me he ignored 11 enquiries on holiday because his phone was in airplane mode. The agent caught all 11. Two booked. He didnt know AI worked while he slept.</div>
+  <div class="reason">Concrete SMB story with numbers. Conversion proof that maps to Automatyn ICP.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=A%20plumber%20I%20set%20up%20last%20week%20told%20me%20he%20ignored%2011%20enquiries%20on%20holiday%20because%20his%20phone%20was%20in%20airplane%20mode.%20The%20agent%20caught%20all%2011.%20Two%20booked.%20He%20didnt%20know%20AI%20worked%20while%20he%20slept." target="_blank" onclick="markDone('o2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o3" id="card-o3">
+  <div class="card-head">
+    <span class="num">#3</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">135c</span>
+  </div>
+  
+  <div class="draft-text">If your agent has a system prompt longer than 800 words, you do not have an agent. You have a wishlist your model is politely ignoring.</div>
+  <div class="reason">Mild contrarian take. Will pull engagement from anyone shipping bloated prompts.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=If%20your%20agent%20has%20a%20system%20prompt%20longer%20than%20800%20words%2C%20you%20do%20not%20have%20an%20agent.%20You%20have%20a%20wishlist%20your%20model%20is%20politely%20ignoring." target="_blank" onclick="markDone('o3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r1" id="card-r1">
+  <div class="card-head">
+    <span class="num">#4</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@TTrimoreau</span>
+    <span class="meta">7958f</span>
+    <span class="meta">1.0h</span>
+    <span class="char-count">175c</span>
+  </div>
+  <div class="target"><a href="https://x.com/TTrimoreau/status/2052277248666001624" target="_blank">view post →</a><div class="target-text">Which one do you prefer building first?    - Audience   - Product</div></div>
+  <div class="draft-text">Audience first if you can stomach posting into the void for 12 months. Product first if you have one specific person who already begged you to build it. Which camp are you in?</div>
+  <div class="reason">Bait reply-back: hands the binary back as a question.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052277248666001624&text=Audience%20first%20if%20you%20can%20stomach%20posting%20into%20the%20void%20for%2012%20months.%20Product%20first%20if%20you%20have%20one%20specific%20person%20who%20already%20begged%20you%20to%20build%20it.%20Which%20camp%20are%20you%20in%3F" target="_blank" onclick="markDone('r1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r2" id="card-r2">
+  <div class="card-head">
+    <span class="num">#5</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@dharmesh</span>
+    <span class="meta">376524f</span>
+    <span class="meta">2.0h</span>
+    <span class="char-count">166c</span>
+  </div>
+  <div class="target"><a href="https://x.com/dharmesh/status/2052261951900647868" target="_blank">view post →</a><div class="target-text">Over the past 25 years we've gone from: Cloud Computing to Claude Computing</div></div>
+  <div class="draft-text">Cloud to Claude is cute but the real shift is from infra you rent to workforce you rent. When does the hubspot side start charging per agent-hour instead of per seat?</div>
+  <div class="reason">Direct question to Hubspot CTO about pricing model. High reply-back probability.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052261951900647868&text=Cloud%20to%20Claude%20is%20cute%20but%20the%20real%20shift%20is%20from%20infra%20you%20rent%20to%20workforce%20you%20rent.%20When%20does%20the%20hubspot%20side%20start%20charging%20per%20agent-hour%20instead%20of%20per%20seat%3F" target="_blank" onclick="markDone('r2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r3" id="card-r3">
+  <div class="card-head">
+    <span class="num">#6</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@hnshah</span>
+    <span class="meta">288205f</span>
+    <span class="meta">1.5h</span>
+    <span class="char-count">172c</span>
+  </div>
+  <div class="target"><a href="https://x.com/hnshah/status/2052269341211808096" target="_blank">view post →</a><div class="target-text">Greatness is mostly accumulated micro-decisions.</div></div>
+  <div class="draft-text">The hard part is that micro-decisions feel low stakes in the moment, so you have no signal until 3 years later. Whats your trick for spotting a bad one before it compounds?</div>
+  <div class="reason">Asks Hiten for his personal heuristic. Personal-question replies convert.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052269341211808096&text=The%20hard%20part%20is%20that%20micro-decisions%20feel%20low%20stakes%20in%20the%20moment%2C%20so%20you%20have%20no%20signal%20until%203%20years%20later.%20Whats%20your%20trick%20for%20spotting%20a%20bad%20one%20before%20it%20compounds%3F" target="_blank" onclick="markDone('r3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r4" id="card-r4">
+  <div class="card-head">
+    <span class="num">#7</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@AishwaryaDevv</span>
+    <span class="meta">2336f</span>
+    <span class="meta">1.4h</span>
+    <span class="char-count">163c</span>
+  </div>
+  <div class="target"><a href="https://x.com/AishwaryaDevv/status/2052271712381911098" target="_blank">view post →</a><div class="target-text">Most people use Claude like Google. Thats the mistake. The real power starts when you stop chatting and start...</div></div>
+  <div class="draft-text">Whats the one shift that flipped it for you? For me it was treating the chat like a workspace not a search bar, but Im curious if you mean something more specific.</div>
+  <div class="reason">Smaller account but on-topic. Asks for her specific framing.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052271712381911098&text=Whats%20the%20one%20shift%20that%20flipped%20it%20for%20you%3F%20For%20me%20it%20was%20treating%20the%20chat%20like%20a%20workspace%20not%20a%20search%20bar%2C%20but%20Im%20curious%20if%20you%20mean%20something%20more%20specific." target="_blank" onclick="markDone('r4')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r4')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r5" id="card-r5">
+  <div class="card-head">
+    <span class="num">#8</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@shawnchauhan1</span>
+    <span class="meta">32113f</span>
+    <span class="meta">1.3h</span>
+    <span class="char-count">190c</span>
+  </div>
+  <div class="target"><a href="https://x.com/shawnchauhan1/status/2052272601855349149" target="_blank">view post →</a><div class="target-text">Elon Musk called Anthropic evil. Then he signed a deal with them. This is not hypocrisy. This is the...</div></div>
+  <div class="draft-text">Saying its evil is a recruiting moat. Calling it evil while signing the deal is a price negotiation tactic. The actual question is which framing investors believed when reading the contract.</div>
+  <div class="reason">Mild contrarian. Reframes the take with a sharper angle, baits Shawn to clarify which camp he is in.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052272601855349149&text=Saying%20its%20evil%20is%20a%20recruiting%20moat.%20Calling%20it%20evil%20while%20signing%20the%20deal%20is%20a%20price%20negotiation%20tactic.%20The%20actual%20question%20is%20which%20framing%20investors%20believed%20when%20reading%20the%20contract." target="_blank" onclick="markDone('r5')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r5')">Skip</button>
+  </div>
+</div>
+</div>
+<script>
+const KEY = 'x-drafts-morning-2026-05-07';
+const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function refresh() {
+  let done = 0, skipped = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const id = c.dataset.id;
+    c.classList.remove('done', 'skipped');
+    if (state[id] === 'done') { c.classList.add('done'); done++; }
+    if (state[id] === 'skipped') { c.classList.add('skipped'); skipped++; }
+  });
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('skipped-count').textContent = skipped;
+}
+function markDone(id) { state[id] = 'done'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function markSkipped(id) { state[id] = 'skipped'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function resetState() { if (confirm('Reset all progress?')) { localStorage.removeItem(KEY); location.reload(); } }
+refresh();
+</script>
+</body>
+</html>
