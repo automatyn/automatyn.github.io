@@ -920,3 +920,55 @@ Open items for next slot:
   - yt-dlp install.
   - drip persistence bug.
   - reply-detector autoresponder false-positive.
+
+### /evening — 2026-05-08 22:00 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active.
+- X status: @patrickssons OK, **130 followers / 755 tweets** (+1f, +10t since /afternoon — Pat shipped 10 of 11 afternoon drafts).
+- **SEO Daily local timer: TWO blogs auto-shipped today (huge win after 5-day silent fail).**
+  - 07:32Z (manual recovery): commit ede824e, "AI Receptionist vs Phone Answering Service" — https://automatyn.co/blog/ai-receptionist-vs-phone-answering-service-2026.html
+  - 10:05Z (timer fired autonomously): commit fd1b8ce, "Hiring a Receptionist vs AI Receptionist: Real Numbers for UK Trades" — https://automatyn.co/blog/hiring-receptionist-vs-ai-receptionist-uk-2026.html
+  - Both 200 live. Both wrote correct path blog/images/<slug>-hero.jpg.
+  - Timer next fire: Sat 2026-05-09 10:05 UTC.
+- **Image audit issue persists on both blogs.** Same JuggernautXL teal-monochrome cast + garbled fake text on paper props. Need to patch the script's image prompt + add a multimodal pre-commit audit gate. Open item escalating.
+- X dual-channel:
+  - API 5 reads / 5 candidates ($0.55/$4.50 month). Saved to candidates-api-fresh.json.
+  - Browser scrape 44 candidates / 35 handles.
+  - Dedupe + <6h: 25 fresh, all NEW vs morning + afternoon.
+- **12 unified drafts** (2 originals + 10 hand-drafted replies). High-end of normal mode.
+- Drafts targets: AnthropicAI 1.24M, SahilBloom 1.16M, levelsio 863k, AravSrinivas 496k, lennysan 347k, GergelyOrosz 332k, jasonlk 239k, patio11 194k, TKopelman 40k, TTrimoreau 8k, rxhit05 2.8k.
+- **Today's X total: 31 unique drafts (4 originals + 27 hand-drafted replies)** across morning/afternoon/evening. On 30-50/day target.
+- Drafts page: https://automatyn.co/x-private/evening-ZHRB6irqIAc/. Telegram msg 177 sent.
+- Reddit pipeline: webhook 200.
+- Reply detector 24h: **32 inbox msgs scanned, 0 new replies, 0 bounces.**
+- Brevo opens 48h: 14 events, 10 matched.
+- **Outreach this slot: SKIPPED.** Pool dry across all queues for 3rd consecutive slot. Same UK-trades enrichment channel mismatch. Did not run ingest+enrich (proven 0/30 yield) or sender (no leads).
+- **Outreach today total:** E1 **0** / E2 **10** / E3 **0** = **10 emails sent today** (all from /morning).
+- **Outreach lifetime:** 208 E1 / 202 E2 / 181 E3 = **591 total** / 43 E1 opens / 47 E2 opens / 28 E3 opens / 7 unsubs / 0 replies / 1 bounced. Pool 781/206/208.
+- **Daily-stats email: GMAIL_APP_PASSWORD env not set, stats printed only.**
+- **Outreach monitor still NOT running** (last entry 2026-05-04).
+- **Triggers (5 total): 2 enabled, 3 disabled.**
+  - SEO Daily cloud trigger: DISABLED (replaced by local timer).
+  - Local seo-daily.timer: enabled, fires daily 10:05 UTC. Verified working today.
+  - SEO Audit weekly cloud trigger: enabled, next 2026-05-11 09:02.
+  - SEO Day-14 one-shot: dormant (next_run 2027).
+  - Locations one-shot + Blog publish Apr 14: disabled.
+- TikTok: yt-dlp still missing. Carousels SKIPPED (Postiz paused).
+- LinkedIn / Dev.to / Medium: SKIPPED. Local SEO Daily currently doesn't run distribution.
+- Signups today: **0 new** (23 total: 18 free / 4 starter / 1 pro). 0 caps hit.
+- **Adam (AB Plumbing): no update this slot.**
+- Tomorrow prep:
+  - Local SEO timer fires 2026-05-09 10:05 UTC. Will write blog #3 of week.
+  - Image-quality fix (re-roll + script audit patch) is now top open item.
+  - Outreach pool still dry — needs Pat's ICP/channel decision.
+- Open items carried (active):
+  - **Image audit + script patch** (top priority — 2 teal-cast/garbled hero images now live).
+  - Outreach pool dry — UK-trades channel mismatch needs Pat decision.
+  - Sender null-email guard.
+  - Sender double-send concurrency lock.
+  - X drafts angle-matcher upgrade.
+  - candidates.json file collision (manual workaround daily).
+  - GMAIL_APP_PASSWORD not set.
+  - outreach/monitor.js cron registration.
+  - yt-dlp install.
+  - drip persistence bug.
+  - reply-detector autoresponder false-positive.

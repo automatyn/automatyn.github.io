@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-08T12:50:29.328Z",
+  "scraped_at": "2026-05-08T20:50:21.513Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
@@ -8,75 +8,75 @@
     "skippedContent": 0
   },
   "budget": {
-    "used": 105,
+    "used": 110,
     "cap": 900,
-    "remaining": 795
+    "remaining": 790
   },
   "candidates": [
     {
-      "handle": "GergelyOrosz",
-      "tweet_id": "2052702817819795965",
-      "url": "https://x.com/GergelyOrosz/status/2052702817819795965",
-      "text": "Outside of Coinbase, did any other major service have a 8-hour outage?\n\nI’ll be honest: did not notice anything else. Want to make sure I didn’t miss anything?\n\n(AWS had an outage in a single AZ. This should have… NOT taken down any service with resiliency 101)",
-      "created_at": "2026-05-08T10:51:03.000Z",
-      "age_hours": 2,
-      "likes": 427,
-      "replies": 28,
-      "reposts": 6,
-      "views": 39909,
-      "author_followers": 332488
+      "handle": "OpenAIDevs",
+      "tweet_id": "2052830440864780761",
+      "url": "https://x.com/OpenAIDevs/status/2052830440864780761",
+      "text": "Available until the goblins notice.\n\nhttps://t.co/Ymb4PN6nqc https://t.co/nz0IZL0rO8 https://t.co/s8xFvg3zZ4",
+      "created_at": "2026-05-08T19:18:11.000Z",
+      "age_hours": 1.5,
+      "likes": 573,
+      "replies": 121,
+      "reposts": 33,
+      "views": 82598,
+      "author_followers": 330045
     },
     {
-      "handle": "TKopelman",
-      "tweet_id": "2052723752169885838",
-      "url": "https://x.com/TKopelman/status/2052723752169885838",
-      "text": "You don't need a complicated or complex investment strategy to be successful\n\nYou need a simple one you actually stick to\n\nBoring wins in investing",
-      "created_at": "2026-05-08T12:14:14.000Z",
-      "age_hours": 0.6,
-      "likes": 8,
-      "replies": 2,
-      "reposts": 0,
-      "views": 428,
-      "author_followers": 39893
-    },
-    {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2052697587330036144",
-      "url": "https://x.com/shawnchauhan1/status/2052697587330036144",
-      "text": "For nine years, CB Insights ran its AI 100 without a Physical AI category.\n\nThis year, 11 companies made the list under that label alone.\n\nRobotics software. Autonomous hardware. Chips designed for bodies in motion.\n\nThis is not a trend. It is a reclassification.\nThe industry is ",
-      "created_at": "2026-05-08T10:30:16.000Z",
-      "age_hours": 2.3,
-      "likes": 3,
-      "replies": 0,
+      "handle": "SahilBloom",
+      "tweet_id": "2052835380857016695",
+      "url": "https://x.com/SahilBloom/status/2052835380857016695",
+      "text": "What's one thing you find exciting that most people find boring?",
+      "created_at": "2026-05-08T19:37:49.000Z",
+      "age_hours": 1.2,
+      "likes": 81,
+      "replies": 140,
       "reposts": 3,
-      "views": 311,
-      "author_followers": 32113
+      "views": 22821,
+      "author_followers": 1158495
     },
     {
-      "handle": "TKopelman",
-      "tweet_id": "2052704676202569924",
-      "url": "https://x.com/TKopelman/status/2052704676202569924",
-      "text": "People often judge financial advisors by one thing:\n\n“Did you beat the S&amp;P 500?”\n\nBut that's not how real financial planning works\n\nA good financial advisor is not just picking investments\n\nThey help you:\n\n- Organize your entire financial life\n- Understand your cash flow\n- Ma",
-      "created_at": "2026-05-08T10:58:26.000Z",
-      "age_hours": 1.9,
-      "likes": 9,
+      "handle": "SahilBloom",
+      "tweet_id": "2052829116416557393",
+      "url": "https://x.com/SahilBloom/status/2052829116416557393",
+      "text": "My son is deep in the “why” phase right now. Something I’ve noticed is that it’s hard to go too deep down the “why” rabbit hole without ultimately arriving at something that sounds like God.",
+      "created_at": "2026-05-08T19:12:55.000Z",
+      "age_hours": 1.6,
+      "likes": 214,
+      "replies": 52,
+      "reposts": 8,
+      "views": 15972,
+      "author_followers": 1158495
+    },
+    {
+      "handle": "GergelyOrosz",
+      "tweet_id": "2052831557480521754",
+      "url": "https://x.com/GergelyOrosz/status/2052831557480521754",
+      "text": "When the CEO of Coinbase said \"non-technical teams are now shipping production code\" I assume it's things like marketing now makes copy updates to a small site w/o a dev or similar.\n\nBut now half the internet thinks this caused the Coinbase outage two days later, when it did not.",
+      "created_at": "2026-05-08T19:22:37.000Z",
+      "age_hours": 1.5,
+      "likes": 244,
+      "replies": 23,
+      "reposts": 2,
+      "views": 18109,
+      "author_followers": 332612
+    },
+    {
+      "handle": "jasonlk",
+      "tweet_id": "2052851281157341580",
+      "url": "https://x.com/jasonlk/status/2052851281157341580",
+      "text": "Ok we're hiring a human to report to the AI VP Marketing we built on @Replit \n\nIs this crazy? Is this the future? Could it be ... better to report to an AI?\n\n@amasad and I will discuss next week at SaaStr AI Annual 2026! May 12-14 in SF Bay!!  \n\nBring your team.  Leave agentic ht",
+      "created_at": "2026-05-08T20:41:00.000Z",
+      "age_hours": 0.2,
+      "likes": 1,
       "replies": 0,
       "reposts": 0,
-      "views": 1037,
-      "author_followers": 39893
-    },
-    {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2052720339478864241",
-      "url": "https://x.com/shawnchauhan1/status/2052720339478864241",
-      "text": "A legal AI company just hired Jude Law as its spokesperson.\n\nLegora is valued at $5.6 billion. Closed $600 million in two months.\nAnd they chose a Hollywood actor over a white paper.\n\nThis is a signal about where enterprise AI marketing is heading.\n\nThe technical sale is already ",
-      "created_at": "2026-05-08T12:00:41.000Z",
-      "age_hours": 0.8,
-      "likes": 5,
-      "replies": 0,
-      "reposts": 1,
-      "views": 148,
-      "author_followers": 32113
+      "views": 375,
+      "author_followers": 239577
     }
   ]
 }
