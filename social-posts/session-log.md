@@ -886,3 +886,37 @@ Open items for next slot:
   - yt-dlp install.
   - drip persistence bug.
   - reply-detector autoresponder false-positive bug.
+
+### /afternoon — 2026-05-08 13:30 UTC
+- Bot health: openclaw-gateway + automatyn-api + x-gate-poller all active. /api/health 200.
+- X status: @patrickssons OK, **129 followers / 745 tweets** (-1f, +7t since /morning — Pat posted 7 of 8 morning drafts, lost 1 follower).
+- SEO Daily: cloud trigger remains DISABLED. Local `seo-daily.timer` next fire 2026-05-09 10:05 UTC. Today's blog already shipped via 07:32 recovery run (commit ede824e). One blog/day cadence holding.
+- X dual-channel:
+  - API 5 reads ($0.53/$4.50 month), 5 candidates kept. Saved to candidates-api-fresh.json.
+  - Browser scrape 55 candidates / 35 handles.
+  - Dedupe + <6h: 12 fresh, all NEW (none in morning's drafts).
+- **11 unified drafts** (1 original + 10 hand-drafted replies). Above target.
+- Drafts targets: GergelyOrosz 332k (x3 - Coinbase-blast-radius, Cloud→AI-org-flip, Linear-trial-week), TKopelman 40k (x2 - simple-strategy-trades, S&P-question), shawnchauhan1 32k (x3 - Legora-moat, 80x-reluctance, Physical-AI-home-robot), TTrimoreau 8k (x2 - shipped-count + Friday-link drop).
+- **Friday link rule:** r7 includes one automatyn.co/pricing.html link in reply to TTrimoreau's "drop your product's link" thread. Compliant.
+- Drafts page: https://automatyn.co/x-private/afternoon-BDpDN6cAOTI/. Telegram msg 176 sent.
+- Reddit pipeline: webhook 200.
+- Reply detector 7h: **14 inbox msgs scanned, 0 replies, 0 bounces.**
+- **Outreach this slot: SKIPPED ALL.** Pool dry across queues: E1=0, E2=0, E3=0. Same UK-trades enrich-channel mismatch as last 2 days. Did not run ingest+enrich (proven 0/30 yield on 05-07 — channel wrong, not script). Did not run sender.
+- **Outreach today total:** E1 **0** / E2 **10** / E3 **0** = **10 emails sent today** (all from /morning).
+- **Outreach lifetime:** 208 E1 / 202 E2 / 181 E3 = **591 total**. Pool 781/206/208.
+- Signups last 7h: **0 new** (23 total). 0 caps.
+- TikTok: yt-dlp still missing. Carousels SKIPPED (Postiz paused).
+- LinkedIn: SKIPPED (Postiz paused). Dev.to/Medium: SKIPPED (local SEO Daily currently doesn't run distribution).
+- **Image audit decision still open** from /morning: blog hero teal-cast + garbled fake text. Next routine pick (a) re-roll, (b) patch script, or (c) both.
+- Open items carried (active):
+  - Blog image audit decision (above).
+  - Outreach pool dry — needs ICP/channel decision (UK trades have no website email).
+  - Sender null-email guard.
+  - Sender double-send concurrency lock.
+  - X drafts angle-matcher upgrade.
+  - candidates.json file collision (manual workaround).
+  - GMAIL_APP_PASSWORD missing.
+  - outreach/monitor.js not running (last entry 2026-05-04).
+  - yt-dlp install.
+  - drip persistence bug.
+  - reply-detector autoresponder false-positive.

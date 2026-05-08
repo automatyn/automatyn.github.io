@@ -1,5 +1,5 @@
 {
-  "scraped_at": "2026-05-08T08:02:32.009Z",
+  "scraped_at": "2026-05-08T12:50:29.328Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
@@ -8,75 +8,75 @@
     "skippedContent": 0
   },
   "budget": {
-    "used": 100,
+    "used": 105,
     "cap": 900,
-    "remaining": 800
+    "remaining": 795
   },
   "candidates": [
     {
       "handle": "GergelyOrosz",
-      "tweet_id": "2052617506334900667",
-      "url": "https://x.com/GergelyOrosz/status/2052617506334900667",
-      "text": "Unfortunate optics for Coinbase to have an hours-long outage when customers could not trade, a few days after their CEO said how non-technical teams are shipping code to production.\n\nThis outage is because Coinbase seems to have a hard dependency on AWS, and when AWS (or a part h",
-      "created_at": "2026-05-08T05:12:03.000Z",
-      "age_hours": 2.8,
-      "likes": 602,
-      "replies": 35,
-      "reposts": 36,
-      "views": 55601,
-      "author_followers": 332426
+      "tweet_id": "2052702817819795965",
+      "url": "https://x.com/GergelyOrosz/status/2052702817819795965",
+      "text": "Outside of Coinbase, did any other major service have a 8-hour outage?\n\nI’ll be honest: did not notice anything else. Want to make sure I didn’t miss anything?\n\n(AWS had an outage in a single AZ. This should have… NOT taken down any service with resiliency 101)",
+      "created_at": "2026-05-08T10:51:03.000Z",
+      "age_hours": 2,
+      "likes": 427,
+      "replies": 28,
+      "reposts": 6,
+      "views": 39909,
+      "author_followers": 332488
     },
     {
-      "handle": "GergelyOrosz",
-      "tweet_id": "2052612980433379654",
-      "url": "https://x.com/GergelyOrosz/status/2052612980433379654",
-      "text": "Remember these predictions?\n\n“Software engineering will be dead because of AI” —&gt; we’re seeing more demand for sw engineering (good part thanks to AI)\n\n“SaaS will be dead because of AI” —&gt; SaaS businesses growing massively (in part thanks to AI)\n\nBe careful what you believe",
-      "created_at": "2026-05-08T04:54:04.000Z",
-      "age_hours": 3.1,
-      "likes": 299,
-      "replies": 42,
-      "reposts": 28,
-      "views": 16602,
-      "author_followers": 332426
-    },
-    {
-      "handle": "GergelyOrosz",
-      "tweet_id": "2052614969888297357",
-      "url": "https://x.com/GergelyOrosz/status/2052614969888297357",
-      "text": "Remind me how every manager at Coinbase doing IC work, some with 15+reports will help generate more revenue, when revenue is fully dependent on trading volume, and trading volume is falling?\n\nunless these managers code up new businesses not dependent on this market ofc… https://t",
-      "created_at": "2026-05-08T05:01:59.000Z",
-      "age_hours": 3,
-      "likes": 384,
-      "replies": 9,
-      "reposts": 13,
-      "views": 37220,
-      "author_followers": 332426
-    },
-    {
-      "handle": "jasonlk",
-      "tweet_id": "2052622523804893198",
-      "url": "https://x.com/jasonlk/status/2052622523804893198",
-      "text": "2.5 days can change your roadmap. Your hiring plan. Your pricing strategy. Your fundraising narrative. \n\nSaaStr AI 2026 does that every year. \n\nThis year is the biggest one yet. \n\nMay 12-14. SF Bay. https://t.co/Zou0kioofV",
-      "created_at": "2026-05-08T05:32:00.000Z",
-      "age_hours": 2.5,
-      "likes": 12,
-      "replies": 3,
-      "reposts": 2,
-      "views": 1257,
-      "author_followers": 239527
+      "handle": "TKopelman",
+      "tweet_id": "2052723752169885838",
+      "url": "https://x.com/TKopelman/status/2052723752169885838",
+      "text": "You don't need a complicated or complex investment strategy to be successful\n\nYou need a simple one you actually stick to\n\nBoring wins in investing",
+      "created_at": "2026-05-08T12:14:14.000Z",
+      "age_hours": 0.6,
+      "likes": 8,
+      "replies": 2,
+      "reposts": 0,
+      "views": 428,
+      "author_followers": 39893
     },
     {
       "handle": "shawnchauhan1",
-      "tweet_id": "2052637208860086582",
-      "url": "https://x.com/shawnchauhan1/status/2052637208860086582",
-      "text": "Anthropic just committed $200 billion to Google over five years.\n\nThe same Google that has invested billions into Anthropic.\nThe money goes out, comes back, goes out again.\n\nCloud giants fund AI labs.\nAI labs then become the largest customers of those same cloud giants.\n\nIt looks",
-      "created_at": "2026-05-08T06:30:21.000Z",
-      "age_hours": 1.5,
-      "likes": 8,
+      "tweet_id": "2052697587330036144",
+      "url": "https://x.com/shawnchauhan1/status/2052697587330036144",
+      "text": "For nine years, CB Insights ran its AI 100 without a Physical AI category.\n\nThis year, 11 companies made the list under that label alone.\n\nRobotics software. Autonomous hardware. Chips designed for bodies in motion.\n\nThis is not a trend. It is a reclassification.\nThe industry is ",
+      "created_at": "2026-05-08T10:30:16.000Z",
+      "age_hours": 2.3,
+      "likes": 3,
       "replies": 0,
       "reposts": 3,
-      "views": 329,
-      "author_followers": 32114
+      "views": 311,
+      "author_followers": 32113
+    },
+    {
+      "handle": "TKopelman",
+      "tweet_id": "2052704676202569924",
+      "url": "https://x.com/TKopelman/status/2052704676202569924",
+      "text": "People often judge financial advisors by one thing:\n\n“Did you beat the S&amp;P 500?”\n\nBut that's not how real financial planning works\n\nA good financial advisor is not just picking investments\n\nThey help you:\n\n- Organize your entire financial life\n- Understand your cash flow\n- Ma",
+      "created_at": "2026-05-08T10:58:26.000Z",
+      "age_hours": 1.9,
+      "likes": 9,
+      "replies": 0,
+      "reposts": 0,
+      "views": 1037,
+      "author_followers": 39893
+    },
+    {
+      "handle": "shawnchauhan1",
+      "tweet_id": "2052720339478864241",
+      "url": "https://x.com/shawnchauhan1/status/2052720339478864241",
+      "text": "A legal AI company just hired Jude Law as its spokesperson.\n\nLegora is valued at $5.6 billion. Closed $600 million in two months.\nAnd they chose a Hollywood actor over a white paper.\n\nThis is a signal about where enterprise AI marketing is heading.\n\nThe technical sale is already ",
+      "created_at": "2026-05-08T12:00:41.000Z",
+      "age_hours": 0.8,
+      "likes": 5,
+      "replies": 0,
+      "reposts": 1,
+      "views": 148,
+      "author_followers": 32113
     }
   ]
 }
