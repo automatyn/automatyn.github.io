@@ -62,7 +62,9 @@ Log the analytics numbers in the session log every routine so we can see trend a
 
 ## Step 3aa: Dual-channel X reply pipeline
 
-**Daily aim: 30-50 replies. Half via X API, half via scrape.** Across 3 sessions = **5-9 API + 5-9 scrape per slot**. Default to 5+5 (=10/slot, 30/day floor); push to 8+8 if quality candidates available (=48/day).
+> **Note (2026-05-09):** A separate `x-firehose.timer` runs every 30 min (06-22 UTC) and pushes ~80-150 reply drafts/day to Telegram autonomously, using browser scrape + fxtwitter (no API writes). This routine's X-drafts step is now SUPPLEMENTARY to the firehose, not the primary supply. Light scrape here just to give the firehose's next cycle fresh candidates.
+
+**Daily aim: 30-50 routine-drafted replies on top of the firehose's ~100/day.** Across 3 sessions = **5-9 API + 5-9 scrape per slot**. Default to 5+5 (=10/slot, 30/day floor); push to 8+8 if quality candidates available (=48/day).
 
 Two sources, both produce intent-URL drafts (no API writes — sidesteps cold-reply 403).
 
@@ -71,22 +73,22 @@ Two sources, both produce intent-URL drafts (no API writes — sidesteps cold-re
 cd /home/marketingpatpat/openclaw/social-posts/x-drafts
 X_BEARER_TOKEN='<see reference_x_api_keys.md>' node scrape-via-api.js 5 24
 # Reads ~$0.005 each. 5/slot × 3 = 15/day = $2.25/month. 8/slot = $3.60/month.
-# Output: candidates.json (sorted by engagement)
+# Output: candidates-api.json (per-source file as of 2026-05-09; old shared candidates.json deprecated)
 ```
 
 **Source 2 — Browser-use scrape (5-9/slot, free):**
 ```bash
-timeout 700 node scrape-targets.js 24 5   # CDP 18800, ~35 handles
+timeout 700 node scrape-targets.js 24 5   # CDP 18800, ~35 handles → candidates-browser.json
 ```
 
 **Draft + send to Telegram (both sources):**
-- Read top 5-9 from each source's candidates.json (match the API count for parity)
+- `draft-from-candidates.js` now MERGES candidates-api.json + candidates-browser.json + candidates-search.json + legacy candidates.json (deduped by tweet id)
 - Verify each target's age <6h via fxtwitter (mandatory, feedback_x_reply_recency.md)
 - Verify follower count >1k unless warm chain (feedback_x_analytics_gated_drafts.md)
 - Draft replies that **make the author reply back** — direct questions to author, mild contrarian takes, asks for their data/anecdote. Reply-bait > observation. (Algo: reply-back = 150x impressions per reference_x_algorithm.md)
 - All drafts <200 chars, no em dashes, no AI buzzwords
-- Send each as Telegram message to @automatyntweetbot with intent URL button:
-  `https://twitter.com/intent/tweet?in_reply_to=<tweet_id>&text=<encoded_reply>`
+- Telegram intent URL format (parameter order matters — `in_reply_to` BEFORE `text`):
+  `https://x.com/intent/tweet?in_reply_to=<tweet_id>&text=<encoded_reply>`
 
 If either source returns 0 candidates, skip that source and log; do not lower quality bar.
 
