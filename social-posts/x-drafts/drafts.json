@@ -87,6 +87,30 @@
       "draft": "What's the one talk you're most nervous won't land? The 'most important one ever' framing usually means there's a session that has to convert and you're sweating it.",
       "char_count": 165,
       "reason": "Same OP. Pulls a genuine confession out of him if he replies. Both jasonlk replies will be fine if both posted (different threads)."
+    },
+    {
+      "id": "r6",
+      "type": "reply",
+      "target_handle": "TTrimoreau",
+      "target_age": "4.3h",
+      "target_text": "You can only keep one for the next 5 years: audience, product, skills, network",
+      "target_url": "https://x.com/TTrimoreau/status/2052930301744095545",
+      "tweet_id": "2052930301744095545",
+      "draft": "Audience. Product is a snapshot, audience compounds. I've tried to rebuild from scratch twice and skill comes back fast, audience does not. What's your gut answer?",
+      "char_count": 163,
+      "reason": "Browser source. Pure conversation starter, OP will pick a winner. Low risk of skip."
+    },
+    {
+      "id": "r7",
+      "type": "reply",
+      "target_handle": "MahlumAI",
+      "target_age": "3.2h",
+      "target_text": "The 'agentic AI' pitch right now reminds me of RPA in 2018. Same promise: it works end-to-end, no humans needed. Same reality: brittle pipelines, silent failures, and someone on a Slack channel handling exceptions.",
+      "target_url": "https://x.com/MahlumAI/status/2052946711350280384",
+      "tweet_id": "2052946711350280384",
+      "draft": "This is the cleanest version of that take I've read. The closest analog is also the bots-vs-RPA gap of who owns the failure mode. Who do your clients call when the agent silently drops a spec?",
+      "char_count": 192,
+      "reason": "Browser source. Directly on our positioning thesis (we are the human in the failure-mode loop). Small account but right audience."
     }
   ]
 }
