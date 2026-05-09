@@ -81,15 +81,146 @@ function cmdStats() {
   console.log(store.stats());
 }
 
+// =============================================================
+// Auto-personalise: deterministic intro_line from existing data.
+// Uses rating, review_count, city, and a single tagline scraped from
+// the homepage (h1/meta-description/first-paragraph). Quality is
+// lower than a hand-written intro but unblocks the pipeline when
+// volume is the goal.
+// =============================================================
+
+async function fetchHomepage(url, timeoutMs = 10000) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      signal: ctl.signal,
+      redirect: 'follow',
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Automatyn/1.0)' },
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch { return null; }
+  finally { clearTimeout(t); }
+}
+
+function stripTags(html) {
+  return html.replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function extractTagline(html) {
+  // Try meta description, then h1, then first paragraph
+  const metaDesc = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i)
+    || html.match(/<meta\s+content=["']([^"']+)["']\s+name=["']description["']/i);
+  if (metaDesc) return metaDesc[1].trim();
+  const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  if (h1) {
+    const cleaned = stripTags(h1[1]);
+    if (cleaned.length > 8 && cleaned.length < 200) return cleaned;
+  }
+  const p = html.match(/<p[^>]*>([\s\S]{40,300}?)<\/p>/i);
+  if (p) {
+    const cleaned = stripTags(p[1]);
+    if (cleaned.length > 30) return cleaned.slice(0, 180);
+  }
+  return null;
+}
+
+const SPECIALITY_KEYWORDS = [
+  ['boiler', 'boilers'],
+  ['emergency', 'emergency callouts'],
+  ['gas safe', 'Gas Safe work'],
+  ['leak', 'leak repairs'],
+  ['drain', 'drain unblocking'],
+  ['cylinder', 'unvented cylinders'],
+  ['underfloor', 'underfloor heating'],
+  ['power flush', 'power flushing'],
+  ['bathroom', 'bathroom installs'],
+  ['heating', 'heating systems'],
+  ['radiator', 'radiator work'],
+  ['commercial', 'commercial plumbing'],
+  ['landlord', 'landlord gas safety checks'],
+  ['24/7', '24/7 callouts'],
+  ['24 hour', '24 hour callouts'],
+];
+
+function extractSpeciality(text) {
+  const lower = text.toLowerCase();
+  for (const [needle, label] of SPECIALITY_KEYWORDS) {
+    if (lower.includes(needle)) return label;
+  }
+  return null;
+}
+
+function buildIntroLine(lead, speciality) {
+  const rating = lead.rating;
+  const reviews = lead.review_count;
+  const city = lead.city;
+  // Tier 1: rating + reviews (strong proof point)
+  if (rating && reviews && reviews >= 30) {
+    if (speciality) {
+      return `Saw the ${rating}-star streak across ${reviews}+ reviews and the ${speciality} focus.`;
+    }
+    return `Saw the ${rating}-star streak across ${reviews}+ Google reviews in ${city}.`;
+  }
+  // Tier 2: speciality only
+  if (speciality) {
+    return `Noticed your ${speciality} focus on the site.`;
+  }
+  // Tier 3: rating only
+  if (rating && reviews) {
+    return `Saw the ${rating}-star rating across ${reviews} Google reviews in ${city}.`;
+  }
+  // Tier 4: reviews only
+  if (reviews && reviews >= 20) {
+    return `Saw the ${reviews}+ Google reviews in ${city}.`;
+  }
+  // Tier 5: city only (weakest, last resort)
+  if (city) {
+    return `Saw your work covering ${city}.`;
+  }
+  return null;
+}
+
+async function cmdAuto(limit) {
+  const leads = store.listNeedingPersonalisation(limit);
+  console.log(`Auto-personalising ${leads.length} leads...`);
+  let ok = 0, skip = 0;
+  for (const lead of leads) {
+    let speciality = null;
+    if (lead.website) {
+      const url = lead.website.startsWith('http') ? lead.website : 'https://' + lead.website;
+      const html = await fetchHomepage(url);
+      if (html) {
+        const tagline = extractTagline(html);
+        speciality = extractSpeciality((tagline || '') + ' ' + stripTags(html).slice(0, 4000));
+      }
+    }
+    const intro = buildIntroLine(lead, speciality);
+    if (!intro) { skip++; console.log(`  · ${lead.business_name} — no signal`); continue; }
+    if (intro.length < 10 || intro.length > 240) { skip++; continue; }
+    store.update(lead.id, { intro_line: intro });
+    ok++;
+    console.log(`  ✓ ${lead.business_name} → ${intro}`);
+  }
+  console.log(`Done. Personalised ${ok}, skipped ${skip}.`);
+}
+
 const [cmd, ...args] = process.argv.slice(2);
 if (cmd === 'list') cmdList(parseInt(args[0], 10) || 20);
 else if (cmd === 'set') cmdSet(args[0], args.slice(1).join(' '));
 else if (cmd === 'name') cmdName(args[0], args.slice(1).join(' '));
 else if (cmd === 'stats') cmdStats();
+else if (cmd === 'auto') cmdAuto(parseInt(args[0], 10) || 20).catch(err => { console.error(err); process.exit(1); });
 else {
   console.log('Commands:');
   console.log('  list [N]            — print next N leads needing intro_line as JSON');
-  console.log('  set <id> "<line>"   — save intro_line for lead');
+  console.log('  auto [N]            — auto-write intro_line from rating/reviews/scraped tagline');
+  console.log('  set <id> "<line>"   — save intro_line for lead (manual)');
   console.log('  name <id> "<name>"  — save scraped first_name for lead');
   console.log('  stats               — show store stats');
 }

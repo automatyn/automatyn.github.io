@@ -19,6 +19,8 @@
 // Gmail Sent folder — check Brevo dashboard (app.brevo.com/statistics/transactional)
 // for delivery logs.
 
+require('./load-env'); // load /etc/automatyn-api.env for ad-hoc CLI runs (no-op under systemd)
+
 const https = require('https');
 const crypto = require('crypto');
 const store = require('./leads-store');
@@ -179,11 +181,11 @@ async function sendOne(transport, lead, step, dryRun) {
 }
 
 async function run(step, limit, dryRun) {
+  const fs = require('fs');
+  const path = require('path');
   // monitor.js writes outreach/HALT on bounce/spam alarms. Respect it.
   if (!dryRun) {
     try {
-      const fs = require('fs');
-      const path = require('path');
       const haltPath = path.join(__dirname, 'HALT');
       if (fs.existsSync(haltPath)) {
         const reason = fs.readFileSync(haltPath, 'utf8');
@@ -193,6 +195,52 @@ async function run(step, limit, dryRun) {
       }
     } catch {}
   }
+
+  // Per-step concurrency lock: prevent two parallel sender runs for the same
+  // step from double-sending the same leads. Different steps (e1/e2/e3) can
+  // still run in parallel — they touch disjoint queues.
+  const lockPath = path.join(__dirname, `sender-step${step}.lock`);
+  let lockFd = null;
+  if (!dryRun) {
+    try {
+      // O_CREAT | O_EXCL fails if file exists — atomic acquire
+      lockFd = fs.openSync(lockPath, 'wx');
+      fs.writeSync(lockFd, JSON.stringify({ pid: process.pid, step, startedAt: new Date().toISOString() }));
+    } catch (err) {
+      if (err.code === 'EEXIST') {
+        const stale = fs.readFileSync(lockPath, 'utf8');
+        let staleInfo = {};
+        try { staleInfo = JSON.parse(stale); } catch {}
+        // Detect stale lock: if pid is dead, take it over
+        let alive = false;
+        if (staleInfo.pid) {
+          try { process.kill(staleInfo.pid, 0); alive = true; }
+          catch (e) { alive = (e.code === 'EPERM'); }
+        }
+        if (alive) {
+          console.error(`Another sender for step ${step} is running (pid ${staleInfo.pid}, started ${staleInfo.startedAt}). Skipping.`);
+          return;
+        }
+        console.warn(`Stale lock from dead pid ${staleInfo.pid}; reclaiming.`);
+        fs.unlinkSync(lockPath);
+        lockFd = fs.openSync(lockPath, 'wx');
+        fs.writeSync(lockFd, JSON.stringify({ pid: process.pid, step, startedAt: new Date().toISOString() }));
+      } else {
+        throw err;
+      }
+    }
+  }
+  const releaseLock = () => {
+    if (lockFd !== null) {
+      try { fs.closeSync(lockFd); } catch {}
+      try { fs.unlinkSync(lockPath); } catch {}
+      lockFd = null;
+    }
+  };
+  // Ensure lock is released on any process exit signal
+  process.once('SIGINT',  () => { releaseLock(); process.exit(130); });
+  process.once('SIGTERM', () => { releaseLock(); process.exit(143); });
+  process.once('exit',    () => { releaseLock(); });
   const queue = pickQueue(step);
   let max = limit === Infinity ? queue.length : limit;
 
@@ -231,6 +279,7 @@ async function run(step, limit, dryRun) {
     }
   }
   console.log(`Done. Sent ${sent}, failed ${failed}.`);
+  releaseLock();
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }

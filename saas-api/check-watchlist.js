@@ -94,7 +94,8 @@ function ageStr(ms) {
     const nowSilent = !cur.lastHit || (now - cur.lastHit > 3600000);
     const becameActive = cur.lastHit && (now - cur.lastHit < 1800000) && (!prev.lastHit || (now - prev.lastHit > 3600000));
 
-    if (becameActive) events.push(`👀 site traffic resumed (last visitor ${ageStr(now - cur.lastHit)} ago, ${cur.hitsLastHr} hits/hr)`);
+    // becameActive intentionally silent — Pat asked the watcher to track but not notify on routine site traffic.
+    // Real transitions (WA connect, first conv, drop-off, no-traffic) still alert below.
 
     // Stuck signals (only if NOT connected)
     if (!cur.whatsappConnected) {

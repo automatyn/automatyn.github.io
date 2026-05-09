@@ -47,9 +47,21 @@ function getAuthDir(agentId) {
  */
 async function startPairingCode(agentId, phoneNumber) {
   // Clean phone number: remove spaces, dashes, plus sign
-  const phone = phoneNumber.replace(/[\s\-\+\(\)]/g, '');
+  let phone = phoneNumber.replace(/[\s\-\+\(\)]/g, '');
+  // UK agents commonly type their number with the national 0 prefix (07496...).
+  // Baileys forwards that to WhatsApp as-is, WhatsApp rejects the JID, pair fails.
+  // Detect a UK national-format number and convert to E.164 (44...).
+  // Heuristic: 11 digits starting with "07" looks like a UK mobile in national format.
+  if (/^07\d{9}$/.test(phone)) {
+    phone = '44' + phone.slice(1);
+    console.log(`[whatsapp:${agentId}] normalized UK phone: ${phoneNumber} -> ${phone}`);
+  }
   if (!/^\d{10,15}$/.test(phone)) {
     throw new Error('Invalid phone number. Use format: 44XXXXXXXXXX (country code + number, no +)');
+  }
+  // Numbers starting with 0 are still in national format (other countries) and won't pair.
+  if (phone.startsWith('0')) {
+    throw new Error('Phone number must include country code (e.g. 44 for UK, no leading 0). You entered something starting with 0.');
   }
 
   // Kill any existing session for this agent
