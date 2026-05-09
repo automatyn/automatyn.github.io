@@ -3,12 +3,94 @@ const QRCode = require('qrcode');
 const pino = require('pino');
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
 const AGENTS_DIR = path.join(require('os').homedir(), '.openclaw', 'agents');
+const DATA_DIR = path.join(__dirname, 'data');
 const { loadConfig, saveConfig, reloadGateway, withConfigLock } = require('./provision');
 
 // Track active sessions per agent
 const activeSessions = new Map();
+
+// =============================================================================
+// PAIRING TELEMETRY
+// =============================================================================
+// Every QR/phone-code pair attempt logs an event to data/<agentId>.json's
+// `pairAttempts` array, so we can see what's failing and where users get stuck.
+// If a single agent racks up 3+ failures in 30 min, fire a Telegram alert to Pat
+// so he can intervene (the Adam pattern: 9 fails in 1 hour, no one noticed).
+
+const TG_TOKEN = process.env.TG_BOT_TOKEN || '8726414142:AAFQr-8dHxws5g9zZpu6IbjhmoN7b7lf8qc';
+const TG_CHAT  = process.env.TG_BOT_CHAT  || '5904617085';
+const FAILURE_ALERT_THRESHOLD = 3;
+const FAILURE_ALERT_WINDOW_MS = 30 * 60 * 1000;
+
+function _readAgent(agentId) {
+  const p = path.join(DATA_DIR, `${agentId}.json`);
+  if (!fs.existsSync(p)) return null;
+  try { return JSON.parse(fs.readFileSync(p, 'utf-8')); } catch { return null; }
+}
+
+function _writeAgent(agentId, agent) {
+  const p = path.join(DATA_DIR, `${agentId}.json`);
+  // Atomic write: tmp + rename
+  const tmp = p + '.tmp';
+  fs.writeFileSync(tmp, JSON.stringify(agent, null, 2));
+  fs.renameSync(tmp, p);
+}
+
+function _tgSend(text) {
+  // Fire-and-forget telegram alert. Errors swallowed so a TG outage doesn't break pairing.
+  try {
+    const body = JSON.stringify({ chat_id: TG_CHAT, text, disable_web_page_preview: true });
+    const req = https.request({
+      hostname: 'api.telegram.org',
+      path: `/bot${TG_TOKEN}/sendMessage`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+      timeout: 5000,
+    }, (res) => { res.on('data', () => {}); res.on('end', () => {}); });
+    req.on('error', () => {});
+    req.write(body); req.end();
+  } catch {}
+}
+
+/**
+ * Append a pair-flow event to the agent's record.
+ * @param {string} agentId
+ * @param {object} event - { method: 'qr'|'phone-code', stage: 'start'|'qr_shown'|'code_issued'|'success'|'failure', error?: string, statusCode?: number, durationMs?: number }
+ */
+function logPairEvent(agentId, event) {
+  const agent = _readAgent(agentId);
+  if (!agent) return; // anonymous test, skip
+  if (!Array.isArray(agent.pairAttempts)) agent.pairAttempts = [];
+  const entry = { at: new Date().toISOString(), ...event };
+  agent.pairAttempts.push(entry);
+  // Keep only the last 100 entries (rolling window)
+  if (agent.pairAttempts.length > 100) {
+    agent.pairAttempts = agent.pairAttempts.slice(-100);
+  }
+  // Update `lastPairAttempt` summary so reads don't have to scan the array
+  agent.lastPairAttempt = entry;
+  try { _writeAgent(agentId, agent); }
+  catch (e) { console.error(`[whatsapp:${agentId}] logPairEvent write failed:`, e.message); return; }
+
+  // Alert if this is a failure AND threshold-exceeding
+  if (event.stage === 'failure') {
+    const cutoff = Date.now() - FAILURE_ALERT_WINDOW_MS;
+    const recentFailures = agent.pairAttempts.filter(e =>
+      e.stage === 'failure' && new Date(e.at).getTime() >= cutoff
+    );
+    if (recentFailures.length === FAILURE_ALERT_THRESHOLD) {
+      // Only alert exactly at the threshold (not on every subsequent failure)
+      const businessName = agent.businessName || agent.agentId;
+      const lastErr = event.error || `code=${event.statusCode || 'unknown'}`;
+      const dashUrl = `https://automatyn.co/dashboard.html`;
+      const msg = `🚨 PAIR FAILING — ${businessName} (${agentId})\n${recentFailures.length} failures in 30 min.\nLast error: ${lastErr}\nDashboard: ${dashUrl}`;
+      _tgSend(msg);
+    }
+  }
+}
 
 // Cache the live WA Web version so we don't hit web.whatsapp.com on every pair attempt.
 let _waVersionCache = { version: null, fetchedAt: 0 };
@@ -46,6 +128,8 @@ function getAuthDir(agentId) {
  * WhatsApp > Linked Devices > Link with phone number > enter code.
  */
 async function startPairingCode(agentId, phoneNumber) {
+  const _pairStartedAt = Date.now();
+  logPairEvent(agentId, { method: 'phone-code', stage: 'start' });
   // Clean phone number: remove spaces, dashes, plus sign
   let phone = phoneNumber.replace(/[\s\-\+\(\)]/g, '');
   // UK agents commonly type their number with the national 0 prefix (07496...).
@@ -113,6 +197,7 @@ async function startPairingCode(agentId, phoneNumber) {
       if (connection === 'open') {
         if (currentState.creds.registered) {
           clearTimeout(timeout);
+          logPairEvent(agentId, { method: 'phone-code', stage: 'success', durationMs: Date.now() - _pairStartedAt });
           resolve({ connected: true });
         }
         // else: this is the pre-pair 'open' — wait for 515 reconnect cycle
@@ -145,15 +230,17 @@ async function startPairingCode(agentId, phoneNumber) {
             newSock.ev.on('connection.update', onUpdate);
             const stored = activeSessions.get(agentId);
             if (stored) stored.sock = newSock;
-          })().catch((e) => { clearTimeout(timeout); reject(e); });
+          })().catch((e) => { clearTimeout(timeout); logPairEvent(agentId, { method: 'phone-code', stage: 'failure', error: e.message, durationMs: Date.now() - _pairStartedAt }); reject(e); });
           return;
         }
         if (!currentState.creds.registered && !statusCode) {
           // Pre-pair silent close — pairing code becomes stale. User must request a new one.
           console.log(`[whatsapp:${agentId}] socket closed pre-pair, awaiting new pairing-code request`);
+          logPairEvent(agentId, { method: 'phone-code', stage: 'silent_close_pre_pair', error: errMsg });
           return;
         }
         clearTimeout(timeout);
+        logPairEvent(agentId, { method: 'phone-code', stage: 'failure', statusCode, error: errMsg, durationMs: Date.now() - _pairStartedAt });
         reject(new Error(`Pairing failed (${statusCode || 'no-code'}): ${errMsg}`));
       }
     };
@@ -168,8 +255,10 @@ async function startPairingCode(agentId, phoneNumber) {
   let pairingCode;
   try {
     pairingCode = await sock.requestPairingCode(phone);
+    logPairEvent(agentId, { method: 'phone-code', stage: 'code_issued' });
   } catch (err) {
     try { sock.end(); } catch {}
+    logPairEvent(agentId, { method: 'phone-code', stage: 'failure', error: `requestPairingCode: ${err.message}`, durationMs: Date.now() - _pairStartedAt });
     throw new Error(`Could not request pairing code: ${err.message}`);
   }
 
@@ -192,6 +281,8 @@ async function startPairingCode(agentId, phoneNumber) {
  * Returns a data URL with the QR code image.
  */
 async function startQrPairing(agentId) {
+  const _pairStartedAt = Date.now();
+  logPairEvent(agentId, { method: 'qr', stage: 'start' });
   // Kill any existing session for this agent
   await disconnectSession(agentId);
 
@@ -238,6 +329,7 @@ async function startQrPairing(agentId) {
         const { connection, lastDisconnect } = update;
         if (connection === 'open') {
           if (qrCurrentState.creds.registered) {
+            logPairEvent(agentId, { method: 'qr', stage: 'success', durationMs: Date.now() - _pairStartedAt });
             connResolve({ connected: true });
           }
           return;
@@ -273,6 +365,7 @@ async function startQrPairing(agentId) {
             return;
           }
           if (statusCode === DisconnectReason.loggedOut) {
+            logPairEvent(agentId, { method: 'qr', stage: 'failure', statusCode, error: 'logged out', durationMs: Date.now() - _pairStartedAt });
             connReject(new Error('WhatsApp logged out.'));
             activeSessions.delete(agentId);
             try {
@@ -283,7 +376,9 @@ async function startQrPairing(agentId) {
             // Pre-scan silent close from WA. QR becomes stale; user must request a new one.
             // Do NOT reject — that would surface an error before they've even tried.
             console.log(`[whatsapp:${agentId}] QR socket closed pre-scan, awaiting new QR request`);
+            logPairEvent(agentId, { method: 'qr', stage: 'silent_close_pre_scan', error: errMsg });
           } else {
+            logPairEvent(agentId, { method: 'qr', stage: 'failure', statusCode, error: errMsg, durationMs: Date.now() - _pairStartedAt });
             connReject(new Error(`Pairing failed (${statusCode || 'no-code'}): ${errMsg}`));
           }
         }
@@ -304,6 +399,7 @@ async function startQrPairing(agentId) {
             connectionPromise,
             createdAt: Date.now(),
           });
+          logPairEvent(agentId, { method: 'qr', stage: 'qr_shown' });
           resolve({ qrDataUrl, message: 'Scan this QR code with WhatsApp > Linked Devices > Link a Device' });
         } catch (err) {
           reject(err);
@@ -514,4 +610,5 @@ module.exports = {
   isWhatsAppConnected,
   unpairWhatsApp,
   setBotActive,
+  logPairEvent, // exported for tests + ad-hoc admin use
 };
