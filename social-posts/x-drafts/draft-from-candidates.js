@@ -320,28 +320,40 @@ function recentlyPushedTexts() {
 }
 const _recentTexts = recentlyPushedTexts();
 
+// Batch-scoped dedupe: track every draft text used in this drafter run so the
+// SAME text never goes to two different candidates in one cycle. Combined with
+// the 24h history dedupe in _recentTexts, this catches both:
+//   (a) same text repeated across runs (24h dedupe handles this)
+//   (b) same text repeated within a single run (this set handles this)
+const _batchUsedTexts = new Set();
+
 function pickDraft(text, candId) {
   for (const a of angles) {
     if (a.test(text)) {
       const idStr = String(candId || text);
       let h = 0;
       for (let i = 0; i < idStr.length; i++) h = (h * 31 + idStr.charCodeAt(i)) | 0;
-      // Score every variant. Penalty if recently-pushed: knock 10pts off so any non-recent
-      // variant beats it, but if ALL are recent, the highest-scoring still wins (graceful).
-      const scored = a.drafts.map((d, i) => ({
-        draft: d,
-        score: scoreDraft(d) - (_recentTexts.has(d.trim()) ? 10 : 0),
-        idx: i,
-      }));
-      // Find max score; collect ALL variants tied at max → rotate among them by hash.
+      // Score every variant. Penalty if recently-pushed (24h history) OR already
+      // used in THIS batch. Both penalties are -10 so any unused variant wins.
+      const scored = a.drafts.map((d, i) => {
+        const trimmed = d.trim();
+        const recencyPenalty = _recentTexts.has(trimmed) ? 10 : 0;
+        const batchPenalty   = _batchUsedTexts.has(trimmed) ? 10 : 0;
+        return {
+          draft: d,
+          score: scoreDraft(d) - recencyPenalty - batchPenalty,
+          idx: i,
+        };
+      });
       scored.sort((x, y) => y.score - x.score);
       const top = scored[0].score;
       const tied = scored.filter(s => s.score === top);
       const pick = tied[Math.abs(h) % tied.length];
-      // Reject if penalised score is <3 (means recently-pushed AND only-low-quality variants left).
       // Use the un-penalised score for the quality gate.
       const realScore = scoreDraft(pick.draft);
       if (realScore < 3) return null;
+      // Mark this text as used in the batch so subsequent picks avoid it.
+      _batchUsedTexts.add(pick.draft.trim());
       return { draft: pick.draft, reason: a.reason, score: realScore };
     }
   }
