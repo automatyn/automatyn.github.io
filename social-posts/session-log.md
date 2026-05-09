@@ -2,6 +2,63 @@
 
 Each command writes its results here after completing. The next command reads the most recent entry as a recap.
 
+### /morning — 2026-05-09 06:11 UTC
+
+**Gap context:** First /morning since 2026-05-03 (6-day gap). Hand-drafted morning/afternoon/evening commits from 2026-05-04 through 2026-05-07 are visible in git log. Today is the first auto run after the gap.
+
+**Bot health:** automatyn-api ✅ active · openclaw-gateway ✅ active. HALT file absent.
+
+**Triggers (live IDs, skill IDs are 404):**
+- `trig_0181Shnfp8365bssX5RUSykv` SEO Daily ✅ **re-enabled** (was disabled, fired yesterday at 10:00 UTC and auto-disabled). Next run 2026-05-09 10:05 UTC.
+- `trig_01WpmgSA1ekBuyC7KS4RudCg` SEO Audit weekly ✅ enabled (next Mon 2026-05-11 09:00 UTC).
+- `trig_01JZWRfoATR65zjmBZ9vZ5Xg` SEO Day-14 one-shot ran 2026-05-07, now scheduled 2027-05-07 (idempotent).
+
+**X status:** @patrickssons ✅ live, verified individual — **132 followers (+10 vs 2026-05-03's 122)**, 766 tweets (+130 since 2026-05-03's 636). Account analytics not pulled (browser-use deferred — capacity used on candidate scrape; will pull in /afternoon).
+
+**X drafts → Telegram (8 cards: 3 originals + 5 replies):**
+- Slot `morning-684cb4b1`, page at https://automatyn.co/social-posts/x-drafts/
+- Telegram message 178 sent to @automatyntweetbot.
+- Originals: o1 SMB-WhatsApp-bots-at-11pm (139c), o2 tradies-want-callback-time (187c), o3 AI-helped-us-cut-not-write (158c).
+- Replies (all <6h, all >100k followers, all reply-bait questions to author):
+  - r1 @alexalbert__ (Anthropic, 140k, 6.2h, Mythos 2x METR benchmark) — 185c
+  - r2 @AravSrinivas (Perplexity CEO, 496k, 3.2h, "monitor the situation") — 168c
+  - r3 @patio11 (193k, 5.1h, 1000km cardio plug) — 137c
+  - r4 @jasonlk (SaaStr, 239k, 4.9h, Claude Cowork sent calendar invites) — 159c
+  - r5 @jasonlk (239k, 2.6h, "most important SaaStr ever") — 165c
+- API budget: 115/900 reads used this month ($0.58 of $4.50). 1 write recorded. Plenty of headroom.
+- Browser-use scrape: started in background, still running at log time (>4 min in). Will check in /afternoon for additional candidates.
+
+**Reddit n8n:** webhook fired ✅ HTTP 200 `{"message":"Workflow was started"}`.
+
+**Outreach (highlights):**
+- **Reply detector ✅ working** (Gmail OAuth still good): scanned 12 inbox messages, 0 replies, 0 bounces.
+- **Pool fully starved: E1=0, E2=0, E3=0 ready.** All 4 sender batches **SKIPPED** because pool empty. Send order (E2→E1→E3) cannot run today.
+- Lead pool: 781 total · 206 with_email · 208 E1 sent · 202 E2 sent · 181 E3 sent · 7 unsub · 1 bounced · 0 replied tracked.
+- Brevo opens fetched: 12 events scanned, 9 matched. Cumulative E1 opens **43**, E2 **47**, E3 **28** (up from 2026-05-03's 34/23/15 — opens kept arriving over the 6-day gap, +9/+24/+13).
+- Variant diagnostic (14d, daily-report.js): overall **FULL RESET**. S2×C4_link, S1×C4_link, S3×C3_qualifier flagged FULL RESET (drop). S2×C1_binary (23.1% open), S1×C1_binary (27.3%), S2×C2_reverse (20.0%) flagged **FIX CTA** (subjects work, swap CTA). S3×C1_binary 50% open on 8 sends still INSUFFICIENT DATA but trending strong. Action for /afternoon: when pool refills, drop C4_link + C3_qualifier, double-down on C1_binary subjects with a swapped CTA.
+- **Ingest still blocked:** `node outreach/ingest.js` errors `GOOGLE_PLACES_API_KEY not set`. Was IP-allowlist issue on 2026-05-03 — possibly compounded by env var no longer set in service env. Needs Pat to fix.
+
+**SEO (GSC 7d):** **110 imp · 0 clicks · 0% CTR · avg pos 16.2.** Down from 2026-05-03's 171/1/0.58%/54.2 — impressions down 36%, but avg pos improved from 54.2 to 16.2 (huge jump, possibly because thin-content URLs dropped out of impressions, leaving stronger pages averaging higher). Top page still `/blog/passive-income-ai-agents-2026.html` (90 imp, pos 15.1 — quick-win still on the table). Top query "claude managed agents vs openclaw" pos 19.5. Quick-win audit fires Mon 2026-05-11 via SEO Audit weekly trigger. **Regression flag: 0 clicks vs 1 click on 2026-05-03 — small sample but worth watching.**
+
+**Signups overnight (last 14h):** 0 real.
+**Cap-hit:** only Test-Agent biz-test-race (Apr 21, not real customer).
+
+**Skipped (with reason):**
+- Step 3a X analytics: browser-use scrape took priority on the single CDP slot; deferred to /afternoon.
+- Step 4 TikTok carousels: Postiz subscription paused (per memory).
+- Step 5 TikTok stats: yt-dlp still not installed.
+- Step 6 LinkedIn: Postiz paused.
+- Step 7 Dev.to / Step 8 Medium: covered by SEO Daily trigger's distribution task at 10:05 UTC today.
+
+**Open issues (carried from prior runs):**
+1. GOOGLE_PLACES_API_KEY missing/blocked — E1 ingest dead, pool starves.
+2. Hetzner API token rotation pending (leaked in chat 2026-05-02).
+3. POSTIZ_API_KEY consolidation (separate from paused subscription).
+4. Adam @ AB Plumbing WhatsApp pairing.
+5. Browser-use scrape may need timeout tuning — has been running 4+ min with no output.
+
+---
+
 ### /morning — 2026-05-03 08:30 UTC
 
 **Bot health:** automatyn-api ✅ active · openclaw-gateway ✅ active.
