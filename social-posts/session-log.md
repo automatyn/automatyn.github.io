@@ -1067,3 +1067,37 @@ Open items for next slot:
   - yt-dlp install.
   - drip persistence bug.
   - reply-detector autoresponder false-positive.
+
+### /morning - 2026-05-10 13:30 UTC
+- X: 139 followers / 814 tweets (+9f/+59t since /evening 2026-05-08).
+- Skipped May 9 routines entirely (no entries).
+- **OUTREACH HALT ACTIVE** since 2026-05-10 00:00Z. HARD BOUNCE 9.8% (5/51). Sender skipped this routine.
+  - Reply detector failed: Gmail OAuth invalid_grant (refresh token expired). Open item.
+  - Variant diagnostic: ALL pairs insufficient data. Overall verdict: FULL RESET. 0 replies in 14 days.
+  - Pool: 263 with_email / 1948 total. E1 ready 8 / E2 ready 0 / E3 ready 20.
+  - Lifetime: 257 E1 / 202 E2 / 181 E3 / 5 bounces / 8 unsubs / 0 replies / 11 new opens 48h.
+- Triggers: old morning skill triggers (Content Machine, Medium Writer, Blog Writer) all 404. Skill is stale.
+  - SEO Daily fired today 10:10Z, shipped 1 blog (dentist UK, 89f9251).
+  - SEO Audit weekly + Accelera Mon-Fri + SEO Day-14 + Locations + Apr14 publish: all in expected state.
+- X drafts: skipped routine scrape (firehose is primary supply per skill).
+  - **Firehose degraded today**: pushing 0 reply drafts/cycle. scrape-targets-pw exiting null, search/fxt writing 0-candidate files. Big-account floor (30k) blocks all originals. Open item.
+- Reddit pipeline: webhook 200.
+- GSC 7d: 122 imp / 0 clk / 0% CTR / pos 17.9. Quick-win: can-you-really-make-money-with-ai (23 imp, pos 11.1).
+- Bot health: 5 services active (openclaw-gateway, automatyn-api, x-firehose.timer, x-gate-poller, seo-daily.timer).
+- Signups last 14h: 0 new (23 total).
+- TikTok / LinkedIn / Medium: skipped (Postiz paused, yt-dlp missing).
+- Dev.to: last article 2026-04-20 (20d old). Backfill open item.
+- Open items carried (active):
+  - **OUTREACH HALT** — needs Pat decision: clean lead pool / pause outreach / new ICP.
+  - **Variant diagnostic FULL RESET** — 0 replies in 14d means copy-market mismatch.
+  - **Gmail OAuth refresh token expired** — reply-detector blocked.
+  - **X firehose degraded** — scrape-targets-pw exiting null, 0 reply drafts pushed today.
+  - Image audit + script patch (carried from /evening 2026-05-08).
+  - Sender null-email guard, double-send concurrency lock.
+  - candidates.json file collision (manual workaround).
+  - GMAIL_APP_PASSWORD not set.
+  - outreach/monitor.js cron registration.
+  - yt-dlp install.
+  - drip persistence bug.
+  - reply-detector autoresponder false-positive.
+  - Dev.to backfill (last post 20d ago).
