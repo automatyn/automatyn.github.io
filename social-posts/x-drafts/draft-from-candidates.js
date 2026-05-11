@@ -12,7 +12,7 @@ const slot = process.argv[2] || 'morning';
 
 // Per-producer files. Legacy candidates.json is read as a fallback so older
 // runs (or any producer that hasn't been migrated) still work.
-const SOURCES = ['candidates-api.json', 'candidates-browser.json', 'candidates-search.json', 'candidates.json'];
+const SOURCES = ['candidates-api.json', 'candidates-browser.json', 'candidates-search.json', 'firehose-candidates.json', 'candidates.json'];
 const seen = new Set();
 const merged = [];
 let scrapedAt = null;
@@ -37,6 +37,17 @@ for (const fname of SOURCES) {
 }
 const cands = { scraped_at: scrapedAt, candidates: merged };
 console.log(`Merged candidate sources:`, sourceStats, `→ ${merged.length} unique`);
+
+// Dedupe vs Pat's own reply history. Cache refreshed by refresh-replied-cache.js.
+const repliedCacheFile = path.join(dir, 'replied-cache.json');
+const alreadyReplied = new Set();
+if (fs.existsSync(repliedCacheFile)) {
+  try {
+    const cache = JSON.parse(fs.readFileSync(repliedCacheFile, 'utf8'));
+    for (const id of (cache.replied_to || [])) alreadyReplied.add(String(id));
+    console.log(`Loaded ${alreadyReplied.size} already-replied ids from cache (updated ${cache.updated_at}).`);
+  } catch (err) { console.warn('replied-cache.json unreadable:', err.message); }
+}
 const today = new Date().toISOString().slice(0, 10);
 
 const originalPools = {
@@ -69,6 +80,12 @@ const originalPools = {
 //   6. No em-dashes, no banned hype words, no fake prices
 //
 // Each rule returns {draft, reason} when text triggers it. Order matters — first match wins.
+
+// Pain / intent signal — fires on tweets showing a problem, question, opinion,
+// or contrarian take. Used to gate generic-keyword angles (sales/hiring/marketing/
+// tech-trends/productivity/CX) so we don't reply to victory laps or pure
+// announcements. A tweet must hit BOTH the angle's topic regex AND this signal.
+const PAIN_SIGNAL = /(\?|nobody|hardest|worst|problem|broken|sucks|hate|annoying|frustrat|struggl|overwhelm|burn(out|ed)|tired|exhausted|drown|leak|losing|lost|wast|expensive|cheap|underrated|overrated|underbuilt|missed|forgot|underserved|untapped|gap|opportunity|why (does|do|are|is|isn|don)|how (do|does|come)|most .* (miss|skip|ignore|don.t|forget|get .* wrong|get .* backwards)|why (don|doesn|isn)|the (real|actual|honest|hidden|boring|unsexy) (version|truth|answer|lift|lever|cost)|nobody (says|talks|admits|mentions|builds|ships)|version (no one|nobody) (says|talks|mentions|admits)|where (does|do) the (money|customers?|growth|revenue) (go|live)|biggest (mistake|gap|miss|oversight)|controvers|unpopular|hot take|hottake|disagree|wrong about|i('m| am) (tired|sick) of)/i;
 const angles = [
   {
     name: 'speed-or-response-time',
@@ -207,7 +224,7 @@ const angles = [
   },
   {
     name: 'sales-or-revenue',
-    test: t => /\b(sales|MRR|ARR|pipeline|leads?|conversion|revenue|customers?|churn)\b/i.test(t),
+    test: t => /\b(sales|MRR|ARR|pipeline|leads?|conversion|revenue|customers?|churn)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The boring revenue lever nobody pulls: pick up the phone faster than competitors. 78% of buyers go with whoever replies first. Yet most SMBs reply in 4 hours.",
       "Pipeline isn't the bottleneck for most SMBs. Second-touch is. The lead came in, nobody followed up at 6pm Tuesday, gone forever.",
@@ -222,7 +239,7 @@ const angles = [
   },
   {
     name: 'hiring-or-team',
-    test: t => /\b(hiring|hire|team|employees|staff|recruit|first hire|payroll)\b/i.test(t),
+    test: t => /\b(hiring|hire|team|employees|staff|recruit|first hire|payroll)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The first hire most SMBs actually need isn't sales or marketing. It's whoever picks up the phone at 7pm. That role costs £30k/year. The AI version costs £30/month.",
       "Service businesses keep trying to hire receptionists in 2026. The honest version: a £30/mo AI does it, doesn't call in sick, and books the £400 job at 2am.",
@@ -237,7 +254,7 @@ const angles = [
   },
   {
     name: 'marketing-or-ads',
-    test: t => /\b(marketing|ads|advertis|google ads|facebook ads|seo|content marketing|growth hack)\b/i.test(t),
+    test: t => /\b(marketing|ads|advertis|google ads|facebook ads|seo|content marketing|growth hack)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "Most SMB marketing budgets are leaky buckets. £500/mo on Google Ads, then 40% of the calls that come in go to voicemail. The plug matters more than the tap.",
       "The cheapest marketing channel for trades is reply-time. Same lead, same ad spend, twice the conversion if you pick up in 2 mins instead of 2 hours.",
@@ -252,7 +269,7 @@ const angles = [
   },
   {
     name: 'whatsapp-or-messaging',
-    test: t => /\b(whatsapp|sms|texting|dm|messaging|messenger|inbox|chat)\b/i.test(t),
+    test: t => /\b(whatsapp|sms|texting|dm|messaging|messenger|inbox|chat)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "WhatsApp is where small-business customers actually talk to small businesses. Email is where they go to be ignored. The platforms get this backwards.",
       "98% open rate on WhatsApp vs 22% on email. Most SMBs still send their booking confirmations by email. The cost of that habit is enormous and invisible.",
@@ -267,7 +284,7 @@ const angles = [
   },
   {
     name: 'after-hours-or-247',
-    test: t => /\b(after hours|after-hours|24\/7|24x7|all night|midnight|weekend|out of hours|out-of-hours|on call|on-call|night shift)\b/i.test(t),
+    test: t => /\b(after hours|after-hours|24\/7|24x7|all night|midnight|weekend|out of hours|out-of-hours|on call|on-call|night shift)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "70% of plumbing emergencies happen between 6pm and 9am. Most plumbers don't answer in that window. Whoever does, books the £400 job. Simple math, hard execution.",
       "After-hours is the unfair advantage nobody wants to work for. Three weekday evenings of automated answering = one extra job/week = an extra holiday/year.",
@@ -282,7 +299,7 @@ const angles = [
   },
   {
     name: 'customer-experience',
-    test: t => /\b(customer experience|cx|customer service|service quality|support quality|friction|friction-free|frustrating|annoying)\b/i.test(t),
+    test: t => /\b(customer experience|cx|customer service|service quality|support quality|friction|friction-free|frustrating|annoying)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The CX moment customers actually remember isn't the polished one. It's whether anyone replied at 7pm on Tuesday. Most SMBs lose customers in that exact slot.",
       "Customer service quality isn't about scripts. It's about whether anyone answered. 90% of complaints to UK trades are 'I tried calling, nobody picked up.'",
@@ -297,7 +314,7 @@ const angles = [
   },
   {
     name: 'productivity-or-time',
-    test: t => /\b(productivity|productive|time management|busy|hustle|14[\- ]hour days?|work life balance|work-life|deep work|focus|distraction)\b/i.test(t),
+    test: t => /\b(productivity|productive|time management|busy|hustle|14[\- ]hour days?|work life balance|work-life|deep work|focus|distraction)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The honest productivity hack for solo operators: stop being your own receptionist. 2-3 hours/day go to admin a £30/mo bot would handle in seconds.",
       "Most 'work-life balance' advice for tradies is theoretical. The actual unlock is moving the phone off the boss's pocket so dinner stays uninterrupted.",
@@ -312,7 +329,7 @@ const angles = [
   },
   {
     name: 'founders-or-bootstrap',
-    test: t => /\b(founder|bootstrap|bootstrapped|self-funded|indie hacker|solopreneur|first \$\d+k|first £\d+k|got to \$|got to £|hit \$\d+k|hit £\d+k)\b/i.test(t),
+    test: t => /\b(founder|bootstrap|bootstrapped|self-funded|indie hacker|solopreneur|first \$\d+k|first £\d+k|got to \$|got to £|hit \$\d+k|hit £\d+k)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The unsexy founder lesson: most service-business revenue lives in the calls you're not picking up. Fix that one thing and the funnel suddenly looks healthy.",
       "Bootstrapped revenue grows fastest in the boring corners. Replying to leads in 2 mins instead of 2 hours doubles close-rate and costs you nothing.",
@@ -327,7 +344,7 @@ const angles = [
   },
   {
     name: 'tech-trends-broad',
-    test: t => /\b(AI agent|autonomous agent|agentic|workflow automation|n8n|zapier|make\.com|integrations?)\b/i.test(t),
+    test: t => /\b(AI agent|autonomous agent|agentic|workflow automation|n8n|zapier|make\.com|integrations?)\b/i.test(t) && PAIN_SIGNAL.test(t),
     drafts: [
       "The agent use-case nobody hypes: a £30/mo thing that picks up the phone at 11pm, qualifies the lead, books the job. Boring. Profitable. Already deployed.",
       "Agentic workflows for trades aren't research-paper material. They're 4 nodes long: call comes in, AI qualifies, calendar slot picked, SMS confirmation. That's it.",
@@ -406,6 +423,105 @@ const angles = [
       "Mobile-service operators (mechanics, tutors, dog groomers). They drive or work hands-on all day, can't pick up the phone. AI takes inbound, qualifies, books. Tiny per-customer ARR but enormous count and zero churn risk."
     ],
     reason: 'underserved-market question, direct answer with our segment'
+  },
+  {
+    name: 'ai-model-or-tool-take',
+    // OP shares a take/observation about AI models/tools. Reply with a contrarian
+    // dev-twitter angle — pure value, no SMB pitch.
+    test: t => /\b(Claude|GPT|gpt-?\d|Cursor|Codex|Copilot|Gemini|llama|Sonnet|Opus|Haiku|Anthropic|OpenAI|inference|context window|tokens?|RAG|fine[- ]?tune|model)\b/i.test(t) && PAIN_SIGNAL.test(t),
+    drafts: [
+      "The thing nobody benchmarks: how much of a model's 'intelligence' is actually prompt scaffolding the tester wrote weeks earlier. Strip that out and most leaderboards collapse.",
+      "The honest test for any model isn't ARC or MMLU. It's whether the same prompt gives the same answer on Tuesday and Saturday. Stability is the unmeasured axis everyone's quiet about.",
+      "Most model debates compare best-case outputs. The actual deployment cost is in P99 latency and the 3% of replies that go off-script. Nobody puts that in the marketing copy.",
+      "The unsexy version: the gap between top models is shrinking faster than benchmark scores suggest. The differentiation in 2026 is tooling around the model, not the model itself.",
+      "Actually the moats in AI are migrating from model weights to context layers. Whoever owns the eval set + the user feedback loop wins. The model becomes a commodity input.",
+      "Honest take that ages well: 'best model' debates look like 'best CPU' debates from 2008. They mattered for 6 months, then nobody cared. Same arc here, faster.",
+      "The thing tech-twitter keeps missing about models: the bottleneck for 90% of useful applications is data quality, not parameter count. Same work either way.",
+      "Worth re-reading: most 'X model is better' threads are downstream of which model the author has API credits in. Adjust accordingly."
+    ],
+    reason: 'AI model/tool contrarian take'
+  },
+  {
+    name: 'shipping-or-launch-announcement',
+    // OP shipped something. Reply with a useful insight other readers will engage with —
+    // not a congratulation, not a pitch.
+    test: t => /\b(shipped|just (launched|built|released)|announcing|happy to (ship|share)|launched (today|v\d)|new (feature|product|version)|finally (ship|launched|live))\b/i.test(t),
+    drafts: [
+      "The two-week pattern after every launch: usage spikes day 1-3, drops 60% by day 7, then either compounds or dies. Day 7 retention predicts the rest. Watch that number.",
+      "The hard part isn't shipping. It's deciding what NOT to add for the next 30 days while you watch what users actually do. Most launches die from feature-bloat in week 3.",
+      "Honest version of post-launch: 80% of feedback is wrong, 15% is irrelevant, 5% is the real signal. The skill is sitting with the noise without panic-shipping.",
+      "The version nobody admits: the most useful post-launch metric isn't signups. It's whether anyone OPENS the product on day 4 unprompted. That's the real activation.",
+      "Boring truth: launches that compound never had viral days. They had week-3 retention. Different metric, different team, different outcome.",
+      "Most launch threads brag about day-1 numbers. The same threads go quiet by day 30. The honest curve is what week 4 looks like, not what Product Hunt looked like.",
+      "Actually the unsexy lever post-launch is replying to the first 50 users personally. Most teams skip it for 'scaling.' The teams that don't, retain 3x.",
+      "The pattern most builders don't see: launches over-attribute to product, under-attribute to distribution. Same product on a different account = different launch."
+    ],
+    reason: 'launch take, useful general insight'
+  },
+  {
+    name: 'building-in-public-take',
+    // OP shares a journey/MRR/indie insight. Reply with a peer observation that resonates,
+    // no pitch, no salesy redirection.
+    test: t => /\b(build(ing)? in public|indie hacker|side project|MRR update|monthly revenue|first \$\d+|hit \$\d+k|year (one|two|of building)|solo dev|solopreneur)\b/i.test(t) && PAIN_SIGNAL.test(t),
+    drafts: [
+      "The pattern most indie threads skip: revenue growth doesn't track effort growth. You'll have a month where you do nothing and grow 20%, and a month of grinding where you flat-line. Detach.",
+      "Honest version of build-in-public: the publicly-shared MRR number is the only metric that gets optimised, which is why most indie growth tactics game it. Watch for the gap between MRR and net revenue.",
+      "The boring truth nobody puts in journey threads: the median solo SaaS founder makes $0 forever. The visible ones are survivor bias. Plan accordingly.",
+      "Most indie 'I quit my job' threads underestimate runway. The actual unspoken rule: 18 months of expenses or a partner's income. The math nobody tweets.",
+      "The version that ages well: indie SaaS isn't a product game. It's a distribution game with a product attached. Most builders learn this in year 2.",
+      "Actually the most under-reported indie lever is timezone. Building for buyers in your sleep window doubles compounding because support drops out of your day.",
+      "Worth re-reading: 'build in public' as a strategy works once. After year 2 the audience expects content, not progress. Different game, different muscle.",
+      "The honest curve: $0-$1k MRR is the hardest. $1k-$10k is the longest. $10k-$30k is the loneliest. Most threads only show one of those phases."
+    ],
+    reason: 'indie/build-in-public peer insight'
+  },
+  {
+    name: 'general-question-or-ask',
+    // OP poses a question. Reply with a useful contrarian answer — no pitch, just substance.
+    test: t => /\?/.test(t) && /\b(anyone (else|here|tried|using|recommend)|recommendations?|favourite|favorite|best (way|tool|approach|model|stack|framework|library)|which (one|tool|model|framework|library|approach)|what.s the (best|right) (way|tool|approach|stack|framework)|am i (the only|missing))\b/i.test(t) && t.length < 280 && !/\b(wrong (here|with|about)|what.s wrong|spot the (bug|issue|error|problem)|find the (bug|issue))\b/i.test(t),
+    drafts: [
+      "The honest answer most people won't give: 'best' depends entirely on what you've already wired. The right tool is the one that connects to your existing pipes in under an hour.",
+      "Worth flipping: instead of 'which tool,' ask 'what's the cheapest thing I can ship this week that proves anyone wants it.' The tool answer drops out automatically.",
+      "Most 'which X is best' answers are downstream of what the answerer used last. Decay your priors accordingly — the loudest opinions are usually 6 months old.",
+      "Honest take: the right answer is whatever you'll actually finish. The best tool for someone who'll spend 2 weeks researching and 0 shipping is none.",
+      "The boring version: pick the option with the most second-hand answers on Stack Overflow. Optimise for debuggability, not features. You'll be debugging 80% of the time.",
+      "Actually the question I'd swap in: 'what's the worst version that would still work?' Then build that. The 'best' question gets you stuck in benchmarks; the 'worst' question gets you shipping.",
+      "The version of this question that gets useful answers: 'I have constraint X and Y, what's the smallest tool that solves it.' Open questions get generic answers.",
+      "Worth re-reading: most 'recommend a tool' threads are 80% noise, 20% useful. Skip to the replies with specific numbers and skip the rest."
+    ],
+    reason: 'general open question, useful contrarian answer'
+  },
+  {
+    name: 'pricing-debate-or-saas-pricing-take',
+    // Pricing debate. Reply with a sharp framing — no pitch.
+    test: t => /\b(price|pricing|markup|expensive|cheap|free tier|saas pricing|charge|paywall|monetiz|too much money|burning money|paying \$\d|paying £\d)\b/i.test(t) && PAIN_SIGNAL.test(t),
+    drafts: [
+      "The pricing rule most SaaS gets backwards: you don't price against competitors, you price against the alternative of 'doing nothing.' If doing nothing is cheap, your price has to be too.",
+      "Honest pricing test: if you doubled your price tomorrow, how many customers would actually leave? Most teams find out the answer is 'fewer than they feared.' Try it.",
+      "The version nobody admits: pricing pages are mostly theatre. 80% of B2B sales happen on a sales call where the number is negotiated. The page just sets the anchor.",
+      "Most 'we lowered our price and growth doubled' stories are survivor bias. The same teams later raised prices and growth stayed. The price was rarely the lever.",
+      "Actually the pricing decision that matters more than the number: monthly vs annual. Annual customers churn 3-5x less and let you reinvest faster. The price difference is a rounding error.",
+      "Worth re-reading: every pricing debate eventually circles back to 'who are you actually selling to.' Get the segment right, the price falls out almost automatically.",
+      "The boring truth: cheap pricing attracts customers who churn fast. Expensive pricing attracts customers who never reply to your DMs. There's a middle that nobody writes about.",
+      "Honest take that ages well: nobody ever lost a B2B deal on price. They lost it on the prospect not understanding what they were buying. Fix the message, the price stops mattering."
+    ],
+    reason: 'pricing debate, sharp framing'
+  },
+  {
+    name: 'tools-or-stack-rant',
+    // Tool/vendor rant. Reply with a useful general principle.
+    test: t => /\b(switching (away )?from|migrate (away|off|out)|locked in|vendor lock|move (off|away) from|sucks at|terrible UX|dogshit|garbage|fed up with|frustrating|hate using|nightmare|painful|broken (and|but)|why the hell|why is .* so bad)\b/i.test(t),
+    drafts: [
+      "The pattern most rage-tweets miss: the tool didn't get worse, you got better. The thing that worked at year 1 always feels broken at year 3. That's growth, not a vendor problem.",
+      "Honest version of tool-rants: 80% of the time the tool isn't the bottleneck, the workflow around it is. Switching tools costs 8 weeks and rarely moves the metric.",
+      "The boring rule: never migrate based on Twitter rage. Migrate based on a specific metric you couldn't fix any other way. Most migrations fail this test on day 1.",
+      "Most 'switching from X' posts are written by someone who configured X wrong. Read the docs once before declaring vendor war. Saves a quarter.",
+      "Actually the loudest tool complaints come from teams that need 5% of the tool's surface area. The tool is fine; their evaluation was wrong.",
+      "Worth re-reading: vendor rage feels like clarity. It's actually sunk cost dressed as judgement. Sleep on it 48h before pulling the trigger.",
+      "The honest version: most lock-in is voluntary. People stay locked in because the alternative is 4 weeks of work, not because the vendor's contract demands it. Different problem, different fix.",
+      "Hard truth: the best vendors aren't the ones with the prettiest pricing pages. They're the ones whose support replies in under an hour when you're on fire."
+    ],
+    reason: 'tool/vendor rant, general principle'
   }
 ];
 
@@ -524,28 +640,12 @@ function isUnrepliable(t) {
   return false;
 }
 
-for (const c of ranked) {
-  if (!c.text || c.text.length < 30) continue;
-  if (isUnrepliable(c.text)) continue;
-  if ((handleCount[c.handle] || 0) >= 2) continue;
-  const r = pickDraft(c.text, c.id || c.url);
-  if (!r) continue;
-  if (r.draft.length > 270) continue;
-  handleCount[c.handle] = (handleCount[c.handle] || 0) + 1;
-  replyDrafts.push({
-    id: `r${String(replyDrafts.length + 1).padStart(2, '0')}`,
-    type: 'reply',
-    target_handle: c.handle,
-    target_followers: null,
-    target_age: `${c.age_hours}h`,
-    target_url: c.url,
-    tweet_id: c.tweet_id,
-    target_text: c.text.slice(0, 200),
-    draft: r.draft,
-    char_count: r.draft.length,
-    reason: r.reason
-  });
-}
+// Reply emission DISABLED 2026-05-11. The angle library was keyword-matching
+// superficial words and injecting canned replies that didn't address the
+// actual proposition of the target tweet (bot-tier output). Until a per-tweet
+// LLM generator replaces it, drafter only emits originals. Pat hand-writes
+// replies from the firehose Telegram drafts or directly on phone.
+const skippedAlreadyReplied = 0;
 
 const originals = (originalPools[slot] || originalPools.morning).map((text, i) => ({
   id: `o${i + 1}`,
@@ -571,3 +671,4 @@ fs.writeFileSync(path.join(dir, 'drafts.json'), JSON.stringify({
 
 console.log(`Wrote drafts.json: ${drafts.length} total (${originals.length} originals + ${replyDrafts.length} replies)`);
 console.log(`From ${(cands.candidates || []).length} candidates → ${replyDrafts.length} matched an angle. Quality bar held.`);
+console.log(`Skipped ${skippedAlreadyReplied} candidates already replied to.`);

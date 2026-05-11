@@ -1113,3 +1113,36 @@ Open items for next slot:
 - Bot health: openclaw-gateway + automatyn-api active. /api/health 200.
 - Open items same as /morning. Adding:
   - **X firehose pushed 0 reply drafts today.** Scrape-targets-pw exits null, search/fxt write 0-candidate files. 84 candidates from API + browser merge but angle-matcher rejects all. The X reply pipeline is effectively dead until matcher is loosened or firehose scrapers fixed.
+
+### /morning — 2026-05-11 09:30 UTC
+- X status: LIVE — @patrickssons 176 followers / 891 tweets (+37f / +77t since /afternoon 2026-05-10).
+- Impressions/post still single-digit (5-8 per reply) — burst-posting throttle still active.
+- **Mode: quality.** Drafter emitted 3 originals + 3 replies; ALL 3 replies were already replied to (cache miss).
+  - Added `refresh-replied-cache.js` + dedupe step in draft-from-candidates.js. Cache pulls last 100 tweets via X API ($0.005/run), drafter skips any candidate Pat already replied to.
+  - Re-ran drafter: skipped 24 already-replied, emitted 2 fresh replies (levelsio Hetzner Claude Code 1h old, MahlumAI chatbot wrong problem 6.45h old).
+  - **BUT replies still bot-tier** — angle library keyword-matches without addressing the actual proposition. Pat called it out: "These replies make no sense to the post at all."
+  - **Fix: reply emission DISABLED in drafter.** Until per-tweet LLM generator exists, drafter only emits originals. Firehose passes through zero replies as a side-effect.
+- X drafts pushed this slot: 3 morning originals (speed/follow-up themes) + 5 "let's connect" originals (Pat's voice request).
+- Triggers: Content Machine / Medium Writer / Blog Writer skill is stale (404s carried). Live timers verified: seo-daily fires 10:05Z, x-firehose **was inactive — restarted today**, x-gate-poller active.
+- Outreach: HALT still active since 2026-05-10 20:00Z (9.8% bounce). Sender skipped. Reply detector failed: Gmail OAuth `invalid_grant` (open item, carried). Brevo opens 48h: 15 events, 8 matched. Pool 263 / 1948 lifetime 257/202/181.
+- Variant diagnostic 14d: overall **FIX CTA** (subject earns opens, CTA fails).
+- GSC 7d: **135 imp / 0 clk / pos 17.5** (+13 imp / pos +0.4 vs yesterday). Top page: passive-income-ai-agents (91 imp pos 14.8).
+- Reddit pipeline: webhook 200.
+- Bot health: openclaw-gateway + automatyn-api active. x-firehose.timer restarted.
+- Signups last 24h: 0 (23 total: 13 free / 4 starter / 1 pro / 5 unknown).
+- TikTok / LinkedIn / Medium / Dev.to: skipped (Postiz paused, yt-dlp missing).
+- Open items carried (active):
+  - **OUTREACH HALT** — needs Pat decision (clean leads / pause / new ICP).
+  - **Variant diagnostic FIX CTA** — swap CTA, keep subjects.
+  - **Gmail OAuth refresh token expired** — reply-detector blocked.
+  - **X firehose Playwright CDP hangs** — scrape-targets-pw.js timed out at 300s (although it flushed 26 candidates before kill).
+  - **X reply generation is template-bot tier** — disabled until per-tweet LLM generator built; need Claude API or free alternative (Gemini free / Ollama).
+  - Image audit + script patch.
+  - Sender null-email guard, double-send concurrency lock.
+  - candidates.json file collision.
+  - GMAIL_APP_PASSWORD not set.
+  - outreach/monitor.js cron registration.
+  - yt-dlp install.
+  - drip persistence bug.
+  - reply-detector autoresponder false-positive.
+  - Dev.to backfill.
