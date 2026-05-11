@@ -31,7 +31,8 @@ const BREVO_KEY  = process.env.BREVO_API_KEY;
 const KILL_MIN_SENDS  = 15;
 const KILL_MAX_OPEN   = 0.08;
 const KILL_MAX_REPLY  = 0.005;
-const HARD_BOUNCE_HALT = 0.03;       // 3%
+const HARD_BOUNCE_HALT = 0.05;       // 5% (industry-standard cold-email tolerance)
+const HARD_BOUNCE_MIN_SENDS = 50;    // require ≥50 sends in 24h before HALTing on rate
 const SPAM_COMPLAINT_ANY = 0.001;    // any complaint at all
 
 function tg(text) {
@@ -85,7 +86,7 @@ async function checkBrevoHealth() {
   const hardRate = pct(hard, sent);
   const spamRate = pct(spam, delivered);
   const issues = [];
-  if (sent >= 20 && hardRate > HARD_BOUNCE_HALT) issues.push(`HARD BOUNCE ${fmtPct(hardRate)} (${hard}/${sent})`);
+  if (sent >= HARD_BOUNCE_MIN_SENDS && hardRate > HARD_BOUNCE_HALT) issues.push(`HARD BOUNCE ${fmtPct(hardRate)} (${hard}/${sent})`);
   if (spamRate >= SPAM_COMPLAINT_ANY)            issues.push(`SPAM COMPLAINTS ${spam}`);
   return { ok: issues.length === 0, sent, hard, spam, delivered, hardRate, spamRate, issues };
 }
