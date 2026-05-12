@@ -35,6 +35,19 @@ const VERTICALS = {
   'handymen':              'handyman services in {city} UK',
   'pest-control':          'pest control in {city} UK',
   'glaziers':              'glazier emergency window repair in {city} UK',
+  // Email-rich verticals (added 2026-05-12). These actually publish emails
+  // because their day-to-day work IS email. Better fit for cold-email outreach
+  // than trades, who use phone/contact-form exclusively.
+  'accountants':           'small business accountants in {city} UK',
+  'bookkeepers':           'bookkeeping services in {city} UK',
+  'solicitors':            'solicitors small business legal advice {city} UK',
+  'recruitment-agencies':  'recruitment agencies {city} UK',
+  'business-consultants':  'small business consultants {city} UK',
+  'marketing-agencies':    'digital marketing agencies {city} UK',
+  'dental-practices':      'private dental practice {city} UK',
+  'veterinary-clinics':    'small animal veterinary clinic {city} UK',
+  'b-and-bs':              'bed and breakfast {city} UK',
+  'estate-agents':         'independent estate agents {city} UK',
 };
 
 async function searchPlaces(query, vertical, city) {
