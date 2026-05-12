@@ -1,82 +1,69 @@
 {
-  "scraped_at": "2026-05-12T11:48:09.659Z",
+  "scraped_at": "2026-05-12T20:38:15.264Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
     "reads_charged": 5,
-    "kept": 5,
-    "skippedContent": 0
+    "kept": 4,
+    "skippedContent": 1
   },
   "budget": {
-    "used": 160,
+    "used": 165,
     "cap": 900,
-    "remaining": 740
+    "remaining": 735
   },
   "candidates": [
     {
-      "handle": "amasad",
-      "tweet_id": "2054105476225511833",
-      "url": "https://x.com/amasad/status/2054105476225511833",
-      "text": "This has been going on for 80 years, and heavily documented. The NYTimes finally scraped together enough integrity to publish something. https://t.co/NVfAp9nAZ5 https://t.co/EJpUteSaR5",
-      "created_at": "2026-05-12T07:44:43.000Z",
-      "age_hours": 4.1,
-      "likes": 4846,
-      "replies": 61,
-      "reposts": 1710,
-      "views": 130888,
-      "author_followers": 459000
-    },
-    {
       "handle": "levelsio",
-      "tweet_id": "2054158385742823894",
-      "url": "https://x.com/levelsio/status/2054158385742823894",
-      "text": "By far THE most annoying part of running a business for me is collecting receipts for my accountant\n\nEvery month my accountants hounds me for invoices and receipts of every single expense I did, doesn't matter how tiny like $0.50, sometimes also for income (I don't know why) http",
-      "created_at": "2026-05-12T11:14:58.000Z",
-      "age_hours": 0.6,
-      "likes": 277,
-      "replies": 35,
-      "reposts": 5,
-      "views": 17081,
-      "author_followers": 865941
+      "tweet_id": "2054269912894279742",
+      "url": "https://x.com/levelsio/status/2054269912894279742",
+      "text": "Do you talk to AI more than your gf/bf/wife/husband?",
+      "created_at": "2026-05-12T18:38:08.000Z",
+      "age_hours": 2,
+      "likes": 60,
+      "replies": 47,
+      "reposts": 4,
+      "views": 16674,
+      "author_followers": 866099
     },
     {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2054100941910253641",
-      "url": "https://x.com/shawnchauhan1/status/2054100941910253641",
-      "text": "OpenAI just admitted the model is no longer the hard part.\n\nThe OpenAI Deployment Company launches with $4B and a mandate to embed engineers directly inside client organizations.\nBacked by Goldman, SoftBank, McKinsey, Bain, Capgemini.\n\nThat partner list tells you exactly what htt",
-      "created_at": "2026-05-12T07:26:42.000Z",
-      "age_hours": 4.4,
-      "likes": 2,
-      "replies": 0,
-      "reposts": 5,
-      "views": 203,
-      "author_followers": 32106
-    },
-    {
-      "handle": "shawnchauhan1",
-      "tweet_id": "2054160227050967199",
-      "url": "https://x.com/shawnchauhan1/status/2054160227050967199",
-      "text": "The next AI platform war will not be won by the smartest model.\nIt will be won by whoever controls what the agent is allowed to spend.\n\nMastercard and Rabobank completed the first AI-agent payment last week.\nVisa is rolling out infrastructure so agents can transact with live http",
-      "created_at": "2026-05-12T11:22:17.000Z",
-      "age_hours": 0.4,
-      "likes": 2,
-      "replies": 1,
-      "reposts": 1,
-      "views": 66,
-      "author_followers": 32106
+      "handle": "OpenAIDevs",
+      "tweet_id": "2054298427245441141",
+      "url": "https://x.com/OpenAIDevs/status/2054298427245441141",
+      "text": "Computer use lets Codex work across your apps without taking over your Mac.\n\n@AriX talks with @romainhuet about what changes when agents can click, type, and keep working in the background. https://t.co/LdAmwtTXCY",
+      "created_at": "2026-05-12T20:31:26.000Z",
+      "age_hours": 0.1,
+      "likes": 78,
+      "replies": 12,
+      "reposts": 3,
+      "views": 2193,
+      "author_followers": 332025
     },
     {
       "handle": "jasonlk",
-      "tweet_id": "2054141266649395306",
-      "url": "https://x.com/jasonlk/status/2054141266649395306",
-      "text": "See everyone at 1pm or so\nToday!! #saastrai2026 https://t.co/8wvEOIHoEN",
-      "created_at": "2026-05-12T10:06:56.000Z",
-      "age_hours": 1.7,
-      "likes": 2,
+      "tweet_id": "2054276664260259960",
+      "url": "https://x.com/jasonlk/status/2054276664260259960",
+      "text": "A new The Agents is out!!  Just before SaaStr AI Annual 2026:\n\nhttps://t.co/neehn70s1c",
+      "created_at": "2026-05-12T19:04:58.000Z",
+      "age_hours": 1.6,
+      "likes": 5,
       "replies": 0,
+      "reposts": 1,
+      "views": 922,
+      "author_followers": 239964
+    },
+    {
+      "handle": "jasonlk",
+      "tweet_id": "2054289350968713517",
+      "url": "https://x.com/jasonlk/status/2054289350968713517",
+      "text": "AI AT SCALE STAGE https://t.co/sfUMaPcqsN",
+      "created_at": "2026-05-12T19:55:22.000Z",
+      "age_hours": 0.7,
+      "likes": 4,
+      "replies": 1,
       "reposts": 0,
-      "views": 744,
-      "author_followers": 239929
+      "views": 440,
+      "author_followers": 239964
     }
   ]
 }

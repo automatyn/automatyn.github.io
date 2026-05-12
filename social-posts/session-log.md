@@ -1238,3 +1238,35 @@ Open items for next slot:
   - Gemini API still blocked.
   - Gmail OAuth still broken.
   - Stripe verification still pending (Adam = only real customer).
+
+### /evening — 2026-05-12 21:00 UTC
+- X status: LIVE — @patrickssons 306 followers / 1004 tweets (+13f / +25t since /afternoon, +76f / +59t since /morning). Verified-follower count yesterday 57 → 87 (+30 manual follow-back grind).
+- **HALT cleared all day.** 00:00Z / 04:00Z / 08:00Z / 12:00Z / 20:00Z monitor runs all `0 hard · 0 spam · OK`. Threshold fix from 2026-05-11 holding.
+- **OUTREACH:**
+  - Morning: 0 sends (pool dry).
+  - Afternoon: 9 E2 follow-ups sent (lifetime 202 → 211).
+  - Evening: +1 E2 so far via background sender (lifetime 211 → 212+); batch still running, 15 remaining ready.
+  - ICP discipline restored: 53 non-trade accountants quarantined as DNS (commit 3f28557). Trade-only pool kept clean.
+  - Replies: still 0 in 14 days. Variant diagnostic 14d unchanged (FIX CTA).
+  - Pool: 301 with_email / 265 personalised / 234 DNS.
+- **X DRAFTS PUSHED TO TELEGRAM TODAY:**
+  - /morning: 3 originals + 5 "let's connect" broader
+  - /afternoon: 3 originals
+  - Mid-day: 7 controversial hand-drafted replies to top live tweets (top-engagement live tweets: nikitabier 9k likes, GergelyOrosz npm, jasonlk, Aishwarya, lennysan, shawnchauhan)
+  - 5 ClaudeDevs Fast Mode replies (sensible) + 5 controversial
+  - 8 "paper-diary register" originals (trades version)
+  - 8 paper-diary register (SaaS version)
+  - 6 trend-piggyback originals (Inflation, Spotify, Nolan, Travis Scott)
+  - 1 Troy (2004) controversial standalone
+  - **1 evening viral controversial original** (mandatory per memory) — "son-in-law set up the WiFi" version
+  - **Total: ~50 drafts pushed to Telegram today, Pat hand-taps from phone.**
+- **NEW INFRA SHIPPED:**
+  - `outreach/enrich-smart-crawl.js` — OpenAI+gpt-4o-mini per-page LLM enricher (commit ac45030). 46% personal hit on accountants, but ICP-wrong so quarantined.
+  - `x-drafts/follow-back-hunter.js` — finds "say hey" follow-back threads, pushes one-tap "Hey" intent URLs (commit pending).
+  - `x-drafts/big-account-hunter.js` — finds <30min tweets from >100k follower accounts in target list, pushes with reply-angle hint (no canned drafts).
+- **Triggers:** SEO Daily fired 10:05Z → commit 243d635 "AI Receptionist for UK Gyms 2026".
+- **GSC:** 133 imp / 0 clicks / pos 17.4 (no change all day).
+- **Bot health:** openclaw-gateway, automatyn-api, x-firehose.timer, x-gate-poller, seo-daily.timer — all active.
+- **Real signups today:** 0. Total real customers verified: still 1 (Adam, unverified payment).
+- **Honest read end-of-day:** activity is high, conversion is still zero outside Adam. Tomorrow's priority must be either (a) hand-rewrite Adam-style E2 to 10 manually-picked plumbers OR (b) clearer X profile → signup funnel. We are 14 days into the 90-day 5M-impressions clock. Estimated daily impressions today: ~2,500-3,000 (rough, single-digit median per tweet × ~30 tweets). 23x below target rate.
+- **Open items same as morning** + need to wire big-account-hunter + follow-back-hunter into a systemd timer (next session).
