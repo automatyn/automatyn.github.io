@@ -1219,3 +1219,22 @@ Open items for next slot:
   - X firehose Playwright CDP unstable.
   - Stripe verification needed (local records don't prove anyone paid).
   - E1/E2/E3 pool refill needs ingest + personalisation cycle.
+
+### /afternoon — 2026-05-12 13:00 UTC
+- X status: LIVE — @patrickssons 232 followers / 961 tweets (+2f / +16t since /morning).
+- SEO Daily fired 10:05Z: shipped commit 243d635 "AI Receptionist for UK Gyms 2026".
+- **OUTREACH:**
+  - HALT clear all day. Monitor passed 00:00Z + 04:00Z + 08:00Z runs (21 sent · 0 hard · OK).
+  - **ICP expansion REVERTED (commit 3f28557).** Pat correctly pushed back: pivoting to accountants/etc abandoned the core product thesis (trades = WhatsApp receptionist pain). 53 non-trade leads quarantined as DNS. 1957 trade leads kept.
+  - **9 E2 follow-ups sent live** to trade leads (lifetime 202→211). Sender timed out mid-batch at 600s; rest pending next slot.
+  - Pool: 301 with-email / 265 personalised / 168 DNS (was 215 before today's quarantine + cleanup).
+- X drafts: 3 afternoon originals pushed.
+- Reddit pipeline: webhook 200.
+- GSC 7d: 133 imp / 0 clk / pos 17.4 (unchanged vs morning).
+- **New tool: enrich-smart-crawl.js** built today. Uses OpenAI key + heuristic-link-follow + LLM extraction (~$0.0003/lead). Smoke-tested on accountants (46% personal hit rate, but ICP was wrong). Now needs to be re-pointed at plumbers + extended with privacy-policy crawl, Companies House director lookup, Wayback Machine snapshots — open item.
+- Open items unchanged + new:
+  - **Run smart-crawl on plumbers properly** (the 263 with-email plumbers prove emails exist; need to find more, not pivot).
+  - Add privacy-policy regex, Companies House lookup, Wayback to enricher.
+  - Gemini API still blocked.
+  - Gmail OAuth still broken.
+  - Stripe verification still pending (Adam = only real customer).
