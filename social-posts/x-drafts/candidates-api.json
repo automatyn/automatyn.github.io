@@ -1,69 +1,82 @@
 {
-  "scraped_at": "2026-05-12T20:38:15.264Z",
+  "scraped_at": "2026-05-13T07:41:23.751Z",
   "window_hours": 24,
   "source": "x-api-v2",
   "stats": {
     "reads_charged": 5,
-    "kept": 4,
-    "skippedContent": 1
+    "kept": 5,
+    "skippedContent": 0
   },
   "budget": {
-    "used": 165,
+    "used": 170,
     "cap": 900,
-    "remaining": 735
+    "remaining": 730
   },
   "candidates": [
     {
-      "handle": "levelsio",
-      "tweet_id": "2054269912894279742",
-      "url": "https://x.com/levelsio/status/2054269912894279742",
-      "text": "Do you talk to AI more than your gf/bf/wife/husband?",
-      "created_at": "2026-05-12T18:38:08.000Z",
-      "age_hours": 2,
-      "likes": 60,
-      "replies": 47,
-      "reposts": 4,
-      "views": 16674,
-      "author_followers": 866099
+      "handle": "nikitabier",
+      "tweet_id": "2054428985195704674",
+      "url": "https://x.com/nikitabier/status/2054428985195704674",
+      "text": "Just one more feature and it'll be fixed",
+      "created_at": "2026-05-13T05:10:14.000Z",
+      "age_hours": 2.5,
+      "likes": 2951,
+      "replies": 1739,
+      "reposts": 254,
+      "views": 107447,
+      "author_followers": 1048959
     },
     {
-      "handle": "OpenAIDevs",
-      "tweet_id": "2054298427245441141",
-      "url": "https://x.com/OpenAIDevs/status/2054298427245441141",
-      "text": "Computer use lets Codex work across your apps without taking over your Mac.\n\n@AriX talks with @romainhuet about what changes when agents can click, type, and keep working in the background. https://t.co/LdAmwtTXCY",
-      "created_at": "2026-05-12T20:31:26.000Z",
-      "age_hours": 0.1,
-      "likes": 78,
-      "replies": 12,
-      "reposts": 3,
-      "views": 2193,
-      "author_followers": 332025
+      "handle": "shawnchauhan1",
+      "tweet_id": "2054418882073629009",
+      "url": "https://x.com/shawnchauhan1/status/2054418882073629009",
+      "text": "The governments of the UAE, UK, and Singapore just co-invested in a drug discovery AI company.\n\nIsomorphic Labs raised $2.1 billion in its Series B.\n\nSovereign wealth is no longer watching AI from the sidelines.\n\nIt is funding the infrastructure that will decide which countries h",
+      "created_at": "2026-05-13T04:30:05.000Z",
+      "age_hours": 3.2,
+      "likes": 5,
+      "replies": 1,
+      "reposts": 5,
+      "views": 180,
+      "author_followers": 32095
     },
     {
       "handle": "jasonlk",
-      "tweet_id": "2054276664260259960",
-      "url": "https://x.com/jasonlk/status/2054276664260259960",
-      "text": "A new The Agents is out!!  Just before SaaStr AI Annual 2026:\n\nhttps://t.co/neehn70s1c",
-      "created_at": "2026-05-12T19:04:58.000Z",
-      "age_hours": 1.6,
-      "likes": 5,
+      "tweet_id": "2054417319552819557",
+      "url": "https://x.com/jasonlk/status/2054417319552819557",
+      "text": "Catch Rory’s session and AMA here:  \n\nhttps://t.co/6x73ETqvPw https://t.co/nc6QlWiFXe",
+      "created_at": "2026-05-13T04:23:52.000Z",
+      "age_hours": 3.3,
+      "likes": 4,
+      "replies": 2,
+      "reposts": 0,
+      "views": 2060,
+      "author_followers": 240011
+    },
+    {
+      "handle": "shawnchauhan1",
+      "tweet_id": "2054441537329918240",
+      "url": "https://x.com/shawnchauhan1/status/2054441537329918240",
+      "text": "Nvidia has one public competitor for AI compute.\n\nIt is about to have two.\n\nCerebras filed to raise its IPO price to $150-$160 per share after investor demand surged - pitching itself as the first public pure-play alternative for AI inference.\n\nThe demand signal matters more than",
+      "created_at": "2026-05-13T06:00:06.000Z",
+      "age_hours": 1.7,
+      "likes": 2,
       "replies": 0,
       "reposts": 1,
-      "views": 922,
-      "author_followers": 239964
+      "views": 117,
+      "author_followers": 32095
     },
     {
-      "handle": "jasonlk",
-      "tweet_id": "2054289350968713517",
-      "url": "https://x.com/jasonlk/status/2054289350968713517",
-      "text": "AI AT SCALE STAGE https://t.co/sfUMaPcqsN",
-      "created_at": "2026-05-12T19:55:22.000Z",
-      "age_hours": 0.7,
-      "likes": 4,
-      "replies": 1,
-      "reposts": 0,
-      "views": 440,
-      "author_followers": 239964
+      "handle": "shawnchauhan1",
+      "tweet_id": "2054464183685783670",
+      "url": "https://x.com/shawnchauhan1/status/2054464183685783670",
+      "text": "Two numbers from last week's hyperscaler earnings that most people skipped past.\n\n$200 billion of Google's $468 billion in future revenue commitments is Anthropic.\n\n$280 billion of Microsoft's $627 billion is OpenAI.\n\nThese are not partnership announcements. These are balance htt",
+      "created_at": "2026-05-13T07:30:06.000Z",
+      "age_hours": 0.2,
+      "likes": 0,
+      "replies": 0,
+      "reposts": 1,
+      "views": 23,
+      "author_followers": 32095
     }
   ]
 }

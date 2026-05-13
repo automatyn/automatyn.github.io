@@ -1270,3 +1270,33 @@ Open items for next slot:
 - **Real signups today:** 0. Total real customers verified: still 1 (Adam, unverified payment).
 - **Honest read end-of-day:** activity is high, conversion is still zero outside Adam. Tomorrow's priority must be either (a) hand-rewrite Adam-style E2 to 10 manually-picked plumbers OR (b) clearer X profile → signup funnel. We are 14 days into the 90-day 5M-impressions clock. Estimated daily impressions today: ~2,500-3,000 (rough, single-digit median per tweet × ~30 tweets). 23x below target rate.
 - **Open items same as morning** + need to wire big-account-hunter + follow-back-hunter into a systemd timer (next session).
+
+### /morning — 2026-05-13 08:10 UTC
+- X status: LIVE — @patrickssons `"followers":307,"tweets":1021` (+1f / +17t since evening; +77f / +76t since /morning 2026-05-12). Verified Premium.
+- X drafts: 3 morning originals pushed via draft-from-candidates.js (follow-up, speed-as-differentiator, onboarding-reply-lag). 168 unique candidates merged across api+browser+firehose+legacy. 0 replies matched (broad angles still tight).
+  - X API budget: `170/900 used ($0.85 of $4.50)` this month.
+  - X firehose timer: active, 30min cadence, last run 07:32Z `Deactivated successfully` (clean exit).
+- Triggers (per old skill): all 3 return 404 `not_found_error`. Real content scheduler is `seo-daily.timer` (active).
+- Reddit pipeline: webhook `{"message":"Workflow was started"}` (after http→https redirect).
+- **OUTREACH:**
+  - HALT clear. Last monitor 04:00Z: `18 sent · 0 hard · 0 spam · OK`.
+  - Reply detector: skipped — Gmail OAuth `invalid_grant` (carried).
+  - Pool E2 ready=8 at start. Sent **4 E2 live** (`email2_sent_today: 4`, lifetime 219→223). Other 4 didn't pass sender filters. E1/E3 batches not run (pool dry).
+  - Ingest finished: `Created 1, updated 522`. Pool 2022→2023 / 301 with-email / 265 personalised / 234 DNS.
+  - Brevo opens 48h: `Scanned 13 open events, matched 10 to leads`. (E1/E2/E3 opens 51/51/31; E2 +1 vs evening.)
+  - Variant diagnostic 14d: every pair INSUFFICIENT DATA; overall print "FULL RESET" on tiny N. No action.
+  - Bot health: openclaw-gateway, automatyn-api, x-firehose.timer, x-gate-poller, seo-daily.timer = all `active`.
+  - Signups last 14h: 0.
+- GSC 7d: 121 imp / 0 clicks / pos 17.7 (-12 imp vs yesterday's 133, pos flat; no >20% regressions). Top page passive-income-ai-agents 74 imp pos 15.1. No new page-2 quick-wins.
+- TikTok stats: @realnataliana — 22 videos, 6,178 total views, 75 total likes. Top: "My dad asked me at dinner..." 988v/20l.
+- TikTok carousels: skipped — POSTIZ_API_KEY absent (Postiz paused).
+- LinkedIn: skipped — Postiz paused.
+- Dev.to: PUBLISHED — id 3661214 `https://dev.to/automatyn/ai-receptionist-for-uk-gyms-the-honest-cost-breakdown-cbk`, canonical → automatyn.co/blog/ai-receptionist-gym-uk-2026.html. Last article before this was 2026-04-20 (23 days, well past 3-day gate).
+- Medium: skipped (CDP/Playwright flaky, carried).
+- Cap-hit scan: only `Test Agent biz-test-race` (pre-existing test artefact). No real-tenant cap hits.
+- **Open items unchanged:**
+  - Gmail OAuth refresh expired (reply-detector blocked).
+  - Gemini API project denied (X reply LLM blocked).
+  - Stripe verification still pending (Adam only real customer).
+  - Pool E1/E3 dry; E2=4 left after this send.
+  - Medium Playwright/CDP unstable.
