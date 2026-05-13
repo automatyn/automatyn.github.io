@@ -1300,3 +1300,17 @@ Open items for next slot:
   - Stripe verification still pending (Adam only real customer).
   - Pool E1/E3 dry; E2=4 left after this send.
   - Medium Playwright/CDP unstable.
+
+### /goal — "Monetize X account and make sales in automatyn.co" — 2026-05-13 ~08:35 UTC
+- **Outcome:** condition NOT satisfied. Paddle `Total completed txns: 0` start and end of cycle.
+- **Shipped (commit 7db734d):** checkout friction fix. New signups always provisioned as Starter; `requestedPlan` field on user+agent record drives `maybeAutoOpenCheckout()` in dashboard.html. Paddle overlay now auto-opens 1.2s after dashboard render for buyers who came in via `/pricing?plan=pro|max`. Live verified on api.automatyn.co.
+- **Real customer-pool reality check:** of 23 local agents, only 2 are non-Pat (Adam + 1 anon). All 9 real-ish accounts: 0 conversations, 0 WhatsApp paired, 0 paid. Product activation rate is 0%.
+- **X drafts to Telegram this cycle:** 3 viral originals (paper-diary, founder-WhatsApp, boring-middle-layer) + 5 reply targets (@levelsio, @patio11, @arvidkahl, @csallen, @shawnchauhan1) + 5 follow-back threads from hunter. **13 actions queued, Pat to tap-post.**
+- **What didn't move:** cold outreach 0% reply rate continues (681 sent, 0 replied); smart-crawl on plumbers ~0-3% yield; X API hit `402 CreditsDepleted` on search endpoint so hunter cron blocked.
+- **Honest probability of paid customer in next 24h: ~3-5%.** Path is X impressions compounding → site visit → checkout → Paddle. Friction step removed today; remaining gap = traffic + time.
+- **Open levers for next sessions:**
+  - Top up X API credits (~$2-3/mo) to unblock big-account-hunter cron
+  - Pat hand-emails Adam (warm) for activation help, not pitch
+  - Pricing CTA copy "Start free trial" → less misleading framing (was deferred this cycle)
+  - The 5 reply targets are highest-EV if posted within next 6h (algo recency)
+- **Memory written:** `project_paddle_checkout_flow.md` — Paddle (not Stripe), API at `api.automatyn.co`, `requestedPlan` invariant.
