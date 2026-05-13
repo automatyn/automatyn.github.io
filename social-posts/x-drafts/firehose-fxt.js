@@ -15,12 +15,24 @@ const handles = [
   'karpathy','simonw','rauchg','GergelyOrosz','patio11','marc_louvion',
   'arvidkahl','jonyongfook','nikitabier','sahilbloom','dvassallo','mckaywrigley',
   'AravSrinivas','amasad','hnshah','OpenAIDevs','AnthropicAI','alexalbert__',
-  'shawnchauhan1','TKopelman','AishwaryaDevv','Duemers_'
+  'shawnchauhan1','TKopelman','AishwaryaDevv','Duemers_',
+  // Migrated from target-list.json (scrape-targets-pw disabled due to X rate-limit on browser session)
+  'gregisenberg','lennysan','dharmesh','harryjdry','csallen','mijustin',
+  'MahlumAI','rxhit05','TTrimoreau','aminnnn_09',
+  // 2026-05-13 expansion: 12 verified handles via fxtwitter (3.7k-361k followers)
+  'adamwathan','steventey','theprimeagen','iannuttall','marckohlbrugge',
+  'jasonleowsg','tdinh_me','natfriedman','cjzafir','damengchen','peer_rich','t3dotgg',
 ];
 
 function fxtFetch(handle) {
   return new Promise((resolve) => {
-    https.get(`https://api.fxtwitter.com/${handle}`, (res) => {
+    const opts = {
+      hostname: 'api.fxtwitter.com',
+      path: `/2/profile/${handle}/statuses`,
+      method: 'GET',
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; firehose-bot/1.0)' }
+    };
+    https.get(opts, (res) => {
       let body = '';
       res.on('data', (c) => (body += c));
       res.on('end', () => { try { resolve(JSON.parse(body)); } catch { resolve(null); } });
@@ -38,30 +50,37 @@ function fxtFetch(handle) {
   for (const h of handles) {
     scanned++;
     const d = await fxtFetch(h);
-    if (!d || !d.user) { broken++; process.stdout.write('!'); continue; }
-    const user = d.user;
-    const tweet = d.tweet || (d.user && d.user.last_tweet);
-    if (!tweet || !tweet.id) { skipNoTweet++; process.stdout.write('-'); continue; }
-    const ts = tweet.created_timestamp ? tweet.created_timestamp * 1000 : Date.parse(tweet.created_at);
-    if (!ts || ts < cutoff) { skipAge++; process.stdout.write('-'); continue; }
-    const text = tweet.text || '';
-    if (text.startsWith('RT @') || tweet.replying_to) { skipReply++; process.stdout.write('-'); continue; }
-    out.push({
-      handle: user.screen_name,
-      author_followers: user.followers,
-      tweet_id: tweet.id,
-      url: tweet.url,
-      text: text.slice(0, 400),
-      created_at: tweet.created_at,
-      age_hours: Math.round((Date.now() - ts) / 360000) / 10,
-      likes: tweet.likes || 0,
-      replies: tweet.replies || 0,
-      reposts: tweet.retweets || 0,
-      views: tweet.views || 0,
-      source: 'firehose'
-    });
-    kept++;
-    process.stdout.write('.');
+    const results = d && Array.isArray(d.results) ? d.results : null;
+    if (!results || results.length === 0) { broken++; process.stdout.write('!'); continue; }
+
+    let kept_one = false;
+    for (const tweet of results) {
+      if (!tweet || !tweet.id) { continue; }
+      const ts = tweet.created_timestamp ? tweet.created_timestamp * 1000 : Date.parse(tweet.created_at);
+      if (!ts) continue;
+      if (ts < cutoff) { skipAge++; continue; }
+      const text = tweet.text || '';
+      if (text.startsWith('RT @') || tweet.replying_to || tweet.is_reply) { skipReply++; continue; }
+      const author = tweet.author || {};
+      out.push({
+        handle: author.screen_name || h,
+        author_followers: author.followers || 0,
+        tweet_id: tweet.id,
+        url: tweet.url,
+        text: text.slice(0, 400),
+        created_at: tweet.created_at,
+        age_hours: Math.round((Date.now() - ts) / 360000) / 10,
+        likes: tweet.likes || 0,
+        replies: tweet.replies || 0,
+        reposts: tweet.reposts || tweet.retweets || 0,
+        views: tweet.views || 0,
+        source: 'firehose'
+      });
+      kept++;
+      kept_one = true;
+    }
+    if (kept_one) process.stdout.write('.');
+    else { skipNoTweet++; process.stdout.write('-'); }
   }
   console.log();
 
