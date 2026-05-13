@@ -25,6 +25,7 @@ const https = require('https');
 const crypto = require('crypto');
 const store = require('./leads-store');
 const { buildEmail, SUBJECTS_E1, CTAS_E1, pickVariantRoundRobin } = require('./templates');
+const { buildSummerEmail, SUBJECTS: SUMMER_SUBJECTS } = require('./templates-summer');
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
 const SENDER_EMAIL = process.env.OUTREACH_SENDER_EMAIL || 'patrick@automatyn.co';
@@ -173,8 +174,20 @@ async function sendOne(transport, lead, step, dryRun) {
     throw new Error(`unsendable email: ${JSON.stringify(lead.email)}`);
   }
   const token = unsubToken(lead.email);
-  const opts = step === 1 ? assignE1Variants(lead.id) : {};
-  const built = buildEmail(step, lead, token, opts);
+  // Summer-niche routing: if lead is gardener/tree-surgeon/roofer AND this is E1,
+  // use templates-summer.js (E2/E3 still use plumber templates for now).
+  const summerNiche = SUMMER_SUBJECTS[lead.source_vertical] ? lead.source_vertical : null;
+  let built;
+  if (step === 1 && summerNiche) {
+    const unsubUrl = `https://api.automatyn.co/u?e=${encodeURIComponent(lead.email)}&t=${encodeURIComponent(token)}`;
+    const h = crypto.createHash('sha1').update(lead.id).digest();
+    const subjectIdx = h[0] % 3;
+    built = buildSummerEmail(summerNiche, lead, unsubUrl, subjectIdx);
+    built.ctaId = `summer-v1-${summerNiche}`;
+  } else {
+    const opts = step === 1 ? assignE1Variants(lead.id) : {};
+    built = buildEmail(step, lead, token, opts);
+  }
   const { subject, body } = built;
   if (dryRun) {
     console.log('---');

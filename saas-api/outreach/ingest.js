@@ -35,6 +35,9 @@ const VERTICALS = {
   'handymen':              'handyman services in {city} UK',
   'pest-control':          'pest control in {city} UK',
   'glaziers':              'glazier emergency window repair in {city} UK',
+  // 2026-05-13 summer pivot: peak-season trades with WhatsApp pain
+  'gardeners':             'gardeners and landscapers in {city} UK',
+  'tree-surgeons':         'tree surgeons in {city} UK',
 };
 
 async function searchPlaces(query, vertical, city) {
