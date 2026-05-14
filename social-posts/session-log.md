@@ -1403,3 +1403,34 @@ Open items for next slot:
   - Forge image-gen unreachable (SEO Daily success rate)
   - automatyn.co/checkout 404 (overlay-mode masks it)
   - Medium Playwright/CDP unstable
+
+### /afternoon — 2026-05-14 19:04 UTC
+- X status: LIVE — @patrickssons `"followers":359,"tweets":1168` (+3f / +5t since 08:13Z morning).
+- **SEO Daily trigger:** `"enabled":true`, `"last_fired_at":"2026-05-14T10:10:07Z"`, `"next_run_at":"2026-05-15T10:07:45Z"`. Produced commit `fc19ae8 feat(blog): AI Receptionist for UK Vets`. **Only 1 of 3 blogs** — Forge was offline at 10:10Z (laptop reboot). Forge is back now (12:17Z Reddit pipeline run succeeded 13:28Z), so next run tomorrow should get full 3/3.
+- **Reddit pipeline:** `2026-05-14T12:17:37 → 2026-05-14T13:28:51 | status=success | finished=True` after I re-fired post-Forge-recovery. ✅
+- **OUTREACH — HALT in place:**
+  - HALT file: `Halted 2026-05-14T16:00:02.015Z / HARD BOUNCE 8.0% (4/50)`.
+  - **Root cause analysis:** 4 hard bounces in Brevo `2026-05-13T05:11-05:13` (~27h ago), all old plumber leads (leedsplumber.uk, local-manchester-plumbers.co.uk, gildersomegas.co.uk, dev7561@gmail.com). NOT from today's 4 sends.
+  - Today's 4 E1 sends (PlumbSharp, J A Clarke, S A Plumbing, UK Gas Services) all show `bounced: false`. Clean.
+  - HALT is rolling-50-window false-positive: old bounces aged into the window after Brevo's 4-14 day lag, but today's deliverability is fine.
+  - **Brevo 7d aggregate:** `requests=165, delivered=138, hardBounces=9, softBounces=16, blocked=5, opens=52, uniqueOpens=31, spamReports=0, unsubscribed=0`.
+  - Pool: total 4558 / with_email 666 / personalised 290 / E1 ready 4 (still). E2/E3 ready 0/0.
+  - E1 sent today: 4 (lifetime 295). E2/E3 today: 0.
+  - Brevo opens 48h: `Scanned 19 open events, matched 13 to leads` (+2 vs morning). Opens E1: 56→58, E2 51, E3 31.
+  - **Decision: leave HALT in place.** Need Pat-call on whether to clear manually or wait for rolling window to age out. Real bounce rate from today's sends is 0%.
+- **X drafts today (per firehose-pipeline log):** ZERO new replies pushed to Telegram across 13 firehose runs since 06:00Z. All log `pushed 0/0 to TG`.
+  - Diagnosed: 32/161 candidates (20%) DO match angles in `draft-from-candidates.js`. But `pickDraft()` returns null for every match because `recentTexts` 24h dedupe + batch dedupe penalize score below the `realScore >= 3` quality gate. Same candidates (@sama, @paulg, @ThePrimeagen etc) drafted-against repeatedly across days.
+  - Originals in drafts.json: 3 (follow-up, speed-as-differentiator, onboarding-reply-lag) — unchanged since morning, not re-pushed.
+  - **Open fix needed:** either reset firehose-sent.json dedupe state, shrink dedupe window from 24h to 6h, OR add new angle-variant text. Parked for Pat decision.
+- X scrape supplementary (Source 2 browser): started in background (~6 min runtime expected).
+- TikTok: not refreshed this slot. yt-dlp returning paginated cache (5 videos visible).
+- Postiz (TikTok carousels + LinkedIn): skipped — POSTIZ_API_KEY absent.
+- Bot health: openclaw-gateway, automatyn-api, x-firehose.timer, x-thread.timer, x-question.timer = all `active`.
+- Signups since morning: 0.
+- **Open items (carried + new):**
+  - HALT false-positive blocking outreach until rolling window ages out
+  - Firehose replies-pushed=0/day bug (dedupe state killing all matches)
+  - SEO Daily 1/3 success rate (Forge laptop reboot today; tomorrow's run should hit 3/3 now Forge is back)
+  - Gmail OAuth invalid_grant (reply-detector blocked, carried)
+  - X API CreditsDepleted (carried)
+  - Pool E2/E3 ready=0 (carried)
