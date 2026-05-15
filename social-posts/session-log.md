@@ -1470,3 +1470,37 @@ Open items for next slot:
   - Forge image-gen success rate (SEO Daily 1/3 yesterday)
   - automatyn.co/checkout 404 (overlay-mode masks it)
   - Daily 10 GSC manual taps (today's list in Telegram)
+
+### /afternoon — 2026-05-15 12:35 UTC
+- **X status:** LIVE — `followers=384 tweets=1248 likes=897` (+12f / +40t since /morning 09:38Z 372/1208). Manual analytics stale (2026-05-13 13:14Z, 78k imp 7d). Browser CDP wedged (5d uptime), scrape attempted twice, both `connectOverCDP Timeout 30000ms`. Skipped re-scrape rather than restart Chrome (cookies/session risk).
+- **X drafts today:** 8 morning + 5 afternoon = **13 in-context bend-back drafts pushed to Telegram**. Afternoon batch (12:00Z): @GergelyOrosz (333k, 122c), @tdinh_me (186k, 97c), @swyx (158k, 103c), @TKopelman (40k, 120c), @TTrimoreau (8k, 103c). Voice-checked, all 97-122 chars, all bend-back angle.
+- **X firehose:** 7 successful timer runs since /morning (09:30, 10:00, 10:30, 11:00, 11:30, 12:00, 12:30Z). Reply emission still code-disabled (correct, per [[x-reply-pipeline-is-claude]]) — drafts come from Claude in-routine.
+- **SEO Daily trigger:** `enabled:true, last_fired:2026-05-15T10:10:09Z, next_run:2026-05-16T10:03:47Z`. Produced commit `3f92623 feat(blog): AI Receptionist for UK Accountants`. **1 of 3 blogs again** — same Forge-availability pattern. Forge IS now reachable (200 OK at 12:33Z), so tomorrow's run should hit 3/3.
+- **Reddit pipeline:** webhook 200 `{"message":"Workflow was started"}` fired at /afternoon-start.
+- **OUTREACH — major day for this track:**
+  - HALT clear (cleared this morning, `Brevo 24h: 14 sent · 1 hard · 0 spam · OK` per monitor 12:00Z).
+  - **Old template killed.** Cumulative 0/295 E1 replies → FULL RESET per Larry-brain. Rewrote `templates.js`: dropped Adam ghost, dropped fake $400 setup, swapped to free-tier ask + dual Y/automatyn.co CTA, plumber-shaped "8pm WhatsApp burst pipe" scene. Committed `b6ff0e6 outreach: rewrite E1/E2/E3 templates`.
+  - **Smoke test:** 7 fresh personalised plumbers sent at 11:05Z (Edinburgh Heating, SMC Cardiff, Llandaff Heating, Marcus Jones, JHP Services, Gas Guard Birmingham, Rosoman Cardiff). All 7 delivered via Brevo (`requests:9, delivered:7, hardBounces:0 on the batch`). 1 open already (Edinburgh Heating, opened twice within 2 min of receipt).
+  - **Variant-killer false-positive:** monitor 12:00Z killed `v4_hw|v4_hw` based on 13 prior + 7 today hand-written sends sharing the same tag. Restored dead-variants.json to `{}`; retagged today's 7 to `v5_smoke_2026-05-15|v5_y_or_link` so the new template gets its own accounting. Edinburgh Heating's open now credits v5.
+  - **False signup alert:** `NEW SIGNUP: Test Plumbing Manchester` was my E2E test signup from the signup-flow verification (`patrickssontest+20260515@gmail.com`). Marked `is_test=true` on the agent record; already in monitor.seen_list so won't re-alert.
+  - Reply detector still blocked: Gmail OAuth `invalid_grant` (carried).
+  - Pool: total 4564 / with_email 666 / personalised 290 / E1 ready 0 / E2 ready 0 / E3 ready 23.
+  - **Action needed:** Pat to check `patrick@automatyn.co` inbox + spam for replies from the 7 (reply-detector blind).
+- **SEO 7d:** `101 imp / 0 clicks / pos 17.5`. Top page passive-income-ai-agents 61 imp pos 15.3 (still noindexed — ghost impressions). Top buyer-intent page how-much-does-ai-chatbot-cost-2026 only 2 imp pos 5.5.
+- **GSC daily-10:** today's IndexNow batch fired this morning (10 URLs). 7/10 went through GSC manually (per Pat), 3 failed because they're `noindex` (claude-code-getting-dumber, claude-code-vs-codex were never crawled; best-whatsapp-bot-small-business is already indexed). Pat's daily-10 routine needs `noindex`-filter built in before next batch.
+- **TikTok:** 22 / 6,181v / 75l (unchanged).
+- **Postiz/LinkedIn:** skipped (POSTIZ_API_KEY absent, paused).
+- **Bot health:** openclaw-gateway, automatyn-api, x-firehose.timer, seo-daily.timer, reply-watcher.timer, goal-pulse.timer = all `active`. ✅
+- **Signups since /morning:** 0 real (1 test-only, flagged).
+- **Pricing memory fix:** wrote `feedback_automatyn_pricing_monthly_saas.md`. The CLAUDE.md "Real prices: $400 / $800 / $1500 + $150/mo" line is stale; live pricing is Free / Pro $29/mo / Max $79/mo. All future outreach/X/blog content must use monthly SaaS framing.
+- **Commits today:** `b594362 log: /morning`, `3f92623 feat(blog): AI Receptionist for UK Accountants`, `b6ff0e6 outreach: rewrite E1/E2/E3 templates`.
+- **Open items (carried + new):**
+  - X analytics scrape blocked (Chrome CDP wedged, needs restart for next try)
+  - Pool E1/E2 dry — need ingest + personalise more before Wed batch
+  - 0/302 lifetime E1 replies (295 old + 7 new, only 1 open on new) — early signal but n=7 is noise
+  - Gmail OAuth invalid_grant (reply-detector blocked)
+  - X API CreditsDepleted
+  - Daily 10 GSC routine needs noindex-filter
+  - Forge image-gen Daily success rate (1/3 again today)
+  - automatyn.co/checkout 404 (overlay-mode masks it)
+  - CLAUDE.md pricing line still stale (memory file written, file itself not yet rewritten)
