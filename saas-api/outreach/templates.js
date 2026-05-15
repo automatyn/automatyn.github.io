@@ -22,71 +22,67 @@ function render(template, vars) {
 }
 
 // E1 SUBJECT VARIANTS (hooks)
-// New copy 2026-05-04: money-loss framing, named-business specificity, no jargon.
+// Rewritten 2026-05-15: 0/295 replies on prior template = FULL RESET per Larry-brain matrix.
+// Voice reverted to /marketing/outreach-scripts.md playbook (Apr 17): plumber-shaped scene,
+// free tier as the ask, no fake social proof, no setup fee (real pricing = $29/mo or free).
 const SUBJECTS_E1 = {
-  S1: '{{business_name}} after-hours bookings',
-  S2: 'saw {{business_name}} on Google, quick idea',
-  S3: 'the £200 missed call',
+  S1: '{{business_name}} after 6pm',
+  S2: 'quick one about {{business_name}}',
+  S3: 'who answers WhatsApp at 8pm',
 };
 
-// E1 CTA VARIANTS (close — slot into the end of the body)
-// New copy 2026-05-04: removed binary/qualifier asks. Replaced with reply-friendly
-// or genuinely passive options. Easier asks convert.
+// E1 CTA VARIANTS (close - dual path: Y reply OR self-serve free tier)
+// We have no demo video, no demo number, no setup-fee product. The only real asks are:
+// 1) reply Y and Patrick sets up the free tier by hand
+// 2) hit automatyn.co and start the free tier themselves (no card needed)
+// Every CTA below offers both.
 const CTAS_E1 = {
-  C1_short: `Worth a 5-minute look?`,
-  C2_reply: `Reply with the word "send" and I'll mail back the setup link.`,
-  C3_passive: `If it's useful: automatyn.co/plumbers. If not, no follow-up from me.`,
-  C4_link: `automatyn.co/plumbers if you want to skip the pitch.`,
+  C1_y_or_link: `Reply Y and I'll set up the free tier on your number, takes 2 minutes. Or start it yourself: automatyn.co (free for 25 messages, no card).`,
+  C2_question_then_link: `Out of curiosity, how many evening WhatsApps does {{business_name}} get on a Friday? If the number is more than zero, automatyn.co is free to try (no card).`,
+  C3_link_first: `automatyn.co - free tier is 25 messages a month, no card, takes 2 minutes. Or reply Y and I'll do the setup for you.`,
 };
 
-// E1 body skeleton — CTA is appended at the end.
-// New body 2026-05-04: lead with their loss + concrete £, drop "I built a tool"
-// language, add Adam social proof, mechanism in one line.
+// E1 body skeleton - playbook tone, plumber-shaped, free tier ask.
 function renderE1Body(vars, cta) {
   return `${vars.greeting}${vars.intro_line}
 
-Most plumbers I talk to lose 2 or 3 evening enquiries a week. At £150-£300 a job, that's the kind of money you'd notice if it was sitting on the kitchen table.
+Quick question. When someone messages ${vars.business_name} on WhatsApp at 8pm asking about a burst pipe, what happens? It probably waits until morning, and by then they've rung the next plumber on Google.
 
-Automatyn answers ${vars.business_name}'s WhatsApp out of hours, books the job, and texts you the lead before you're back at the van.
+I built a free WhatsApp bot that catches those messages, asks the right questions (address, problem, photos), and texts you a summary so you can decide if it's worth the callout.
 
-Adam at AB Plumbing in Birmingham signed up last week. Setup took two minutes.
+Free for 25 conversations a month. No card. Two-minute setup, sits on your existing number.
 
 ${cta}
 
 Patrick
-Founder, Automatyn
 ${vars.unsubscribe_line}`;
 }
 
-// EMAIL 2 — Day 3 follow-up
-// New copy 2026-05-04: open with a real question, not "bumping this up". Keep specific.
+// EMAIL 2 - Day 3 follow-up.
+// Rewritten 2026-05-15: open with a real specific question, free tier ask, no fake stories.
 const EMAIL_2 = {
-  subject: 'did you see this{{comma_first_name}}?',
-  body: `{{greeting}}One follow-up, then I'll leave you to it.
+  subject: 'one follow up{{comma_first_name}}',
+  body: `{{greeting}}One follow up, then I'll leave you to it.
 
-Quick question: when someone messages {{business_name}} on WhatsApp at 8pm asking about a leaking radiator, what happens right now? Do they get a reply that night, or wait until the morning?
+Last Friday evening, how many WhatsApp messages came in to {{business_name}} after you'd packed up? If even one of them was a job worth chasing, that's the gap.
 
-If it's the morning, they've probably rung the next plumber by then.
+The bot is free for 25 messages a month. No card, no contract, two minute setup on your existing number. You stay in control: it just texts you the lead, you decide if you want to ring back.
 
-Automatyn handles that 8pm message for you, books them in, and sends you a summary so you wake up to a job, not a chase. Sits on your existing WhatsApp Business number, two-minute setup.
-
-automatyn.co/plumbers if you want a look.
+Reply Y and I'll set it up for you. Or start it yourself at automatyn.co.
 
 Patrick
 {{unsubscribe_line}}`,
 };
 
-// EMAIL 3 — Day 5 breakup
-// New copy 2026-05-04: lead with a concrete story, not a hypothetical.
+// EMAIL 3 - Day 5 breakup.
+// Rewritten 2026-05-15: short, honest, no fake customer, just the link.
 const EMAIL_3 = {
-  subject: 'last one',
-  body: `{{greeting}}Last note, promise.
+  subject: 'last note',
+  body: `{{greeting}}Last note from me.
 
-Adam runs a plumbing firm in Birmingham. Same size, same evening-enquiry problem. He set Automatyn up on his WhatsApp the day he signed up, and it now handles every message that comes in after he's wrapped his last job.
+If after-hours WhatsApps are getting missed at {{business_name}}, the tool is at automatyn.co. Free to start (25 messages, no card), takes 2 minutes.
 
-If {{business_name}} has the same gap, the link is below. If not, ignore this and have a solid week.
-
-automatyn.co/plumbers
+If not, ignore this and have a solid week.
 
 Patrick
 {{unsubscribe_line}}`,
@@ -94,7 +90,7 @@ Patrick
 
 function buildUnsubscribeLine(email, token) {
   const url = `https://api.automatyn.co/u?e=${encodeURIComponent(email)}&t=${encodeURIComponent(token)}`;
-  return `\n---\nNot interested? ${url}`;
+  return `\n\nNot interested? ${url}`;
 }
 
 function firstName(business_name) {
