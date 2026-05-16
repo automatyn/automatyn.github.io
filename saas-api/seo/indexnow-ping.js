@@ -14,10 +14,9 @@ const HOST = 'automatyn.co';
 
 const KEY = fs.readFileSync(KEY_FILE, 'utf8').trim();
 
+// Pages flipped back to index 2026-05-16: passive-income, how-much-does-ai-chatbot-cost
 const NOINDEX_URLS = new Set([
-  'https://automatyn.co/blog/passive-income-ai-agents-2026.html',
   'https://automatyn.co/blog/can-you-really-make-money-with-ai-2026.html',
-  'https://automatyn.co/blog/how-much-does-ai-chatbot-cost-2026.html',
   'https://automatyn.co/blog/claude-managed-agents-vs-openclaw-2026.html',
   'https://automatyn.co/blog/claude-managed-agents-what-it-means-2026.html',
   'https://automatyn.co/blog/claude-code-getting-dumber-2026.html',
