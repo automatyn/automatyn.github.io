@@ -115,6 +115,20 @@ Allow: /
 User-agent: YandexBot
 Allow: /
 
+# Internal / non-public paths — block from all crawlers
+User-agent: *
+Disallow: /x-private/
+Disallow: /BUSINESS_PLAN.md
+Disallow: /business_plan.md
+Disallow: /CLAUDE.md
+Disallow: /CONVERSION_AUDIT.md
+Disallow: /NO_SHOW_RESCUE_PLAN.md
+Disallow: /README.md
+Disallow: /TRAFFIC_QUEUE.md
+Disallow: /blog_style.md
+Disallow: /package.json
+Disallow: /generate_hardware_guide.py
+
 # Sitemaps
 Sitemap: https://automatyn.co/sitemap.xml
 

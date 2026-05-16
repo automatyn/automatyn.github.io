@@ -1,0 +1,26 @@
+# GitHub Pages build config
+# Files listed under `exclude:` stay in the repo but are NOT published to automatyn.co.
+# They remain accessible locally and via git.
+
+exclude:
+  # Internal strategy / planning docs
+  - BUSINESS_PLAN.md
+  - business_plan.md
+  - CLAUDE.md
+  - CONVERSION_AUDIT.md
+  - NO_SHOW_RESCUE_PLAN.md
+  - README.md
+  - TRAFFIC_QUEUE.md
+  - blog_style.md
+  # Build/repo files that shouldn't be on the live site
+  - package.json
+  - package-lock.json
+  - generate_hardware_guide.py
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  # Outreach + automation source (not site assets)
+  - saas-api/
+  - social-posts/
+  - .claude/
+  - scripts/
