@@ -205,6 +205,6 @@ Then `git add social-posts/ && git commit -m "log: /evening session" && git push
 ## Content Rules (MUST follow everywhere)
 - NEVER use em dashes
 - NEVER use banned words
-- No fake prices. Real: $400 / $800 / $1500 + $150/mo
+- No fake prices. Live: Starter free / Pro $29/mo / Max $79/mo + geo-pricing. Link to /pricing.html.
 - NEVER use Playwright to post/reply/like on any platform with an API
 - Sound human and professional, not AI-generated

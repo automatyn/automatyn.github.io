@@ -187,6 +187,6 @@ Append to `/home/marketingpatpat/openclaw/social-posts/session-log.md` and commi
 ## Content Rules (MUST follow everywhere)
 - NEVER use em dashes
 - NEVER use banned words (leverage, unlock, seamless, etc.)
-- No fake prices. Real: $400 / $800 / $1500 + $150/mo
+- No fake prices. Live: Starter free / Pro $29/mo / Max $79/mo + geo-pricing. Link to /pricing.html.
 - NEVER use Playwright to post/reply/like on any platform with an API
 - Sound human and professional, not AI-generated

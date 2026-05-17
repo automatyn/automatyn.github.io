@@ -95,7 +95,7 @@ This applies to **editorial posts only**. Never retrofit programmatic location p
 - **NEVER** use em dashes or hyphens between clauses. Use a full stop or comma.
 - **NEVER** use: `leverage`, `unlock`, `seamless`, `game-changer`, `revolutionary`, `cutting-edge`, `streamline`, `empower`, `synergy`, `optimize`, `disrupt`.
 - **NEVER** use words: `bot`, `chatbot`, `receptionist` for our product UI text. Use `agent` (the noun "AI receptionist" is OK as an SEO keyword in titles/H1/H2 only).
-- **NO fake prices**. Real prices: `$400 / $800 / $1500` one-time + `$150/mo` support — but in blog body, link to `/pricing.html`.
+- **NO fake prices**. Live SaaS pricing is Starter free / Pro $29/mo / Max $79/mo with geo-pricing (GB £29/£69, EU €29/€79, AU A$49/A$129, NZ NZ$49/NZ$129, CA C$39/C$99). In blog body, link to `/pricing.html` and let the geo-switcher resolve the currency. Do not hardcode amounts.
 - **Skip the founder section** (no "About me, the founder…").
 
 ## 8. SEO / Metadata

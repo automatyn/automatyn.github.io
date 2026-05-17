@@ -312,6 +312,6 @@ Then `git add social-posts/ && git commit -m "log: /morning session" && git push
 ## Content Rules (MUST follow everywhere)
 - NEVER use em dashes or hyphens between clauses
 - NEVER use: leverage, unlock, seamless, game-changer, revolutionary, cutting-edge, streamline, empower, synergy, optimize, disrupt
-- No fake prices. Real prices: $400 / $800 / $1500 one-time + $150/mo support
+- No fake prices. Live SaaS: Starter free / Pro $29/mo / Max $79/mo + geo-pricing. Link to /pricing.html, don't hardcode currency.
 - NEVER use Playwright to post/reply/like on X, Reddit, LinkedIn, or any platform with an API
 - Sound human and professional, not AI-generated
