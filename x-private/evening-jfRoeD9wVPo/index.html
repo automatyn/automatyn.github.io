@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>X drafts — morning-684cb4b1 2026-05-09</title>
+<style>
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; margin: 0; padding: 16px; max-width: 720px; margin: 0 auto; }
+header { position: sticky; top: 0; background: #0a0a0a; padding: 12px 0; border-bottom: 1px solid #222; z-index: 10; }
+h1 { font-size: 20px; margin: 0 0 8px; }
+.progress { font-size: 14px; color: #a855f7; }
+.card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 14px; margin: 12px 0; transition: opacity 0.3s; }
+.card.done { opacity: 0.35; border-color: #16a34a; }
+.card.skipped { opacity: 0.25; border-color: #444; }
+.card-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px; margin-bottom: 8px; }
+.num { color: #666; font-weight: 600; }
+.badge { padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 11px; }
+.badge.reply { background: #1e3a8a; color: #93c5fd; }
+.badge.original { background: #581c87; color: #c4b5fd; }
+.meta { color: #888; }
+.char-count { margin-left: auto; color: #888; font-variant-numeric: tabular-nums; }
+.target { background: #1a1a1a; border-left: 3px solid #3b82f6; padding: 8px 10px; margin: 8px 0; border-radius: 4px; font-size: 13px; }
+.target a { color: #60a5fa; font-size: 11px; text-decoration: none; }
+.target-text { color: #aaa; margin-top: 4px; }
+.draft-text { background: #0f0f0f; border: 1px solid #2a2a2a; padding: 12px; border-radius: 8px; font-size: 15px; line-height: 1.45; white-space: pre-wrap; margin: 10px 0; }
+.reason { font-size: 11px; color: #666; font-style: italic; margin: 6px 0 10px; }
+.actions { display: flex; gap: 8px; margin-top: 10px; }
+.post-btn { flex: 1; background: #1d9bf0; color: white; padding: 12px; border-radius: 999px; text-align: center; text-decoration: none; font-weight: 600; font-size: 15px; }
+.post-btn:active { background: #1a8cd8; }
+.skip-btn { background: transparent; color: #888; border: 1px solid #333; padding: 12px 18px; border-radius: 999px; font-size: 14px; cursor: pointer; }
+.reset { background: transparent; border: none; color: #666; font-size: 12px; cursor: pointer; text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>X drafts — morning-684cb4b1 2026-05-09</h1>
+  <div class="progress"><span id="done-count">0</span>/10 posted · <span id="skipped-count">0</span> skipped · <button class="reset" onclick="resetState()">reset</button></div>
+</header>
+<div id="cards">
+
+<div class="card" data-id="o1" id="card-o1">
+  <div class="card-head">
+    <span class="num">#1</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">139c</span>
+  </div>
+  
+  <div class="draft-text">The thing nobody tells small businesses about WhatsApp bots: 90% of the win is just answering at 11pm, not the fancy intent classification.</div>
+  <div class="reason">SMB pain angle. Concrete time hook (11pm) + contrarian framing (boring beats clever).</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=The%20thing%20nobody%20tells%20small%20businesses%20about%20WhatsApp%20bots%3A%2090%25%20of%20the%20win%20is%20just%20answering%20at%2011pm%2C%20not%20the%20fancy%20intent%20classification." target="_blank" onclick="markDone('o1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o2" id="card-o2">
+  <div class="card-head">
+    <span class="num">#2</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">187c</span>
+  </div>
+  
+  <div class="draft-text">If you build for tradies you learn quick: the customer doesn't want chat, they want a callback time. Anything else feels like a maze. Bots that answer 'when' beat bots that answer 'what'.</div>
+  <div class="reason">Trade-specific insight. Pattern that converts on /pricing.html. Reply-bait: tradies will share their own version.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=If%20you%20build%20for%20tradies%20you%20learn%20quick%3A%20the%20customer%20doesn't%20want%20chat%2C%20they%20want%20a%20callback%20time.%20Anything%20else%20feels%20like%20a%20maze.%20Bots%20that%20answer%20'when'%20beat%20bots%20that%20answer%20'what'." target="_blank" onclick="markDone('o2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="o3" id="card-o3">
+  <div class="card-head">
+    <span class="num">#3</span>
+    <span class="badge original">ORIGINAL</span>
+    
+    
+    
+    <span class="char-count">158c</span>
+  </div>
+  
+  <div class="draft-text">We rebuilt our outreach copy three times. The version that works is shorter than the failed ones, every time. AI didn't help us write it. AI helped us cut it.</div>
+  <div class="reason">Counter-AI-hype angle. Builders will reply with their own AI editing experience.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?text=We%20rebuilt%20our%20outreach%20copy%20three%20times.%20The%20version%20that%20works%20is%20shorter%20than%20the%20failed%20ones%2C%20every%20time.%20AI%20didn't%20help%20us%20write%20it.%20AI%20helped%20us%20cut%20it." target="_blank" onclick="markDone('o3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('o3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r1" id="card-r1">
+  <div class="card-head">
+    <span class="num">#4</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@alexalbert__</span>
+    <span class="meta">140090f</span>
+    <span class="meta">6.2h</span>
+    <span class="char-count">185c</span>
+  </div>
+  <div class="target"><a href="https://x.com/alexalbert__/status/2052899864493830590" target="_blank">view post →</a><div class="target-text">An early Claude Mythos Preview snapshot we provided METR has a time horizon of more than 2x the next best model on their 80% success rate benchmark</div></div>
+  <div class="draft-text">What workload class shows the biggest gap? We're seeing the 80% bar bend most on multi-step ops where the model has to undo its own mistakes. Curious where METR's 2x is most pronounced.</div>
+  <div class="reason">Anthropic principal. Direct question to author (reply-back = 150x). 79k views, 6.2h.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052899864493830590&text=What%20workload%20class%20shows%20the%20biggest%20gap%3F%20We're%20seeing%20the%2080%25%20bar%20bend%20most%20on%20multi-step%20ops%20where%20the%20model%20has%20to%20undo%20its%20own%20mistakes.%20Curious%20where%20METR's%202x%20is%20most%20pronounced." target="_blank" onclick="markDone('r1')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r1')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r2" id="card-r2">
+  <div class="card-head">
+    <span class="num">#5</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@AravSrinivas</span>
+    <span class="meta">496349f</span>
+    <span class="meta">3.2h</span>
+    <span class="char-count">168c</span>
+  </div>
+  <div class="target"><a href="https://x.com/AravSrinivas/status/2052946163297628443" target="_blank">view post →</a><div class="target-text">Monitor the situation</div></div>
+  <div class="draft-text">Which signal are you watching first? Daily active or session length? We're tracking session length on our SMB setup and it's the more honest one when novelty wears off.</div>
+  <div class="reason">Perplexity CEO. Cryptic OP invites question. 496k followers, fresh.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052946163297628443&text=Which%20signal%20are%20you%20watching%20first%3F%20Daily%20active%20or%20session%20length%3F%20We're%20tracking%20session%20length%20on%20our%20SMB%20setup%20and%20it's%20the%20more%20honest%20one%20when%20novelty%20wears%20off." target="_blank" onclick="markDone('r2')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r2')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r3" id="card-r3">
+  <div class="card-head">
+    <span class="num">#6</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@patio11</span>
+    <span class="meta">193855f</span>
+    <span class="meta">5.1h</span>
+    <span class="char-count">137c</span>
+  </div>
+  <div class="target"><a href="https://x.com/patio11/status/2052916718150771068" target="_blank">view post →</a><div class="target-text">~1,000 km later. Unsolicited plug: continues to be the best hack for motivating me 'Eh, come on, why not one more mile.' on my morning constitutional.</div></div>
+  <div class="draft-text">Curious which gear that is. The 'one more mile' bargain is real, I have it with the dog at 6am. What got you to 1000 vs giving up at 200?</div>
+  <div class="reason">Patrick McKenzie. Personal hook + question that begs the why. SaaS audience.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052916718150771068&text=Curious%20which%20gear%20that%20is.%20The%20'one%20more%20mile'%20bargain%20is%20real%2C%20I%20have%20it%20with%20the%20dog%20at%206am.%20What%20got%20you%20to%201000%20vs%20giving%20up%20at%20200%3F" target="_blank" onclick="markDone('r3')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r3')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r4" id="card-r4">
+  <div class="card-head">
+    <span class="num">#7</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@jasonlk</span>
+    <span class="meta">239605f</span>
+    <span class="meta">4.9h</span>
+    <span class="char-count">159c</span>
+  </div>
+  <div class="target"><a href="https://x.com/jasonlk/status/2052919480620024130" target="_blank">view post →</a><div class="target-text">200+ speakers coming to SaaStr AI Annual. The prior years, an (often grouchy) human spent hours sending the calendar invites, got 5%+ wrong. Last night, Claude Cowork just did it all.</div></div>
+  <div class="draft-text">Was the human reading the wrong fields, or did the calendar provider keep mangling timezones? Curious if Claude beat the human on accuracy or just on patience.</div>
+  <div class="reason">SaaStr founder. AI agent use case adjacent to our space. Forces a real answer.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052919480620024130&text=Was%20the%20human%20reading%20the%20wrong%20fields%2C%20or%20did%20the%20calendar%20provider%20keep%20mangling%20timezones%3F%20Curious%20if%20Claude%20beat%20the%20human%20on%20accuracy%20or%20just%20on%20patience." target="_blank" onclick="markDone('r4')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r4')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r5" id="card-r5">
+  <div class="card-head">
+    <span class="num">#8</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@jasonlk</span>
+    <span class="meta">239605f</span>
+    <span class="meta">2.6h</span>
+    <span class="char-count">165c</span>
+  </div>
+  <div class="target"><a href="https://x.com/jasonlk/status/2052954964570374553" target="_blank">view post →</a><div class="target-text">13 years of SaaStr. Hundreds of events. Tens of thousands of founders helped. SaaStr AI Annual 2026 is the most important one we've ever done. May 12-14.</div></div>
+  <div class="draft-text">What's the one talk you're most nervous won't land? The 'most important one ever' framing usually means there's a session that has to convert and you're sweating it.</div>
+  <div class="reason">Same OP. Pulls a genuine confession out of him if he replies. Both jasonlk replies will be fine if both posted (different threads).</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052954964570374553&text=What's%20the%20one%20talk%20you're%20most%20nervous%20won't%20land%3F%20The%20'most%20important%20one%20ever'%20framing%20usually%20means%20there's%20a%20session%20that%20has%20to%20convert%20and%20you're%20sweating%20it." target="_blank" onclick="markDone('r5')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r5')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r6" id="card-r6">
+  <div class="card-head">
+    <span class="num">#9</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@TTrimoreau</span>
+    
+    <span class="meta">4.3h</span>
+    <span class="char-count">163c</span>
+  </div>
+  <div class="target"><a href="https://x.com/TTrimoreau/status/2052930301744095545" target="_blank">view post →</a><div class="target-text">You can only keep one for the next 5 years: audience, product, skills, network</div></div>
+  <div class="draft-text">Audience. Product is a snapshot, audience compounds. I've tried to rebuild from scratch twice and skill comes back fast, audience does not. What's your gut answer?</div>
+  <div class="reason">Browser source. Pure conversation starter, OP will pick a winner. Low risk of skip.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052930301744095545&text=Audience.%20Product%20is%20a%20snapshot%2C%20audience%20compounds.%20I've%20tried%20to%20rebuild%20from%20scratch%20twice%20and%20skill%20comes%20back%20fast%2C%20audience%20does%20not.%20What's%20your%20gut%20answer%3F" target="_blank" onclick="markDone('r6')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r6')">Skip</button>
+  </div>
+</div>
+
+<div class="card" data-id="r7" id="card-r7">
+  <div class="card-head">
+    <span class="num">#10</span>
+    <span class="badge reply">REPLY</span>
+    <span class="meta">@MahlumAI</span>
+    
+    <span class="meta">3.2h</span>
+    <span class="char-count">192c</span>
+  </div>
+  <div class="target"><a href="https://x.com/MahlumAI/status/2052946711350280384" target="_blank">view post →</a><div class="target-text">The 'agentic AI' pitch right now reminds me of RPA in 2018. Same promise: it works end-to-end, no humans needed. Same reality: brittle pipelines, silent failures, and someone on a Slack channel handling exceptions.</div></div>
+  <div class="draft-text">This is the cleanest version of that take I've read. The closest analog is also the bots-vs-RPA gap of who owns the failure mode. Who do your clients call when the agent silently drops a spec?</div>
+  <div class="reason">Browser source. Directly on our positioning thesis (we are the human in the failure-mode loop). Small account but right audience.</div>
+  <div class="actions">
+    <a class="post-btn" href="https://x.com/intent/tweet?in_reply_to=2052946711350280384&text=This%20is%20the%20cleanest%20version%20of%20that%20take%20I've%20read.%20The%20closest%20analog%20is%20also%20the%20bots-vs-RPA%20gap%20of%20who%20owns%20the%20failure%20mode.%20Who%20do%20your%20clients%20call%20when%20the%20agent%20silently%20drops%20a%20spec%3F" target="_blank" onclick="markDone('r7')">📤 Post</a>
+    <button class="skip-btn" onclick="markSkipped('r7')">Skip</button>
+  </div>
+</div>
+</div>
+<script>
+const KEY = 'x-drafts-morning-684cb4b1-2026-05-09';
+const state = JSON.parse(localStorage.getItem(KEY) || '{}');
+function refresh() {
+  let done = 0, skipped = 0;
+  document.querySelectorAll('.card').forEach(c => {
+    const id = c.dataset.id;
+    c.classList.remove('done', 'skipped');
+    if (state[id] === 'done') { c.classList.add('done'); done++; }
+    if (state[id] === 'skipped') { c.classList.add('skipped'); skipped++; }
+  });
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('skipped-count').textContent = skipped;
+}
+function markDone(id) { state[id] = 'done'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function markSkipped(id) { state[id] = 'skipped'; localStorage.setItem(KEY, JSON.stringify(state)); refresh(); }
+function resetState() { if (confirm('Reset all progress?')) { localStorage.removeItem(KEY); location.reload(); } }
+refresh();
+</script>
+</body>
+</html>
