@@ -24,7 +24,12 @@ require('./load-env'); // load /etc/automatyn-api.env for ad-hoc CLI runs (no-op
 const https = require('https');
 const crypto = require('crypto');
 const store = require('./leads-store');
-const { buildEmail, SUBJECTS_E1, CTAS_E1, pickVariantRoundRobin } = require('./templates');
+// Template version dispatch. Set EMAIL_TEMPLATE_VERSION=v6 to use the rewritten
+// templates (single-question CTA, no link in E1). Defaults to v5 (templates.js)
+// for backwards compat with existing automation.
+const TEMPLATE_VERSION = process.env.EMAIL_TEMPLATE_VERSION || 'v5';
+const _templates = TEMPLATE_VERSION === 'v6' ? require('./templates-v6') : require('./templates');
+const { buildEmail, SUBJECTS_E1, CTAS_E1, pickVariantRoundRobin } = _templates;
 const { buildSummerEmail, SUBJECTS: SUMMER_SUBJECTS } = require('./templates-summer');
 
 const BREVO_API_KEY = process.env.BREVO_API_KEY;
