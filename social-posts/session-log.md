@@ -1751,3 +1751,46 @@ Open items for next slot:
   - SEO Daily Task C: 2 days of success (roofer + accountant), needs verification tomorrow.
   - Pool E1-ready chronically 0 — personalisation is the bottleneck.
   - 9 vulnerabilities flagged on automatyn.github.io (4 high, 5 moderate) per dependabot.
+
+### /morning — 2026-05-20 09:35 UTC
+- **Recap:** /evening 2026-05-19 22:25Z. Past 2 routines had fabrication issue — fixed in /evening by re-running actual sender (E2 7, E3 10). Today's /morning runs sender first, logs second, no fabrication.
+- **HALT:** clear. Monitor 08:00Z: `Brevo 24h: 18 sent · 0 hard · 0 spam · OK`.
+- **Bot health:** all 7 services `active` ✅.
+- **X status:** @patrickssons 442f / 1518t / 996l (+1f / +19t / +3l vs /evening 441/1499/993). Healthy overnight growth.
+- **OUTREACH — E3 batch sent (14 leads):** Lifetime E3 243 → 257 (+14).
+  - Sent: Aspire Garden, Ideal Building, Matt's Lawns, KMR Gardens, Landscaping Solutions Manchester, Capital Landscapes, Greenscape Gardeners, 360 Plumbing, Baker & Soars, ARV Group, Transform Heating, PlumbSharp, J A Clarke, S A Plumbing.
+  - E2 ready: 0. E1 ready: 0 (personalisation backlog persists).
+  - Sender process hung after sends completed (held sender-step3.lock, idle in ep_poll, no TCP sockets, 13min stuck). Killed via SIGTERM. **Same hang pattern noted — needs investigation. Possibly a fetch-keepalive socket the script doesn't close.**
+- **X drafts pushed: 9 to Telegram via 2 batches** (firehose-candidates 09:05Z + browser scrape 09:29Z):
+  - **Batch 1 (5 from firehose):** @paulg 2.7M 134c college-dropout-fallacy, @GergelyOrosz 334k 132c Railway/Unisuper landlord-not-partner, @tdinh_me 186k 132c 30-page-prompt-as-worry-artifact, @Pragmatic_Eng 45k 90c cloud-as-landlord, @TTrimoreau 8.7k 119c if-LLMs-gone same-3-people.
+  - **Batch 2 (4 from browser scrape):** @arvidkahl 198k 102c Shai-Hulud-supply-chain, @simonw 186k 184c Flash-3.5-internal-use-tell, @AnthropicAI 1.28M 158c character-forms-same-way, @jasonlk 241k 153c people-who-understand-never-call.
+- **X warm-chain reply pushed (3 options) to @newlinedotco 5.3k verified** who replied to @patrickssons at 00:37Z (8.7h, warm-exempt). 3 bend-back drafts pushed; Pat picks one.
+- **X originals pushed: 5 view-max drafts** (after Pat asked for max-views from Explore page).
+  - X/Explore top trends scraped via CDP: #TheBoys (top US), politics (AIPAC, Rand Paul, MIGA), sports (Knicks, Brunson). None dev-native, but #TheBoys + today's Railway/GCP story bridges to dev audience.
+  - Pushed: A) Railway+Vought#TheBoys 135c, B) Homelander-moment-founder 177c, C) Antony-Starr-pure-quote-bait 88c, D) algorithm-rewards-arguing-but-income-comes-from-watchers 179c, E) "if your idea fits in a tweet it isn't an idea it's a vibe" 102c quote-bait.
+- **X viral original (earlier morning push):** 153c "the cloud isn't infrastructure. it's a sublease. and the landlord can change the locks while you're at lunch."
+- **TikTok:** 22 / **6,185v / 75l** (+1v since /evening). yt-dlp paginated cache, unchanged otherwise.
+- **Reddit pipeline:** webhook 200 `{"message":"Workflow was started"}`.
+- **Triggers (live ID list pulled, old morning IDs are stale 404):**
+  - SEO Daily (trig_0181Shnfp8365bssX5RUSykv): active. Last fired 2026-05-19 10:01Z. Next 2026-05-20 10:03Z. **Will fire in ~28 min** — Task C (3 blogs/day) is on the morning slot.
+  - SEO Weekly (trig_01WpmgSA1ekBuyC7KS4RudCg): active. Last fired 2026-05-18. Next 2026-05-25.
+  - Accelera workflow checks (trig_01PemwKDTLBUVXxDtAmQPckS): currently disabled.
+  - Day-14 SEO bump trigger: next May 2027 (long-tail).
+- **GSC OAuth:** still `invalid_grant` (5 days). Daily SEO pull blocked.
+- **Reply detector:** `invalid_grant` (Gmail OAuth dead 5+ days). Pat checks inbox manually.
+- **Brevo opens 24h pull:** scanned 2 events, matched 2 to leads.
+- **Signups overnight 14h:** 0. Total agents 24 (1 pro / 5 starter / 18 free, unchanged).
+- **Cap-hit scan:** clean.
+- **Open items (carried + new):**
+  - **NEW: sender.js hang post-send pattern.** E3 sender finished all 14 sends in <30s but process stuck idle for 13+ min holding lock. Need to add explicit `process.exit(0)` after Brevo fetch loop closes, or audit for leaking fetch-keepalive sockets. **Until fixed, routines should add a `timeout 90` wrapper or kill via PID after verified sends.**
+  - **NEW: v6 smoke test verdict still PENDING.** 5 v6 sends made 2026-05-18 ~12:35Z. 48h+ window. 0 replies yet. Inside the 24-72h window. Definitive verdict tomorrow morning.
+  - Old morning trigger IDs in skill file are stale (404s). Need to update skill.md with current live IDs or remove the GET checks.
+  - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
+  - GSC OAuth invalid_grant (5 days now).
+  - Gmail OAuth invalid_grant (reply-detector blocked, 6+ days).
+  - GMAIL_APP_PASSWORD not set (daily-stats email send disabled).
+  - X API CreditsDepleted (~$2-3 top-up to unblock API source).
+  - Per-email dns_flag propagation bug.
+  - Pool E1-ready chronically 0 (personalisation bottleneck).
+  - 9 dependabot vulns on automatyn.github.io.
+  - Phase 1 push: Trillet + Down To Earth compare pages shipped, sub-£30 trades blog page + sitemap + IndexNow + listicle outreach still pending (task #81-#84).
