@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "updated": "2026-05-21",
+  "notes": "Trimmed loop-only list: 15 highest-yield marquee accounts. Driven by Pat's autonomous /x-reply-engine. Pruned to keep scrape <700s.",
+  "groups": {
+    "marquee": [
+      "elonmusk", "sama", "JeffBezos", "mcuban", "pmarca",
+      "jimcramer", "GergelyOrosz", "simonw", "AnthropicAI",
+      "OpenAIDevs", "patio11", "tdinh_me", "SahilBloom",
+      "AlexHormozi", "garyvee"
+    ]
+  }
+}

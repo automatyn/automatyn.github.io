@@ -1827,3 +1827,33 @@ Open items for next slot:
   - GSC OAuth dead 5d. Gmail OAuth dead 6+d. GMAIL_APP_PASSWORD missing.
   - X API CreditsDepleted (~$2-3 needed).
   - Phase 1 push items #82-84 still pending.
+
+### /morning + /afternoon combined — 2026-05-21 15:45 UTC
+- **Recap:** /afternoon 2026-05-20 17:25Z. E3 6/6 sent, lifetime 264. 5 reply drafts + 3 originals pushed.
+- **Date note:** Today is 2026-05-21. Yesterday's marathon reply spree (Bezos x2, NVDA/Anthropic/OpenAI/SpaceX cycle, sama, Cuban, Tom Brown, GaryVee, Hormozi, etc.) drove +21 followers in 19h.
+- **HALT:** clear. Monitor 12:00Z: `Brevo 24h: 21 sent`.
+- **Bot health:** all 7 services active ✅.
+- **X status:** @patrickssons **465f / 1651t / 1083l** (+23f / +133t / +87l vs /afternoon 2026-05-20). Best follower velocity in project history.
+- **OUTREACH — E2 + E3 batches:**
+  - E2: **15/16 sent** (one DNS-skipped). Lifetime E2 278 → 293. Sender hang pattern reappeared (process held lock 20min idle after sends complete; SIGTERM'd).
+  - E3 in flight: 1/3 sent so far (Gardener in Leeds), lifetime 264 → 265. Two more pending.
+  - E1 ready: 0 (personalisation backlog continues).
+- **X drafts pushed: 30 reply drafts + 3 originals**:
+  - **Morning (5):** @SahilBloom 1.16M (156c energized-vs-empty), @GergelyOrosz 334k x2 (190c 3-monopolies + 164c trust-deficit), @tdinh_me 186k (108c Otto-AI-naming), @TKopelman 40k (150c attention-not-time).
+  - **Cycle-1 from /x-reply-engine (25):** @GergelyOrosz 334k x2 (turbopuffer/Cursor + Meta-layoffs-Zuck), @jimcramer 2.4M (per-seat-model), @AlexHormozi 1M (figuring-what-you-want), @garyvee 3.1M (rotten-place).
+  - **Originals (3):** A 152c Meta-layoffs-CEO-playbook, B 189c turbopuffer/AWS-shipped-product-vs-trust, C 142c cloud-as-lease quote-bait.
+- **Reddit pipeline:** webhook 200 OK.
+- **TikTok:** 22 / 6,186v / 75l (unchanged since /afternoon 2026-05-20). yt-dlp cache.
+- **Signups 24h:** 0. Total agents 24 (1 pro / 5 starter / 18 free).
+- **Cap-hit scan:** clean.
+- **Brevo opens 12h pull:** 0 events scanned.
+- **/x-reply-engine loop:** Cron `66abccf1` armed (every 10min off-zero :03/:13/:23/:33/:43/:53). Session-only. Trimmed `target-list-loop.json` (15 marquee handles) + scrape-targets.js patched to accept TARGET_LIST_FILE env var. Cycle 1 executed manually after harness re-prompts.
+- **Open items (carried + new):**
+  - **NEW: cron firings need active session.** Session-only cron dies on Claude exit. For durable autonomy, use `/schedule` instead.
+  - **NEW: scrape attribution bug.** Quote-tweets/retweets appear under multiple author handles (saw mcuban/JeffBezos/elonmusk all attributed to same political tweet). Need to dedupe by tweet_id in /x-reply-engine cycle 2+.
+  - Sender hang intermittent (E2 hung today, E3 cleaning so far).
+  - x-firehose.service "inactive (dead)" — timer fires but service exits without producing output. Need sudo journalctl to diagnose.
+  - GSC OAuth dead 6d. Gmail OAuth dead 7d. GMAIL_APP_PASSWORD absent.
+  - X API CreditsDepleted (~$2-3 needed).
+  - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
+  - Phase 1 task #82 (sitemap+IndexNow) + #84 (listicle outreach emails) still pending.

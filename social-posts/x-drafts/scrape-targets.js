@@ -8,7 +8,8 @@ const path = require('path');
 const { execSync, spawnSync } = require('child_process');
 
 const dir = __dirname;
-const targets = JSON.parse(fs.readFileSync(path.join(dir, 'target-list.json'), 'utf8'));
+const targetListFile = process.env.TARGET_LIST_FILE || 'target-list.json';
+const targets = JSON.parse(fs.readFileSync(path.join(dir, targetListFile), 'utf8'));
 const hoursWindow = parseInt(process.argv[2] || '24', 10);
 const maxPerHandle = parseInt(process.argv[3] || '5', 10);
 const CDP = 'http://localhost:18800';
