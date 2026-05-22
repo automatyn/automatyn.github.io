@@ -1857,3 +1857,34 @@ Open items for next slot:
   - X API CreditsDepleted (~$2-3 needed).
   - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
   - Phase 1 task #82 (sitemap+IndexNow) + #84 (listicle outreach emails) still pending.
+
+### /morning — 2026-05-22 08:35 UTC
+- **Recap:** /morning+/afternoon 2026-05-21 15:45Z. E2 15/16 + E3 3/3 sent. 30 reply drafts + 3 originals pushed. +23 followers on the day (442 → 465). Loop cron killed (session-only crons don't fire autonomously between user messages — locked into memory feedback_no_fake_autonomy.md).
+- **Working style this morning:** 1 draft per target (max-views + max-likes optimisation), no menu, no "recommend X because Y" line.
+- **HALT:** clear. Monitor 08:00Z: `Brevo 24h: 18 sent`.
+- **Bot health:** 7/7 active ✅.
+- **X status:** @patrickssons **469f / 1672t / 1093l** (+4f / +21t / +10l overnight).
+- **OUTREACH:**
+  - E2: **1/1 sent** (Evolve Plumbing Services). Lifetime E2 293 → 294.
+  - E3: **4/4 sent** (DGP Plumbing, Plumbers Glasgow Ltd, 1Point Plumbing & Heating, GPH Plumbing & Heating). Lifetime E3 267 → 271.
+  - Both senders exited cleanly. No hang.
+  - E1 ready: 0 (personalisation backlog continues).
+- **X drafts pushed: 6 single-pick replies (1 per target, max-views/max-likes):**
+  - @simonw 186k 157c — "active listening" was a scam reframe (algorithm too good, not too creepy)
+  - @sama 4.88M 157c — solve attention quality not quantity (replies to his "what problem should AI solve?" — high reply-back odds)
+  - @OpenAIDevs 339k 134c — Codex locked-Mac = "AI employee not AI tool"
+  - @SahilBloom 1.16M 117c — disappeared friend, loud-vs-quiet
+  - @garyvee 3.1M 128c — find the work that doesn't feel like work
+  - @jimcramer 2.4M 159c — NVDA between-earnings buyback isn't optional
+- **Reddit pipeline:** webhook 200 OK.
+- **Browser scrape:** 15 handles, 26 candidates kept (24h), 2 in 3h window. Quiet morning by overall standards but pickings were good.
+- **TikTok:** 22 / **6,190v / 75l** (+4v vs yesterday).
+- **Signups 24h:** 0. Total agents 24 (1 pro / 5 starter / 18 free).
+- **Cap-hit scan:** clean.
+- **Open items (carried):**
+  - Sender hang pattern: today exited cleanly. Watch.
+  - x-firehose.service "inactive (dead)" — timer fires but service is empty. Needs sudo journalctl to diagnose.
+  - GSC OAuth dead 7d. Gmail OAuth dead 8d. GMAIL_APP_PASSWORD absent.
+  - X API CreditsDepleted.
+  - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
+  - Phase 1 task #82 (sitemap+IndexNow) + #84 (listicle outreach emails) still pending.
