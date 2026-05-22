@@ -1888,3 +1888,32 @@ Open items for next slot:
   - X API CreditsDepleted.
   - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
   - Phase 1 task #82 (sitemap+IndexNow) + #84 (listicle outreach emails) still pending.
+
+### /afternoon — 2026-05-22 15:30 UTC
+- **Recap:** /morning 2026-05-22 09:35Z (BST). E2 1/1 + E3 4/4 sent. 6 X replies pushed. +4f overnight.
+- **HALT:** clear. Monitor 08:00Z stale.
+- **Bot health:** 7/7 active ✅.
+- **X status:** @patrickssons **477f / 1685t / 1097l** (+8f / +13t / +4l since /morning).
+- **OUTREACH — pool dry:**
+  - E1/E2/E3 ready: 0/0/0. No sends possible.
+  - Ran `ingest.js`: +8 leads (4572 → 4580 total). New leads need email enrichment + personalisation before they can move into E1.
+  - Ran `enrich-emails.js 50`: timed out at 240s on first try, retrying at 600s with batch=30 (in flight).
+- **X drafts pushed afternoon (5 single-pick replies):**
+  - @SahilBloom 1.16M 115c — edited-vs-unedited personalities
+  - @garyvee 3.1M 100c — life shrinks when protecting > chasing
+  - @jimcramer 2.4M 168c — short position is the market pricing in management's mistake
+  - @GergelyOrosz 334k 138c — cold email isn't dying, the impostable version is (on-brand)
+  - @GergelyOrosz 334k 129c — turbopuffer podcast sponsor = show grew up
+- **Reddit pipeline:** webhook 200 OK.
+- **Browser scrape:** 15 handles 3h, 8 candidates kept. 10 noRecent (Friday afternoon dev-X quiet).
+- **TikTok:** 22 / 6,190v / 75l unchanged.
+- **Signups 24h:** 0. Total agents 24 (unchanged).
+- **Cap-hit scan:** clean.
+- **Open items (carried):**
+  - **POOL DRY** is the bottleneck. Enrichment retry running. Personalisation backlog persists (333/666 personalised). Until enrich+personalise complete, no E1 sends.
+  - enrich-emails.js needs longer timeout in routine skill.md (240s default isn't enough).
+  - x-firehose.service "inactive (dead)" carried 2d.
+  - GSC OAuth dead 8d. Gmail OAuth dead 9d. GMAIL_APP_PASSWORD absent.
+  - X API CreditsDepleted.
+  - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
+  - Phase 1 task #82 + #84 still pending.
