@@ -1947,3 +1947,40 @@ Open items for next slot:
   - X API CreditsDepleted.
   - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
   - Phase 1 task #82 + #84 still pending.
+
+### /evening — 2026-05-23 20:35 UTC
+- **Recap:** /morning+/afternoon 13:15Z. E3 16/16 sent. 5 X drafts + earlier replies (saylor, void, telegram, tai, newlinedotco warm-chain).
+- **HALT:** clear. 7/7 active.
+- **X status:** @patrickssons **486f / 1756t / 1117l** (+2f / +34t / +4l vs /afternoon).
+- **CRITICAL: BREAKTHROUGH on outreach diagnostic.**
+  - 6-day-old "0/918 replies = body is dead" diagnosis was incomplete. Real story: 85% of E1 sends went to ONE vertical (plumbers 282/327). 9 other verticals barely tested. The "copy is dead" claim was actually "plumber-saturation".
+  - **Diversification test launched today (2026-05-23 16:30Z):** 9 v6 E1 sends to London gardeners (4.7-5.0 ratings, never contacted before). Early signal at 7h: **2/9 opened = 22%** (matches plumber baseline). Replies still 0 but in 0-72h window.
+  - Personalised 9 leads with vertical-specific intro_line (rating, design-build framing).
+  - Sent: Garden Builders, Terra Firma, Garden Club London, Two Brothers, MR Landscapes, Green At Home, Chic, Crocus, Landscape Machine.
+- **OUTREACH stats — TODAY: 25 emails sent (E1 9 gardener + E3 16 plumber). LIFETIME: 917 sent.**
+  - E1 327 → 336 (+9 gardener)
+  - E2 294 (no E2 sends today)
+  - E3 271 → 287 (+16 plumber)
+  - Opens lifetime: E1 69 (+3), E2 60 (+1), E3 33 (+1) = **162 total**
+  - Unsubs 13 → 15 (+2 today)
+  - **Replies still 0/917.** 48-72h window on gardener cohort is the real verdict.
+- **X drafts pushed evening: 5 single picks + 1 viral original:**
+  - @elonmusk 240M 205c — Boring Company tunnel cost-disease test
+  - @SahilBloom 1.16M 158c — life advice is autobiographical
+  - @garyvee 3.1M 124c — perfect isn't the trap, inherited perfect is
+  - @patio11 194k 199c — suspicion of articulated goals = suspicion of legibility (sue-ability)
+  - @garyvee 3.1M 164c — 50-year-old starter had to outwait everyone's opinion
+  - **VIRAL ORIGINAL 176c**: "every quiet founder I know is on draft 14 of something boring. every loud one is on draft 1 of something exciting. the boring drafts ship and the exciting drafts get a podcast."
+- **Plus warm-chain reply earlier:** @newlinedotco 5.4k verified replied to @patrickssons directly. Pushed 158c brand-survival extension — highest reply-back EV of the day (warm chain = 150x algo).
+- **Reddit pipeline:** webhook 200.
+- **TikTok:** 22 / 6,191v / 75l unchanged.
+- **Signups 24h:** 0. Agents 24.
+- **Cap-hit scan:** clean.
+- **Open items (carried + new):**
+  - **NEW: gardener cohort verdict in 48-72h.** If 1+/9 replies → copy is fine, scale gardener vertical, expand to roofers + accountants. If 0/9 → v7 rewrite needed.
+  - **NEW: per-lead `email1_opened` vs `email1_opened_at` field naming.** My earlier diagnostic used wrong field name; the data is at `email1_opened_at` / `email1_open_count`. Will remember.
+  - x-firehose.service dead 3d.
+  - GSC OAuth dead 9d. Gmail OAuth dead 10d.
+  - X API CreditsDepleted.
+  - Pool dry across all stages — need batch enrichment + personalisation for tomorrow's E1.
+  - Phase 1 task #82 + #84 still pending.
