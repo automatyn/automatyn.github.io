@@ -1917,3 +1917,33 @@ Open items for next slot:
   - X API CreditsDepleted.
   - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
   - Phase 1 task #82 + #84 still pending.
+
+### /morning + /afternoon combined — 2026-05-23 13:15 UTC
+- **Recap:** /afternoon 2026-05-22 15:30Z. Pool dry, 5 X replies pushed. +8f on the day.
+- **HALT:** clear. Bot health 7/7 ✅.
+- **X status:** @patrickssons **484f / 1722t / 1113l** (+7f / +37t / +16l since /afternoon 2026-05-22).
+- **OUTREACH — E3 batch 16/16 sent cleanly:**
+  - Sent: RF Plumbing, Ncd, KRplumbingGlasgow, Gas Engineer Glasgow, FastFix Emergency, Colin the Plumber, 1st Choice, SM Heating, J Mccartney, Quality Safe, L&C Gas, Local Glasgow Plumbers, J.H.Horn, Evolve Plumbing, Blocked Drain Glasgow, Celsius Plumbing.
+  - Lifetime E3: 271 → **287** (+16).
+  - No sender hang. Clean exit.
+  - E1/E2 ready: 0/0. Pool refill still blocked by enrichment.
+- **X drafts pushed: 5 single-pick replies (1 per target, max-views/max-likes):**
+  - @AnthropicAI 1.28M 188c — 10k vulns, patch pipeline still 1x
+  - @GergelyOrosz 334k 166c — Meta morale, "keep building while we figure out who's next"
+  - @AnthropicAI 1.28M 152c — machine-speed find, human-speed patch = next decade of security work
+  - @OpenAIDevs 339k 158c — papercut releases build product loyalty
+  - @garyvee 3.1M 90c — "envy is admiration that ran out of vocabulary. translate it and it becomes a roadmap."
+- **Plus throughout today:** earlier replies sent to @nikitabier (X Head of Product), @russellbrunson, @AdrianDittmann, @readswithravi.
+- **Reddit pipeline:** webhook 200 OK.
+- **Browser scrape:** 15 handles, 11 candidates (24h window). Saturday afternoon dev-X is sparse (only 2 in 6h, hence widened).
+- **TikTok:** 22 / **6,191v / 75l** (+1v vs yesterday).
+- **Signups 24h:** unchanged (0 / 24 total).
+- **Cap-hit scan:** clean.
+- **Open items (carried):**
+  - **POOL DRY** for E1+E2 continues. Enrichment ran 2x yesterday with 0 emails added; needs script-level investigation.
+  - Sender hang absent today (good).
+  - x-firehose.service "inactive (dead)" 3d.
+  - GSC OAuth dead 9d. Gmail OAuth dead 10d. GMAIL_APP_PASSWORD absent.
+  - X API CreditsDepleted.
+  - 0/327 lifetime E1 replies. Unsub 13/666 = 2%.
+  - Phase 1 task #82 + #84 still pending.
