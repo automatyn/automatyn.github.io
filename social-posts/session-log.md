@@ -2016,3 +2016,31 @@ Open items for next slot:
   - GSC OAuth dead 8+ days. Gmail OAuth dead 9+ days.
   - X API CreditsDepleted (~$2-3 to unblock).
   - SEO Daily Task C partial fail carried.
+
+### /afternoon — 2026-05-24 17:00 UTC
+- **PHASE 1 MILESTONE HIT: @patrickssons crossed 500 followers. Live count 507f / 1808t / 1131l** (+12f since /morning 09:35Z). X eligibility verified-follower / impressions track now technically eligible for monetization screening once 7d/28d impression count refreshes.
+- **HALT clear**. Monitor 16:00Z: `Brevo 24h: 44 sent · 0 hard · 0 spam · OK`.
+- **OUTREACH — fix for "EMAILS MUST BE SENT DAILY" rule.** /morning slot logged "pool empty" instead of pivoting to personalisation. Pat called it out. Resolved both routines today:
+  - **Morning: 19 E1 sent** (Edinburgh-heavy plumbers + 1 Cardiff). Personalised batch first, then sender.
+  - **Afternoon: 14 more E1 sent** (Cardiff cohort: PHBLUE, Phixing, MPH, Plumbaaid, Nova, Let's Heat, AT Heating, A-Z, KB, Total Plumbing East, DMK, Cardiff Plumbers, Cardiff/Caerphilly).
+  - **TODAY TOTAL: 33 E1 sends**. Lifetime E1: 336 → **369** (+33).
+  - All v6 template (single-question CTA). EMAIL_TEMPLATE_VERSION=v6, OUTREACH_DAILY_CAP=35.
+  - Personalised pool 333→375 (+42 over 2 batches).
+  - **Sender hang pattern repeated in both batches**: lifecycle = leads sent fine then process holds lock idle ~10min. Killed via SIGTERM. Carried open item.
+  - Possible bad-email-validator bypass: `vasb@qneyvatcyhzovaturngvat.pb.hx` (ROT13 mangled) sent without flag. Will hard-bounce. Carried.
+- **X drafts pushed: 20 afternoon replies** (5 angles × 4 targets):
+  - @sahilbloom 1.16M (Feynman simplicity, 0.7h, +194 likes)
+  - @jasonlk 241k (does an AI agent need this software, 1.0h)
+  - @TTrimoreau 8.8k (9K followers in 4 months / 4.9K verified flex, 0.5h)
+  - @arvidkahl 198k (npm supply chain day 5, 0.8h)
+- **Reddit pipeline**: webhook 200.
+- **Bot health**: 7/7 active.
+- **Pool state end-of-afternoon**: E1 ready 0, E2 ready 0, E3 ready 0 (everything sent this slot has 3-day maturation gate for E2).
+- **TikTok**: 22 / 6192v / 75l (unchanged from /morning).
+- **Open items (carried + new):**
+  - **NEW: Phase 1 500f milestone hit. Verified-follower count + 7d/28d impressions still stale 11+ days (CDP wedge).** Need account_analytics scrape to confirm full Phase 1 eligibility (need 500 verified + 5M imp).
+  - Sender hang carried (hit on both batches today, intermittent but probable).
+  - Bad-email-validator gap (ROT13 / fake-domain emails passing through).
+  - GSC OAuth dead 8d. Gmail OAuth dead 9d.
+  - X API CreditsDepleted.
+  - 0/917 lifetime E1 replies. v6 verdict confirmed: copy isn't the bottleneck.
