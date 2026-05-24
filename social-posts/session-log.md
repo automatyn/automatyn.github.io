@@ -2044,3 +2044,30 @@ Open items for next slot:
   - GSC OAuth dead 8d. Gmail OAuth dead 9d.
   - X API CreditsDepleted.
   - 0/917 lifetime E1 replies. v6 verdict confirmed: copy isn't the bottleneck.
+
+### /evening — 2026-05-24 20:30 UTC
+- **End-of-day @patrickssons: 511f / 1832t / 1136l** (+4 followers since /afternoon 507f / +48 net in 24h).
+- **OUTREACH — third E1 batch of the day.** Pool was 0/0/0 ready. Personalised 10 more leads (Cardiff/London/Birmingham mix), sent E1 batch of 10. Sender exited cleanly this time, no hang.
+  - Sent: Marvel Plumbing Cardiff, GSG, Halesowen Birmingham, Omar Birmingham, Heating and Plumbing Warehouse Cardiff, Josh Munro Cardiff, Hackney Plumb-IT London, Elias Plumbers London, Emergency Plumber London, 24:7 Plumbing Birmingham.
+  - **TODAY E1 TOTAL: 43 sends**. Lifetime E1 336 → **379**.
+  - **Bad-email flag**: `gmail@gmail.com` accepted by sender for "GSG Plumbing" — placeholder address, will hard-bounce. Validator gap carried.
+  - Unsubs 15 → 16 (+1 from earlier batch).
+- **X drafts pushed evening: 5 viral originals + 20 reply drafts + 5 Armstrong = 30 drafts.**
+  - Viral originals (AI displacement theme): 5 drafts including "AI didn't kill the desk job. it just made you compete with someone else's intern who has Claude open in another tab"
+  - Replies: @sahilbloom 1.16M (mouth-shut life-hack), @dharmesh 1.06M (harness > model, on-brand for Automatyn AI agents), @GergelyOrosz 334k (AI video dark patterns), @patio11 194k (email memorialised decisions)
+  - @brian_armstrong 2.32M (7min FRESH financial-system manifesto, "Agentic payments" on-brand) — 5 angles pushed including A (241c) explicitly tying Automatyn small-biz AI agent invoicing to his point 3.
+- **HALT clear. Brevo 24h 58 sent. Bot health 7/7.**
+- **Pool end-of-day**: E1=0, E2=0, E3=0 (E2 maturation hits in 3 days, E3 in 5).
+- **Reddit pipeline**: webhook 200.
+- **DAILY TOTALS 2026-05-24:**
+  - **Emails: 43 E1 sent** (3 batches: 19 + 14 + 10). Biggest single-day E1 push of the month.
+  - **X drafts: 75 total** (25 morning cycle 1 + 5 PBD + 20 afternoon + 5 viral evening + 20 evening replies + 5 Armstrong)
+  - **Followers: +4** (507 → 511). Phase 1 500f milestone hit + holding.
+  - **Reddit pipeline fired**: 1x
+- **Open items (carried + new):**
+  - Sender hang carried (PM batch hung, evening didn't — intermittent).
+  - Bad-email-validator (placeholder addresses passing through).
+  - Verified-follower count + 7d/28d impressions still stale 11+ days (CDP wedge).
+  - GSC OAuth dead 8d. Gmail OAuth dead 9d.
+  - X API CreditsDepleted.
+  - 0/917 lifetime E1 replies (v6 verdict confirmed).
