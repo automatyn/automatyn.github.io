@@ -2071,3 +2071,30 @@ Open items for next slot:
   - GSC OAuth dead 8d. Gmail OAuth dead 9d.
   - X API CreditsDepleted.
   - 0/917 lifetime E1 replies (v6 verdict confirmed).
+
+### /morning — 2026-05-25 10:50 UTC
+- **@patrickssons: 511f / 1842t / 1140l** (Phase 1 500f milestone holding, +0 overnight, +10 tweets, +4 likes).
+- **HALT clear.** Monitor 08:00Z: `Brevo 24h: 43 sent · 1 hard · 0 spam · OK`. The 1 hard bounce confirms yesterday's `gmail@gmail.com` placeholder prediction.
+- **Bot health 7/7 active.**
+- **OUTREACH — biggest morning batch yet:**
+  - Personalised 18 leads (UK-wide spread: Birmingham, Manchester, Leeds, Liverpool, Sheffield, Bristol, Nottingham, Newcastle, Leicester, Glasgow, Edinburgh).
+  - Skipped 4 unfit: City Plumbing (chain), FlowGrid (no rating), Plumbing experts Newcastle (no rating), Asterisk Maintenance (2.9 rating).
+  - **18/18 E1 sent**. Lifetime E1: 379 → **397** (+18).
+  - **Sender hang pattern fired again** — held lock 20+ min after 11/18 visible sends. SIGTERM at 23min mark released lock; 7 remaining leads completed before exit between kill attempt and verification. All 18 fully sent per Brevo confirmations.
+  - **Bad-email flagged: `dev7561@gmail.com` resent for McHugh Plumbing** — same multi-lead bounce-test address noted in memory (per-email DNS propagation bug, carried).
+  - Personalised pool 375 → 403 (+28 including yesterday's pre-existing buffer).
+- **X drafts pushed: 20 morning replies** (5 angles × 4 targets, top picks via firehose 10:11Z scrape):
+  - @paulg 2.84M (founder emails written by AI, 0.6h fresh)
+  - @balajis 1.54M (aesthetic of the era is code, 0.5h fresh)
+  - @shawnchauhan1 32k x1 (SpaceX $1.25B reframe, narrative continuation)
+  - @TTrimoreau 9k (what matters when launching a startup, 0.1h fresh)
+- **Skipped political-flag**: balajis "all-out conflict between left and right" tweet (per Timcast/Walsh lesson).
+- **Skipped accidental dedupe**: shawnchauhan1 Starbucks oat milk (matcher resolved both shawn tweets to same ID, manual fix deferred).
+- **Reddit pipeline**: webhook 200.
+- **Pool end-of-morning**: E1=0, E2=0, E3=0 (all today's sends mature in 3-5 days).
+- **Open items (carried + new):**
+  - Sender hang carried (hit today, intermittent).
+  - **Per-email DNS bug confirmed live**: dev7561@gmail.com resent without per-email flag. Validator gap real.
+  - Bad-email-validator gap (placeholder addresses passing through).
+  - shawnchauhan1 dedupe matcher bug (cosmetic, doesn't affect quality).
+  - Phase 1 deadline now 6 days out (2026-05-31). Still 0/1 paid conversions.
