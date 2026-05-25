@@ -75,6 +75,14 @@ async function run() {
   const cutoff = Date.now() - 24 * 3600 * 1000;
   for (const t of data.results) {
     if (!t.id) continue;
+    // Author-attribution check: only watch tweets actually authored by @patrickssons.
+    // The profile/statuses endpoint returns the user's timeline, which includes
+    // replies to OTHER people. Without this guard we'd track e.g. Sacks's viral tweet
+    // as if it were ours and ping "YOUR TWEET +N replies" every poll cycle.
+    const author = (t.author?.screen_name || t.user?.screen_name || '').toLowerCase();
+    if (author && author !== HANDLE.toLowerCase()) continue;
+    // Fallback if author missing: skip if URL points to someone else's status
+    if (!author && t.url && !t.url.toLowerCase().includes(`/${HANDLE.toLowerCase()}/status/`)) continue;
     const created = t.created_timestamp ? t.created_timestamp * 1000 : Date.parse(t.created_at);
     if (!created || created < cutoff) continue;
     now[t.id] = {

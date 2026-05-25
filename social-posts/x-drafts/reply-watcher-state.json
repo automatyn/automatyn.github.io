@@ -1,0 +1,37 @@
+{
+  "tweets": {
+    "2058837727034921040": {
+      "replies": 0,
+      "likes": 4,
+      "reposts": 0,
+      "text": "Claude API Error again.\n\nRelease that beast Mythos... @AnthropicAI",
+      "url": "https://x.com/patrickssons/status/2058837727034921040",
+      "created": "Mon May 25 09:09:00 +0000 2026"
+    },
+    "2058656737465409548": {
+      "replies": 0,
+      "likes": 7,
+      "reposts": 0,
+      "text": "AI isn't taking jobs. \n\nAI is making it embarrassing how few jobs the company actually needed.",
+      "url": "https://x.com/patrickssons/status/2058656737465409548",
+      "created": "Sun May 24 21:09:48 +0000 2026"
+    },
+    "2058611638337442307": {
+      "replies": 0,
+      "likes": 4,
+      "reposts": 0,
+      "text": "Where does most small-business revenue leak?\n\n-the website form\n-the phone after 5pm\n-the WhatsApp inbox\n-the follow-up sequence",
+      "url": "https://x.com/patrickssons/status/2058611638337442307",
+      "created": "Sun May 24 18:10:36 +0000 2026"
+    },
+    "2058548623936237618": {
+      "replies": 2,
+      "likes": 3,
+      "reposts": 0,
+      "text": "What's the actual constraint on small business growth?\n\n-marketing budget\n-product quality\n-reply-time\n-reviews count",
+      "url": "https://x.com/patrickssons/status/2058548623936237618",
+      "created": "Sun May 24 14:00:12 +0000 2026"
+    }
+  },
+  "last_run": "2026-05-25T13:41:06.948Z"
+}
