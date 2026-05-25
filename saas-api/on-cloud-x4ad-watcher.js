@@ -12,6 +12,7 @@ const WebSocket = require('/home/marketingpatpat/node_modules/ws');
 const URL = 'https://www.on.com/en-gb/products/cloud-x-4-ad-3mf1026/mens/white-wolf-shoes-3MF10262852';
 const PRODUCT_NAME = 'On Cloud X 4 AD (White/Wolf, mens)';
 const TARGET_PRICE = 95.00; // GBP
+const TARGET_SIZE = '9'; // UK size to watch for stock
 const TG_TOKEN = '8726414142:AAFQr-8dHxws5g9zZpu6IbjhmoN7b7lf8qc';
 const TG_CHAT = '5904617085';
 const STATE_FILE = '/home/marketingpatpat/openclaw/saas-api/on-cloud-x4ad-state.json';
@@ -98,19 +99,31 @@ async function scrapePrice() {
         const out = { url: location.href };
         out.title = (document.querySelector('h1')?.innerText || '').replace(/\\s+/g, ' ').trim().slice(0, 200);
         // On.com structure: "Current price\\n£110.00\\noriginal price\\n£140.00"
-        // Non-greedy + reject crossing "original price" boundary
         const cur = txt.match(/Current price[^£]{0,40}£\\s?([0-9]+(?:\\.[0-9]{1,2})?)/i);
         const orig = txt.match(/original price[^£]{0,40}£\\s?([0-9]+(?:\\.[0-9]{1,2})?)/i);
         if (cur) out.currentPrice = parseFloat(cur[1]);
         if (orig) out.originalPrice = parseFloat(orig[1]);
-        // Fallback: first £ price in product zone
         if (out.currentPrice == null) {
           const m = txt.match(/£\\s?([0-9]+(?:\\.[0-9]{1,2})?)/);
           if (m) out.currentPrice = parseFloat(m[1]);
         }
-        // Availability hints
-        const sold = /sold out|out of stock/i.test(txt);
-        out.outOfStock = sold;
+        // Per-size stock map
+        const sizeMap = {};
+        const spans = Array.from(document.querySelectorAll('[class*="sizeValue"]'));
+        for (const s of spans) {
+          const sizeLabel = (s.innerText || '').trim();
+          if (!/^[0-9]+(\\.[0-9])?$/.test(sizeLabel)) continue;
+          let el = s; let depth = 0;
+          while (el && depth < 6) { if (el.tagName === 'BUTTON') break; el = el.parentElement; depth++; }
+          const cls = el && typeof el.className === 'string' ? el.className : '';
+          const btnTxt = (el?.innerText || '').toLowerCase();
+          const oos = /no items left|notify me|sold out|out of stock/i.test(btnTxt) || /OutOfStock/i.test(cls);
+          const lowMatch = btnTxt.match(/only\\s+(\\d+)\\s+left/i);
+          sizeMap[sizeLabel] = oos ? 'OUT' : (lowMatch ? 'LOW:'+lowMatch[1] : 'IN');
+        }
+        out.sizes = sizeMap;
+        out.totalSizes = Object.keys(sizeMap).length;
+        out.inStockSizes = Object.entries(sizeMap).filter(([,v]) => v !== 'OUT').map(([k]) => k);
         return out;
       })()
     `,
@@ -144,22 +157,53 @@ async function run() {
 
   const ts = new Date().toISOString();
   const origNote = info.originalPrice ? ` (RRP £${info.originalPrice.toFixed(2)})` : '';
-  console.log(`[run ${state.runs}] ${ts} title="${info.title}" price=£${info.currentPrice.toFixed(2)}${origNote} target=£${TARGET_PRICE.toFixed(2)}`);
+  const sizeStatus = info.sizes?.[TARGET_SIZE] || 'NOT_FOUND';
+  console.log(`[run ${state.runs}] ${ts} title="${info.title}" price=£${info.currentPrice.toFixed(2)}${origNote} target=£${TARGET_PRICE.toFixed(2)} size${TARGET_SIZE}=${sizeStatus} inStock=[${info.inStockSizes?.join(',')}]`);
   state.lastPrice = info.currentPrice;
   state.lastOriginalPrice = info.originalPrice || null;
   state.lastTitle = info.title;
   state.lastCheckAt = ts;
   state.lastError = null;
-  state.outOfStock = info.outOfStock || false;
+  state.lastSizeStatus = sizeStatus;
+  state.lastInStockSizes = info.inStockSizes || [];
 
-  // Hit target?
-  if (info.currentPrice <= TARGET_PRICE && !info.outOfStock) {
-    const alreadyAlerted = state.alertedAt && (Date.now() - Date.parse(state.alertedAt)) < 24 * 3600 * 1000;
-    if (!alreadyAlerted) {
+  const sizeInStock = sizeStatus !== 'OUT' && sizeStatus !== 'NOT_FOUND';
+  const priceHitsTarget = info.currentPrice <= TARGET_PRICE;
+
+  // STOCK-RETURN ALERT: size 9 was out, now in stock
+  if (sizeInStock && state.lastSizeStatus_persisted === 'OUT') {
+    const stockAlertedRecent = state.stockAlertedAt && (Date.now() - Date.parse(state.stockAlertedAt)) < 24 * 3600 * 1000;
+    if (!stockAlertedRecent) {
+      const lowNote = sizeStatus.startsWith('LOW:') ? ` (${sizeStatus.replace('LOW:', 'only ')} left, move fast)` : '';
+      const msg = [
+        `<b>SIZE ${TARGET_SIZE} BACK IN STOCK</b>`,
+        `${PRODUCT_NAME}`,
+        ``,
+        `Size: UK ${TARGET_SIZE}${lowNote}`,
+        `Current price: £${info.currentPrice.toFixed(2)}${origNote}`,
+        ``,
+        `${URL}`,
+      ].filter(Boolean).join('\n');
+      const r = await tg(msg);
+      if (r.ok) {
+        state.stockAlertedAt = ts;
+        console.log(`  -> Stock-return Telegram alert sent (UK ${TARGET_SIZE} ${sizeStatus})`);
+      } else {
+        console.error(`  -> Telegram failed: status=${r.status}`);
+      }
+    } else {
+      console.log(`  -> size ${TARGET_SIZE} in stock but already alerted within 24h`);
+    }
+  }
+
+  // PRICE-DROP ALERT: price <= target AND size still available (don't alert if your size is gone)
+  if (priceHitsTarget && sizeInStock) {
+    const priceAlertedRecent = state.alertedAt && (Date.now() - Date.parse(state.alertedAt)) < 24 * 3600 * 1000;
+    if (!priceAlertedRecent) {
       const savedVs = info.originalPrice ? ` (£${(info.originalPrice - info.currentPrice).toFixed(2)} off RRP £${info.originalPrice.toFixed(2)})` : '';
       const msg = [
         `<b>PRICE DROP ALERT</b>`,
-        `${PRODUCT_NAME}`,
+        `${PRODUCT_NAME} (UK ${TARGET_SIZE} in stock)`,
         ``,
         `Current: <b>£${info.currentPrice.toFixed(2)}</b>${savedVs}`,
         `Target: £${TARGET_PRICE.toFixed(2)}`,
@@ -170,20 +214,29 @@ async function run() {
       if (r.ok) {
         state.alertedAt = ts;
         state.alertedAtPrice = info.currentPrice;
-        console.log(`  -> Telegram alert sent (£${info.currentPrice.toFixed(2)} <= target)`);
+        console.log(`  -> Price-drop Telegram alert sent (£${info.currentPrice.toFixed(2)} <= target)`);
       } else {
         console.error(`  -> Telegram failed: status=${r.status}`);
       }
     } else {
-      console.log(`  -> at/below target but already alerted within 24h (at £${state.alertedAtPrice})`);
+      console.log(`  -> price at target but already alerted within 24h`);
     }
   } else {
-    if (state.alertedAt) {
-      console.log(`  -> price recovered above target or out of stock; clearing alert flag`);
+    if (state.alertedAt && !priceHitsTarget) {
+      console.log(`  -> price recovered above target; clearing price-alert flag`);
       state.alertedAt = null;
       state.alertedAtPrice = null;
     }
   }
+
+  // Re-arm stock alert when size goes OOS again so a future return re-pings
+  if (!sizeInStock && state.stockAlertedAt) {
+    console.log(`  -> size ${TARGET_SIZE} back to OUT; clearing stock-alert flag for next return`);
+    state.stockAlertedAt = null;
+  }
+
+  // Persist the snapshot for next-run delta detection
+  state.lastSizeStatus_persisted = sizeInStock ? 'IN' : 'OUT';
 
   saveState(state);
 }
