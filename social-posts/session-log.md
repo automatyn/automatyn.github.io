@@ -2098,3 +2098,28 @@ Open items for next slot:
   - Bad-email-validator gap (placeholder addresses passing through).
   - shawnchauhan1 dedupe matcher bug (cosmetic, doesn't affect quality).
   - Phase 1 deadline now 6 days out (2026-05-31). Still 0/1 paid conversions.
+
+### /afternoon — 2026-05-25 12:30 UTC
+- **@patrickssons: 517f / 1852t / 1141l** (+6 followers since /morning).
+- **HALT clear. Brevo 24h: 61 sent / 2 hard / 0 spam / OK.** Two hard bounces today: yesterday's `gmail@gmail.com` + this morning's `dev7561@gmail.com` per-email dedupe issue (carried).
+- **OUTREACH afternoon batch:**
+  - Personalised 12 leads (UK-wide: Edinburgh/Cardiff/Leeds/Bristol/London/Manchester/Liverpool/Sheffield).
+  - Skipped 6 unfit: City Plumbing chain, FlowGrid no-rating, Asterisk 2.9 rating, Plumbing experts no-rating, HELLO Local no-rating, C&D Leeds (merchant/B2B counter).
+  - **11/12 E1 sent**. Lifetime E1 397 → **408** (+11). 1 lost to sender hang at SIGTERM.
+  - **TODAY total: 29 E1 sends** (18 AM + 11 PM).
+  - Sender hang pattern fired again. SIGTERM at ~15min.
+  - **Per-email duplicate sent**: bristolboilerrepairs247@gmail.com received E1 for two different lead IDs (BBR Bristol Boiler Repairs + BBR Plumbing Heating Bristol). Per-email dedupe bug confirmed live again.
+  - Unsubs 16 → 17 (+1).
+- **X drafts pushed: 20 afternoon replies** (5 angles × 4 targets):
+  - @naval 3.3M ("Anthropic doesn't have Claude, Claude has Anthropic", 1.8h)
+  - @SahilBloom 1.16M (Crab Mentality visual thread, 0.2h fresh)
+  - @simonw 187k (water-per-email estimate revisited, 0.4h fresh)
+  - @shawnchauhan1 32k (stock drops 25% on AI replacement layoffs)
+- **Reddit pipeline**: webhook 200.
+- **Pool end-of-afternoon**: E1=0, E2=0, E3=0 (today's 29 mature in 3 days for E2).
+- **Tweet-thumbnail diagnosis** (separate, Pat's reply 2058884755953709364 to @BatsouElef): zero card unfurl because (a) bare URL reply pattern triggers X spam classifier, (b) http:// not https:// breaks card unfurler, (c) capitalised domain (Automatyn.co) trips canonicalisation. 3 views total. Fix: always reply with value-add text + https://automatyn.co lowercase, not bare URL.
+- **Open items (carried + new):**
+  - Sender hang carried (hit AM + PM today).
+  - **Per-email dedupe bug**: real, hit today (2x to same address). Two leads with same email shouldn't both get E1.
+  - Bad-email-validator gap.
+  - Phase 1 deadline 6 days. Followers above 500. 0/1 paid still.
