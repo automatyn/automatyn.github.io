@@ -2123,3 +2123,47 @@ Open items for next slot:
   - **Per-email dedupe bug**: real, hit today (2x to same address). Two leads with same email shouldn't both get E1.
   - Bad-email-validator gap.
   - Phase 1 deadline 6 days. Followers above 500. 0/1 paid still.
+
+### /evening — 2026-05-25 20:35 UTC
+- **@patrickssons: 527f / 1867t / 1145l** (Phase 1 500f holding +27 above milestone).
+- **HALT clear.** Monitor 20:00Z: Brevo 24h 72 sent · 3 hard · 0 spam · OK.
+- **Bot health 7/7 active.** All 4 new Roger Centre Court watchers + Cloud X 4 AD watcher + Amazon laptop-cooler watcher: ENABLED + ACTIVE.
+- **OUTREACH evening batch:**
+  - Personalised 6 leads (Bristol/Nottingham/Newcastle): Boost Plumbing SW, Bristol Unigas, Plumb Minister, Robin Hood Heating, Acorn Plumbing, Goldie Plumbing.
+  - **7/7 E1 sent**. Lifetime E1 408 → **415** (+7).
+  - **TODAY total: 36 E1 sends** (18 AM + 11 PM + 7 evening).
+  - Sender exited cleanly this batch (no hang).
+- **X drafts pushed evening: 25 reply drafts + 5 viral originals.**
+  - @AnthropicAI 1.29M (Pope Leo encyclical, 1.4h)
+  - @lennysan 357k ("automation is a lie" - on-brand for Automatyn pitch, 1.4h)
+  - @jasonfried 1.45M (keyboard shortcuts in web apps, 1.7h)
+  - @simonw 187k (do agents include automated tests, 0.8h fresh)
+  - @hnshah 295k (account notifications = alpha, 2.2h)
+  - 5 viral originals on AI displacement / automation theme
+- **PRICE WATCHERS SHIPPED TODAY**: 5 systemd watchers total
+  - Amazon B09D6J56NS (laptop cooler, target £70) - £79.70 currently
+  - On Cloud X 4 AD White/Wolf (target £95 + UK 9 stock) - £110, size 9 OUT
+  - Roger Centre Court White/Malibu (target £105 + UK 9 stock) - £125, size 9 OUT
+  - Roger Centre Court White/Flame (target £115 + UK 9 stock) - £140, size 9 OUT
+  - Roger Centre Court White/Black (target £105 + UK 9 stock) - £125, all sizes OUT
+  - Roger Centre Court 48cc new gen (target £150 + UK 9 stock) - waiting room
+  - All 30-min cadence, Telegram pings on EITHER size 9 restock OR price drop.
+- **SEO HEALTH CHECK** (Pat called it out, applied fix-on-find rule):
+  - **Diagnosis**: 121 blog files on disk, 116 in sitemap. Looked like 5 orphan blogs.
+  - **Investigation**: 5 are deliberately `noindex, follow` (Claude/Anthropic topics targeting dev twitter, not trades SEO buyer). Listed in `saas-api/seo/indexnow-ping.js` `NOINDEX_URLS` set. Sitemap correctly excludes them.
+  - **Action**: nothing to fix — sitemap was already correct. Reverted my incorrect patch attempt before commit.
+  - **Real SEO blockers**: (a) Forge image-gen down on Pat's laptop → SEO Daily Task C silent-fails (0 blogs today). Needs laptop-side restart. (b) GSC OAuth dead 8d → blocks Monday/Thursday quick-win audit.
+  - **Memory rule saved**: `feedback_seo_fix_on_find.md` — verify before fix, do not park as open item.
+- **Reddit pipeline**: webhook 200.
+- **SEO Daily trigger** verified via RemoteTrigger get: enabled, fired 10:02:56Z today, next 26th 10:08Z. Configuration unchanged.
+- **DAILY TOTALS 2026-05-25:**
+  - **Emails: 36 E1 sent** (largest single-day this week). Lifetime E1 415.
+  - **X drafts: 70 total** (20 morning + 20 afternoon + 25 evening + 5 viral originals)
+  - **@patrickssons: +16 followers today** (511 → 527)
+  - **5 price watchers built + deployed** as autonomous systemd services
+- **Open items (carried + new):**
+  - **Forge down on Pat's laptop** — needs restart for SEO Daily Task C to ship blogs
+  - GSC OAuth dead 8d
+  - Sender hang intermittent (didn't fire today, good)
+  - X4 AD + all Roger CC variants: size 9 currently OUT across all watched variants
+  - Phase 1 deadline 6 days (2026-05-31). 0/1 paid conversions still pending.
