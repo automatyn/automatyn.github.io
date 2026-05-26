@@ -2191,3 +2191,20 @@ Open items for next slot:
   - Sender hang fired again today.
   - Forge still down on Pat's laptop → SEO Daily Task C silent-fails (no new blogs today either).
   - Phase 1 deadline now **5 days** out (2026-05-31). 0/1 paid conversions still.
+
+### /afternoon — 2026-05-26 14:55 UTC
+- **OUTREACH afternoon batch:**
+  - Personalised 9 leads (Bristol, Nottingham ×3, Newcastle ×3, Leicester ×2).
+  - **9/9 E1 sent**. Lifetime E1 428 → **437** (+9). Sender exited cleanly, no hang.
+  - **TODAY total: 22 E1 sends** (13 morning + 9 afternoon).
+- **X drafts pushed afternoon: 15 reply drafts** (4 targets × 5, jasonlk skipped due to matcher miss):
+  - @GergelyOrosz 335k (TypeScript origin story from Outlook Web, 0.1h FRESH at scrape time)
+  - @drgurner 186k (Seneca pay attention to your life)
+  - @SahilBloom 1.16M (favorite TV scene about success)
+- **Reddit pipeline**: webhook 200.
+- **Pool end-of-afternoon**: E1=0 ready (today's 22 mature E2 in 3 days).
+- **DAILY TOTALS 2026-05-26 (morning + afternoon):**
+  - Emails: 22 E1 sent (lifetime 437)
+  - X drafts: 40 total (25 morning + 15 afternoon)
+  - @patrickssons: 520f (Phase 1 500f milestone holding)
+- **Open items**: same as morning — Forge still down, sender hang intermittent.
