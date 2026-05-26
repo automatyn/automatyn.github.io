@@ -2167,3 +2167,27 @@ Open items for next slot:
   - Sender hang intermittent (didn't fire today, good)
   - X4 AD + all Roger CC variants: size 9 currently OUT across all watched variants
   - Phase 1 deadline 6 days (2026-05-31). 0/1 paid conversions still pending.
+
+### /morning — 2026-05-26 14:35 UTC
+- **@patrickssons: 520f / 1878t / 1151l** (−7 vs last night 527 — small dip, Phase 1 milestone still holding).
+- **HALT clear**. Monitor 12:00Z: Brevo 24h 36 sent · 2 hard · 0 spam · OK.
+- **Bot health 13/13 active** (incl all 5 new price watchers).
+- **OUTREACH morning batch:**
+  - Personalised 13 leads (Leicester, Edinburgh ×2, Cardiff, London ×3, Birmingham, Sheffield ×2, Bristol ×3).
+  - Skipped 9 unfit: City Plumbing (chain), FlowGrid/Plumbing experts/HELLO Local/G Smith/Higz/Flow Sure (no rating), Asterisk (2.9), C&D Leeds (merchant).
+  - **13/13 E1 sent**. Lifetime E1 415 → **428** (+13).
+  - Sender hang fired again at 13 min mark, all 13 completed before SIGTERM.
+- **X drafts pushed morning: 25 reply drafts** (5 targets × 5 angles):
+  - @naval 3.3M (humans with AI vs everyone else, 1h fresh)
+  - @SahilBloom 1.16M (learn to tolerate boredom, 1h)
+  - @gregisenberg 661k (back from SF inspired, 0.5h fresh)
+  - @amasad 462k (companies experiencing AI psychosis, 0.4h fresh)
+  - @ThePrimeagen 364k (Price's law + corporate workforce, 0.1h FRESH)
+- **Reddit pipeline**: webhook 200.
+- **Pool end-of-morning**: E1=0, E2=0, E3=0 (today's 13 mature E2 in 3 days).
+- **Unsubs**: 17 → 18 (+1 overnight).
+- **5 price watchers**: all timers active. No alerts fired (Amazon £79.70, Cloud X4 AD £110, Roger CC variants £125-£140 — all above targets).
+- **Open items (carried + new):**
+  - Sender hang fired again today.
+  - Forge still down on Pat's laptop → SEO Daily Task C silent-fails (no new blogs today either).
+  - Phase 1 deadline now **5 days** out (2026-05-31). 0/1 paid conversions still.
