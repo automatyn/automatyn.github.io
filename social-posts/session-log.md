@@ -2262,3 +2262,34 @@ Open items for next slot:
   - **NEW: Per-email dedupe still gap.** Same email on different lead_ids gets sent twice. Need source-side dedupe in ingest, not just downstream flagging.
   - Phase 1 deadline 4 days out (2026-05-31). @patrickssons 533f comfortably above 500 milestone. 0/1 paid still.
   - GSC OAuth fixed earlier (task #101). Now have GSC data flowing again.
+
+### /evening — 2026-05-27 20:30 UTC
+- **@patrickssons: 540f / 1924t / 1163l** (+7 since /morning 533f, +23 in 4 days. Phase 1 500f milestone holding by +40).
+- **HALT clear** (cleared this morning Path B). Monitor 20:00Z: `Brevo 24h: 52 sent · 2 hard · 0 spam · OK`. The 2 hard bounces were yesterday's pre-validator-fix sends, not today's.
+- **Bot health 8/8 active** including amazon-price-watcher.
+- **OUTREACH evening: E2 12/13 sent** (validator skipped 1 lead — bounce-memory caught a re-attempt):
+  - Cardiff cohort matured from May 24-25: The Cardiff Plumbers, Phixing, Cardiff & Caerphilly, Plumbaaid, DMK, Nova, AT Heating, KB Heating, Total Plumbing East, PHBLUE, Let's Heat, A-Z Heating.
+  - **TODAY total: 38 E2 sends** (26 morning + 12 evening). Lifetime E2: 294 → **332 (+38)**.
+  - **Zero bounces from validator-armed sender** (Brevo confirmed all 38 delivered cleanly).
+  - E1 ready: 0 today (HALT-recovery focus, no fresh personalisations).
+  - Sender hang fired again on evening batch. SIGTERM at ~15min. All sends completed before exit.
+- **X drafts pushed: 15 reply drafts + 5 viral originals = 20 total**:
+  - **Reply targets (3 × 5 angles):**
+    - @claudeai 1.4M (Replit President profile, 3h, builder-on-brand AI buyer audience)
+    - @rauchg 520k (Vercel Deployments view origin, 2.9h, peer founder)
+    - @AravSrinivas 562k (Perplexity tokenizer open source, 2.5h, dev twitter)
+  - **Viral originals (AI-jobs theme, continuing Sacks narrative):**
+    - A 125c: "the AI tax isn't paid by customers. it's paid by every junior..."
+    - E 154c: "AI didn't replace your job. it replaced the version of you who used to have time to chat at the watercooler. nobody mourns that version."
+- **Reddit pipeline**: webhook 200.
+- **Skipped political-flag**: @levelsio left/right tweet, @amasad x4 over-saturation.
+- **DAILY TOTALS 2026-05-27:**
+  - **Emails: 38 E2 sent today** (3 batches: 26 AM + 12 PM, /afternoon never ran). Lifetime E2: 332.
+  - **X drafts: 30 total** (10 morning + 20 evening).
+  - **Followers**: 533f → 540f, +7 today.
+  - **HALT recovery**: full Path B (investigate + validator hardening + 13 leads flagged + sender.js patched + commit 8ea39e6).
+- **Open items (carried + new):**
+  - Sender hang pattern still intermittent.
+  - **NEW: Need fresh E1 personalisations.** Pool dry on E1-ready, last personalisation batch was May 25. /morning + /afternoon haven't refilled this week. Risk: E2/E3 pipeline runs out of seed leads in 2-3 days.
+  - Per-email dedupe still gap (downstream-flag only, not ingest-side).
+  - Phase 1 deadline 4 days out. 540f / 0 paid.
