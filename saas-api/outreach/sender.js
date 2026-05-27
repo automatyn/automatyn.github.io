@@ -101,6 +101,39 @@ const PLACEHOLDER_LOCAL_PARTS = new Set([
   'you', 'your', 'example', 'user', 'name', 'email', 'test',
   'webmaster', 'server', 'hostmaster', 'postmaster',
   'noreply', 'no-reply', 'mailer-daemon', 'donotreply', 'abuse',
+  // Scraper-generated placeholders that mimic real local parts but bounce.
+  'gmail', 'hotmail', 'yahoo', 'outlook', 'icloud',
+  'dev', 'developer', 'admin', 'sample', 'demo',
+]);
+
+// Real-bounce memory: addresses that hard-bounced once must never be retried,
+// even if attached to a different lead_id with the same email. Loaded lazily.
+let _bouncedEmailSet = null;
+function loadBouncedEmails() {
+  if (_bouncedEmailSet !== null) return _bouncedEmailSet;
+  _bouncedEmailSet = new Set();
+  try {
+    const all = store.listAll();
+    for (const l of all) {
+      if ((l.bounced || l.dns_flagged) && l.email) {
+        _bouncedEmailSet.add(l.email.toLowerCase());
+      }
+    }
+  } catch {}
+  return _bouncedEmailSet;
+}
+
+// ROT13 obfuscation detection. Scrapers occasionally serve ROT13-ciphered emails;
+// the most common tell is a domain with an invalid TLD (.pb.hx, .pbz, .gbq, etc).
+const VALID_TLDS_MIN = new Set([
+  // Top-100 TLDs we expect to see in UK trades outreach. Anything else gets blocked.
+  'com', 'co.uk', 'org', 'org.uk', 'net', 'net.uk', 'io', 'ai', 'app', 'me',
+  'uk', 'biz', 'info', 'eu', 'tv', 'ltd', 'ltd.uk', 'plumbing', 'london',
+  'shop', 'store', 'pro', 'tech', 'agency', 'services', 'company',
+  'wales', 'scot', 'cymru', 'careers', 'design', 'studio', 'consulting',
+  'group', 'gmbh', 'de', 'fr', 'es', 'it', 'ie', 'au', 'com.au', 'co.nz', 'nz',
+  'ca', 'us', 'mx', 'jp', 'kr', 'in', 'co.in', 'sg', 'hk', 'cn', 'br', 'za', 'co.za',
+  'gov', 'gov.uk', 'ac.uk', 'sch.uk', 'edu', 'mil', 'int', 'name', 'mobi',
 ]);
 
 function isUnsendable(email) {
@@ -109,8 +142,22 @@ function isUnsendable(email) {
   const trimmed = email.trim();
   if (!trimmed || trimmed === 'null' || trimmed === 'undefined') return true;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return true;
-  const local = trimmed.split('@')[0].toLowerCase();
+  const lower = trimmed.toLowerCase();
+  const local = lower.split('@')[0];
+  const domain = lower.split('@')[1] || '';
+  // Placeholder local-part check
   if (PLACEHOLDER_LOCAL_PARTS.has(local)) return true;
+  // Exact "kind@kind" pattern (gmail@gmail.com, info@info.co.uk, etc) — these always bounce
+  const localBase = local.replace(/[^a-z]/g, '');
+  const domainBase = domain.split('.')[0].replace(/[^a-z]/g, '');
+  if (localBase && localBase === domainBase) return true;
+  // TLD validity check (catches ROT13 .pb.hx, fictitious TLDs)
+  const tldParts = domain.split('.');
+  const tld = tldParts.slice(-2).join('.'); // try "co.uk" first
+  const tld1 = tldParts.slice(-1)[0];        // fallback "com"
+  if (!VALID_TLDS_MIN.has(tld) && !VALID_TLDS_MIN.has(tld1)) return true;
+  // Bounce memory: if this exact address has bounced before, never retry
+  if (loadBouncedEmails().has(lower)) return true;
   return false;
 }
 
