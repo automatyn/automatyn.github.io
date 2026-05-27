@@ -2236,3 +2236,29 @@ Open items for next slot:
   - Forge still down on Pat's laptop → SEO Daily Task C silent-fails.
   - Sender hang carried (didn't fire today though).
   - Phase 1 deadline 5 days. 0/1 paid conversions still pending.
+
+### /morning — 2026-05-27 07:50 UTC (Path B: HALT clear + validator hardening)
+- **HALT cleared** after investigation. Yesterday's HALT (6.5% hard bounce, 4/62) traced to 4 scraped/placeholder emails that bypassed the validator: gmail@gmail.com, admin@redshield.uk, info@boilerinstallationleeds.com, eben@eyebytes.com.
+- **13 leads DNS-flagged this session**: 4 hard-bounced (Brevo confirmed), 5 invalid patterns (2 example@, 3 ROT13 vasb@...pb.hx), 3 dev7561 placeholder duplicates.
+- **sender.js validator hardened** (commit 8ea39e6):
+  - PLACEHOLDER_LOCAL_PARTS extended: + gmail/hotmail/yahoo/outlook/icloud/dev/admin/sample/demo
+  - kind@kind detection (gmail@gmail.com, info@info.com)
+  - VALID_TLDS_MIN whitelist (blocks ROT13 .pb.hx, .pbz, etc)
+  - Persistent bounce-memory (once bounced, never retried, regardless of lead_id)
+  - Smoke-tested: 10/11 correct, 1 "fail" was actually correct behaviour
+- **OUTREACH — E2 batch 26/26 sent** (Brevo confirmed all delivered, no validator skips needed since pre-flagged bad leads were already excluded):
+  - Lifetime E2: 294 → **320 (+26)**
+  - First mature E2 cohort from May 24-25 batches: Black Fox & Baxter, McInally, ZHeat, J Carlisle, G Gray, Graeme White, 4x 247-Emergency Edinburgh chain, Gasworks, Corstorphine Gas, Aspire Trade, 123-Gas, JMF, Absolut, P Blackhall, DLP Group, RM Plumbing Cardiff, plus 8 summer-cohort gardeners/landscapers.
+  - E1 pool 0 ready (need fresh personalisations — afternoon job).
+  - Sender hang pattern fired again at 27min mark. Killed via SIGTERM; all 26 had already completed before exit.
+- **X drafts pushed: 10 to Telegram** (5 angles × 2 targets):
+  - @patio11 194k (AI-hallucinating-from-uploaded-file meta-flip, 1.8h fresh, on-brand for dev audience)
+  - @dhh 666k (release-isn't-shipping-it's-accepting reframe, 1.1h, peer founder voice)
+- **Skipped political-flag**: balajis "outsource security to US" geopolitics, dhh "climate hysteria" tweet.
+- **@patrickssons: 533f / 1906t / 1160l** (+16 followers since 2026-05-25, healthy growth).
+- **Bot health 7/7 + amazon-price-watcher.timer active**.
+- **Open items (carried + new):**
+  - Sender hang pattern still intermittent (fired again today). Hasn't lost work but holds lock 20+ min after sends complete.
+  - **NEW: Per-email dedupe still gap.** Same email on different lead_ids gets sent twice. Need source-side dedupe in ingest, not just downstream flagging.
+  - Phase 1 deadline 4 days out (2026-05-31). @patrickssons 533f comfortably above 500 milestone. 0/1 paid still.
+  - GSC OAuth fixed earlier (task #101). Now have GSC data flowing again.
