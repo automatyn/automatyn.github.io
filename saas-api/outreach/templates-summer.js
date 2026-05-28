@@ -32,55 +32,62 @@ const SUBJECTS = {
   ],
 };
 
-// E1 bodies: personalised intro, one specific scenario, one question. No link, no price.
+// E1 bodies follow the researched spec (2026-05-28): PAS compressed to 3-4 short
+// sentences at a 5th-grade reading level, one light agitate beat, and a single
+// interest-based CTA that asks about THEIR current process (the Gong 304K
+// cold-stage finding). No link, no price, no product noun. Sources: Gong,
+// Belkins 16.5M, Backlinko 12M, Boomerang reading-level study, Lavender.
 const BODIES = {
   gardeners: (vars) => `${vars.greeting}${vars.intro_line}
 
-Quick one: when a homeowner messages ${vars.business_name} on a Saturday evening for a quote on a garden clearance or a regular maintenance round, those messages probably sit till Monday. By then they've asked two other gardeners and booked whoever replied first.
+Quick one. A homeowner messages ${vars.business_name} on a Saturday evening about a clearance or a regular round. That message usually sits unread till Monday. By then they have asked two other gardeners and booked whoever wrote back first.
 
-Do those evening enquiries just wait till morning, or have you got something catching them?
+Right now, what happens to those evening enquiries: do they just wait till morning, or have you got a way to catch them?
 
 Patrick
 ${vars.unsubscribe_line}`,
 
   'tree-surgeons': (vars) => `${vars.greeting}${vars.intro_line}
 
-Quick one: when someone WhatsApps ${vars.business_name} a photo of a hanging branch at 9pm asking "is this dangerous", they are not waiting until morning. They are messaging the next surgeon on Google.
+Quick one. Someone sends ${vars.business_name} a photo of a hanging branch at 9pm asking if it is dangerous. They are not waiting till morning. They message the next surgeon on Google and book whoever answers first.
 
-Do those after-hours messages just sit till you see them, or have you got a way to catch them?
+Right now, what happens to those after-hours messages: do they wait till you see them, or have you got a way to catch them?
 
 Patrick
 ${vars.unsubscribe_line}`,
 
   roofers: (vars) => `${vars.greeting}${vars.intro_line}
 
-Quick one: when wind brings tiles down at 8pm, the customer WhatsApps three roofers and hires whoever replies first. If ${vars.business_name} sees it at 9am tomorrow, the job has usually gone.
+Quick one. Wind brings tiles down at 8pm and the customer messages three roofers at once. They hire whoever replies first. If ${vars.business_name} reads it at 9am, the job has usually gone.
 
-When those evening messages land, are you reliably the one who replies first, or do some slip till morning?
+Right now, what happens to those evening messages: do some slip till morning, or are you reliably the first to reply?
 
 Patrick
 ${vars.unsubscribe_line}`,
 };
 
-// Fallback name derived from the business when first_name is missing, so the
-// body never opens cold mid-sentence. Mirrors templates-v6.js firstName().
-function deriveName(businessName) {
-  if (!businessName) return 'there';
-  const word = businessName.trim().split(/\s+/)[0];
-  if (!word) return 'there';
-  const skip = new Set([
-    'the', 'a', 'an', 'mr', 'mrs', 'ms',
-    'london', 'leeds', 'manchester', 'birmingham', 'liverpool', 'sheffield',
-    'bristol', 'nottingham', 'newcastle', 'leicester', 'glasgow', 'edinburgh',
-    'cardiff', 'east', 'west', 'north', 'south', 'central', 'greater',
-    'city', 'national', 'royal', 'best', 'premier', 'rapid', 'fast',
-    'urgent', 'express', 'elite', 'prime', 'top', 'first', 'pro',
-    'quick', 'smart', 'super', 'ultra', 'green', 'garden', 'gardens',
-    'tree', 'trees', 'roof', 'roofing', 'landscape', 'landscapes',
-  ]);
-  if (skip.has(word.toLowerCase())) return 'there';
-  if (/^[A-Z][a-z]+$/.test(word)) return word;
+// Greeting fallback. A wrong name ("Hi Landspace,", "Hi Eco,") reads more
+// robotic than no name, and a business's first word is almost never a person's
+// name. So we deliberately do NOT guess a name from the business: callers pass
+// an explicit first_name when they have one, otherwise the greeting is the safe,
+// human "Hi there,". Kept as a function so the contract is explicit.
+function deriveName() {
   return 'there';
+}
+
+// Scraped Google-listing names carry a category tail (e.g. "Beaufort & Rampton
+// Landscapes - Garden Design, Landscaping and Maintenance, London"). Trim to the
+// trading name so it reads naturally in a subject line and mid-sentence: take
+// everything before the first " - " or comma, and cap the length.
+function shortBusinessName(businessName) {
+  if (!businessName) return 'your business';
+  // Cut at the first hyphen (with or without surrounding spaces) or comma, which
+  // is where Google listings append the category tail.
+  let n = businessName.split(/\s*[-,]\s*/)[0].trim();
+  // strip trailing legal suffixes that read oddly mid-sentence
+  n = n.replace(/\s+(Limited|Ltd\.?|LLP)$/i, '').trim();
+  if (n.length > 45) n = n.slice(0, 45).trim();
+  return n || 'your business';
 }
 
 function buildSummerEmail(vertical, lead, unsubLine, subjectIdx = 0) {
@@ -90,14 +97,20 @@ function buildSummerEmail(vertical, lead, unsubLine, subjectIdx = 0) {
   const vars = {
     first_name: name,
     greeting: name && name !== 'there' ? `Hi ${name},\n\n` : 'Hi there,\n\n',
-    business_name: lead.business_name || 'your business',
+    business_name: shortBusinessName(lead.business_name),
     intro_line: lead.intro_line || '',
     unsubscribe_line: `\n\nNot interested? ${unsubLine}`,
   };
   const subjectTpl = SUBJECTS[vertical][subjectIdx % SUBJECTS[vertical].length];
-  const subject = subjectTpl.replace(/\{\{business_name\}\}/g, vars.business_name);
+  let subject = subjectTpl.replace(/\{\{business_name\}\}/g, vars.business_name);
+  // Research spec: subject <= 50 chars. If a long business name pushes it over,
+  // fall back to a name-free concrete subject for this vertical.
+  if (subject.length > 50) {
+    const fallback = { gardeners: 'the Saturday evening enquiries', 'tree-surgeons': '"is this tree dangerous" at 9pm', roofers: 'storm at 8pm, customer at 9am' };
+    subject = fallback[vertical];
+  }
   const body = BODIES[vertical](vars);
   return { subject, body, subjectId: `S_${vertical[0].toUpperCase()}${subjectIdx + 1}` };
 }
 
-module.exports = { buildSummerEmail, SUBJECTS, deriveName };
+module.exports = { buildSummerEmail, SUBJECTS, deriveName, shortBusinessName };

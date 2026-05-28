@@ -354,7 +354,14 @@ async function run(step, limit, dryRun) {
   if (!dryRun) console.log('Using Brevo transactional API.');
 
   let sent = 0, failed = 0;
+  const haltPath = path.join(__dirname, 'HALT');
   for (const lead of slice) {
+    // Re-check HALT before EACH send (not just at startup) so a HALT placed
+    // mid-run stops the batch cleanly without having to kill the process.
+    if (!dryRun && fs.existsSync(haltPath)) {
+      console.error(`HALT detected mid-run after ${sent} sent. Stopping. Remove outreach/HALT to resume.`);
+      break;
+    }
     try {
       await sendOne(transport, lead, step, dryRun);
       sent++;
