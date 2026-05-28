@@ -2315,3 +2315,26 @@ Open items for next slot:
   - Sender hang pattern absent this batch — first clean morning in days.
   - Phase 1 deadline 3 days out (2026-05-31). X 540f-ish, 0/1 paid. SEO will fire naturally at 10:00 UTC.
   - Pool now refilled: E1 sent total 443 (was 437), E2-ready pool drained but E3 will mature next.
+
+### /afternoon — 2026-05-28 17:00 UTC
+- **@patrickssons: 532f / 1961t / 1177l** (-5 since /morning, second day of churn dip).
+- **HALT clear**. Brevo 24h: 53 sent / 0 hard / 0 spam — validator still holding clean.
+- **Bot health 8/8 active**. SEO Daily did NOT fire this morning (no blog commits since 09:00 UTC — Task C silent fail carried).
+- **OUTREACH afternoon:**
+  - **E2: 25 sent / 24 actually delivered** (1 dup-email caught by sender mid-flight). Lifetime E2: 341 → **365 (+24)**. Cardiff + Edinburgh + Birmingham follow-up cohort.
+  - **E1: 0 sent.** 3 PM personalisations all rejected: JD Plumbers (.xyz TLD blocked by validator), Oasis Accountants (do_not_send wrong-ICP from May 12), Howlader Chartered (same wrong-ICP flag). Intro lines cleared on the 2 wrong-ICP leads. **My error: didn't pre-filter for trades-only vertical before personalising.**
+  - **NEW BUG: BBR Bristol sent E2 twice to bristolboilerrepairs247@gmail.com** (2 lead IDs sharing same email, ingest-side dedupe still missing). Same exact bug as 4 days ago.
+  - **TODAY total: 6 E1 (morning) + 33 E2 (9 AM + 24 PM) = 39 emails sent**.
+- **X drafts pushed: 20 reply drafts** (4 targets × 5 angles):
+  - @TechCrunch 10M (Visa-Replit agentic-payments — best on-brand for @patrickssons brand)
+  - @gregisenberg 663k (CEO layoff letter template satire)
+  - @AravSrinivas 567k (MS Office powered by Perplexity Computer)
+  - @arvidkahl 199k (Claude-writes / Codex-reviews two-AI workflow)
+- **Reddit pipeline**: webhook 200.
+- **Sender hang reappeared** on E2 25 batch (~30min stuck after sends complete). Killed via SIGTERM.
+- **Open items (carried + new):**
+  - **NEW: TLD validator too narrow.** Blocked legitimate `.xyz` TLDs. Should expand to top-100 modern TLDs.
+  - **NEW: Personalisation pre-filter missing.** No `source_vertical` check before opening lead for personalisation. Wasted 3 leads today.
+  - Per-email dedupe still gap (BBR fired again today).
+  - Sender hang intermittent.
+  - Phase 1 deadline 3 days out. 532f / 0 paid.
