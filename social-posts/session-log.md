@@ -2293,3 +2293,25 @@ Open items for next slot:
   - **NEW: Need fresh E1 personalisations.** Pool dry on E1-ready, last personalisation batch was May 25. /morning + /afternoon haven't refilled this week. Risk: E2/E3 pipeline runs out of seed leads in 2-3 days.
   - Per-email dedupe still gap (downstream-flag only, not ingest-side).
   - Phase 1 deadline 4 days out. 540f / 0 paid.
+
+### /morning — 2026-05-28 08:30 UTC
+- **@patrickssons: 537f / 1957t / 1176l** (-3 since /evening yesterday — first overnight dip, normal churn after the +23 climb). Phase 1 500f milestone holding by +37 margin.
+- **HALT clear**. Brevo 24h: 38 sent / 0 hard / 0 spam — **validator hardening from yesterday is working, zero bounces in 24h**.
+- **Bot health 8/8 active**. SEO Daily trigger fires naturally at 10:00 UTC.
+- **OUTREACH — biggest morning push of the week, parallel E1+E2:**
+  - **6 fresh personalisations** (Leicester bathrooms + Glasgow plumbers): Plug, Clifton Trade, EcoGem, Glenfield, Turri, Glasgow Local.
+  - Skipped 9 unfit (chain merchants, no-rating leads, 2.9-rating).
+  - **E1 6/6 sent**: Clifton, EcoGem, Turri, Plug, Glenfield, Glasgow Local. Lifetime E1: 437 → **443 (+6)**.
+  - **E2 9/9 sent**: Marvel Cardiff, Halesowen Birmingham, Omar Birmingham, Heating Warehouse, Josh Munro, Hackney Plumb-IT, Elias London, Emergency Plumber London, 24:7 Birmingham. Lifetime E2: 332 → **341 (+9)**.
+  - **TODAY total: 15 emails sent (6 E1 + 9 E2)**. Both senders exited cleanly, parallel execution worked, no hang pattern this batch.
+  - Validator-armed: 0 bounces, 0 placeholder-skips.
+- **X drafts pushed: 15 reply drafts** (3 targets × 5 angles):
+  - @shawnchauhan1 32k (Uber AI coding budget COO can't name feature, 1.2h, fintwit dunk)
+  - @GergelyOrosz 334k (efficient AI usage internal sessions, 2.2h, peer dev pin)
+  - @TTrimoreau 9k (branding > product question, 0.4h fresh, founder bait)
+- **Reddit pipeline**: webhook 200.
+- **Open items (carried + new):**
+  - **NEW: Reply pipeline now armed** for the 1 "no" reply received yesterday. Follow-up draft template ready. Pat to verify lead context.
+  - Sender hang pattern absent this batch — first clean morning in days.
+  - Phase 1 deadline 3 days out (2026-05-31). X 540f-ish, 0/1 paid. SEO will fire naturally at 10:00 UTC.
+  - Pool now refilled: E1 sent total 443 (was 437), E2-ready pool drained but E3 will mature next.
