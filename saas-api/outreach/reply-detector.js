@@ -46,9 +46,18 @@ async function run(lookbackHours = 24) {
   const q = `in:inbox after:${afterTs}`;
   let replyCount = 0, bounceCount = 0;
 
-  const list = await gmail.users.messages.list({ userId: 'me', q, maxResults: 100 });
-  const msgs = list.data.messages || [];
-  console.log(`Scanning ${msgs.length} inbox messages...`);
+  // Paginate fully: a single maxResults:100 page silently misses any reply
+  // buried past the 100 newest messages (a busy inbox in a 30-day window).
+  const msgs = [];
+  let pageToken;
+  let pages = 0;
+  do {
+    const list = await gmail.users.messages.list({ userId: 'me', q, maxResults: 500, pageToken });
+    (list.data.messages || []).forEach(m => msgs.push(m));
+    pageToken = list.data.nextPageToken;
+    pages++;
+  } while (pageToken && pages < 20);
+  console.log(`Scanning ${msgs.length} inbox messages (${pages} page(s))...`);
 
   for (const { id } of msgs) {
     const msg = await gmail.users.messages.get({ userId: 'me', id, format: 'metadata', metadataHeaders: ['From', 'Subject', 'X-Failed-Recipients', 'Auto-Submitted'] });

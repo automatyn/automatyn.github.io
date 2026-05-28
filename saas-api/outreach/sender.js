@@ -24,10 +24,11 @@ require('./load-env'); // load /etc/automatyn-api.env for ad-hoc CLI runs (no-op
 const https = require('https');
 const crypto = require('crypto');
 const store = require('./leads-store');
-// Template version dispatch. Set EMAIL_TEMPLATE_VERSION=v6 to use the rewritten
-// templates (single-question CTA, no link in E1). Defaults to v5 (templates.js)
-// for backwards compat with existing automation.
-const TEMPLATE_VERSION = process.env.EMAIL_TEMPLATE_VERSION || 'v5';
+// Template version dispatch. v6 is the rewritten set (single-question CTA, no
+// link in E1) that replaced v5 after v5 got 0 replies on 322 sends. Default is
+// v6: the old v5 default was shipping the known-broken copy. Set
+// EMAIL_TEMPLATE_VERSION=v5 only to deliberately A/B back to the old templates.
+const TEMPLATE_VERSION = process.env.EMAIL_TEMPLATE_VERSION || 'v6';
 const _templates = TEMPLATE_VERSION === 'v6' ? require('./templates-v6') : require('./templates');
 const { buildEmail, SUBJECTS_E1, CTAS_E1, pickVariantRoundRobin } = _templates;
 const { buildSummerEmail, SUBJECTS: SUMMER_SUBJECTS } = require('./templates-summer');
