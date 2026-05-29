@@ -12,10 +12,28 @@ const hoursWindow = parseInt(process.argv[2] || '24', 10);
 const maxPerHandle = parseInt(process.argv[3] || '5', 10);
 const CDP = 'http://127.0.0.1:18800';
 
-const handles = [];
+let handles = [];
 const seen = new Set();
 for (const group of Object.values(targets.groups)) for (const h of group) {
   if (!seen.has(h)) { seen.add(h); handles.push(h); }
+}
+
+// Rotation: the handle list outgrew a single paced scrape (80 handles x 10s
+// exceeds the firehose 420s/run budget). Scrape a rotating slice each run and
+// advance an offset so the full list is covered over a few runs. Override the
+// slice size with SCRAPE_BATCH (default 25). Disable rotation with SCRAPE_BATCH=0.
+const SCRAPE_BATCH = parseInt(process.env.SCRAPE_BATCH || '25', 10);
+if (SCRAPE_BATCH > 0 && handles.length > SCRAPE_BATCH) {
+  const stateFile = path.join(dir, 'scrape-rotation-state.json');
+  let offset = 0;
+  try { offset = JSON.parse(fs.readFileSync(stateFile, 'utf8')).offset || 0; } catch {}
+  offset = offset % handles.length;
+  const slice = [];
+  for (let i = 0; i < SCRAPE_BATCH; i++) slice.push(handles[(offset + i) % handles.length]);
+  const nextOffset = (offset + SCRAPE_BATCH) % handles.length;
+  try { fs.writeFileSync(stateFile, JSON.stringify({ offset: nextOffset, total: handles.length, updated: new Date().toISOString() })); } catch {}
+  console.log(`Rotation: scraping handles ${offset}-${offset + SCRAPE_BATCH - 1} of ${handles.length} (next offset ${nextOffset}).`);
+  handles = slice;
 }
 
 const skipPatterns = [
