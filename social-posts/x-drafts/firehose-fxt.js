@@ -10,8 +10,11 @@ const https = require('https');
 const dir = __dirname;
 const hoursWindow = parseInt(process.argv[2] || '3', 10);
 
+// NOTE: levelsio removed 2026-05-29 — replies to @patrickssons are restricted on
+// his account (the compose box does not open), so drafting replies to him wastes
+// the slot. Do not re-add. See memory feedback_x_levelsio_replies_restricted.
 const handles = [
-  'sama','levelsio','jasonlk','naval','balajis','paulg','dhh','swyx',
+  'sama','jasonlk','naval','balajis','paulg','dhh','swyx',
   'karpathy','simonw','rauchg','GergelyOrosz','patio11','marc_louvion',
   'arvidkahl','jonyongfook','nikitabier','sahilbloom','dvassallo','mckaywrigley',
   'AravSrinivas','amasad','hnshah','OpenAIDevs','AnthropicAI','alexalbert__',
