@@ -11,25 +11,29 @@ const dir = __dirname;
 const hoursWindow = parseInt(process.argv[2] || '6', 10);
 const CDP = 'http://localhost:18800';
 
-// Search queries — broad SMB + AI + trades + follow-up territory.
+// Search queries — dev / founder / indie / SaaS / AI territory.
+// X audience is devs and founders, NOT trades (per feedback_x_audience_not_plumbers).
+// Trades-audience terms were removed 2026-05-29: they surfaced sub-100k SMB owners
+// that the 100k floor rejects, starving the reply pipeline. These terms surface
+// the high-follower builder/founder accounts that clear the floor.
 // Each is hit once. Live tab returns most recent posts.
 const queries = [
-  '"small business" struggling',
-  '"small business" overwhelmed',
-  '"follow up" leads',
-  '"missed calls" business',
-  '"AI agent" small business',
-  '"chatbot" small business',
-  'plumber admin',
-  'electrician paperwork',
-  '"build in public" founder',
-  '"small business owner" tired',
-  '"booking" appointment missed',
-  '"customer service" slow',
-  '"automation" small business',
-  '"receptionist" cost',
-  'tradesman phone',
-  '"side project" launched'
+  'shipping a feature',
+  '"building in public" revenue',
+  'indie hacker MRR',
+  '"vibe coding"',
+  'AI coding agent',
+  'Claude vs GPT',
+  '"prompt engineering" is',
+  'startup founders hardest part',
+  'SaaS churn',
+  'cold outreach reply rate',
+  'developer productivity AI',
+  'first paying customer',
+  '"product market fit" founder',
+  'agents autonomous coding',
+  'bootstrapped to profitable',
+  'open source maintainer burnout'
 ];
 
 const skipPatterns = [

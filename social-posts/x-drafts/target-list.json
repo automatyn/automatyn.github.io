@@ -1,21 +1,33 @@
 {
-  "version": 2,
-  "updated": "2026-04-29",
-  "notes": "Pruned to 30 active, high-yield handles. Paced scrape (10s/handle) avoids X anti-scrape wall.",
+  "version": 3,
+  "updated": "2026-05-29",
+  "notes": "Expanded 2026-05-29 to feed higher reply volume at the 100k follower floor. Audience = devs/founders/indie/SaaS/AI, NOT trades (X is creator-payouts track). Paced scrape (10s/handle) avoids the anti-scrape wall. Big list, but the 100k floor + recency filter downstream keeps quality.",
   "groups": {
     "smb_founders": [
       "patio11", "levelsio", "marc_louvion", "jasonlk",
       "nikitabier", "sahilbloom", "GergelyOrosz", "swyx",
-      "dvassallo", "rauchg"
+      "dvassallo", "rauchg", "shl", "Suhail", "naval",
+      "david_perell", "JamesClear", "agazdecki", "thepatwalls",
+      "tdinh_me", "marckohlbrugge", "yongfook"
     ],
     "ai_builders": [
       "OpenAIDevs", "AnthropicAI", "alexalbert__", "karpathy",
-      "simonw", "amasad", "mckaywrigley", "AravSrinivas", "shawnchauhan1"
+      "simonw", "amasad", "mckaywrigley", "AravSrinivas", "shawnchauhan1",
+      "sama", "gdb", "ericschmidt", "ylecun", "drjimfan",
+      "emollick", "rowancheung", "mreflow", "alliekmiller",
+      "GregKamradt", "jerryjliu0", "svpino", "rasbt"
     ],
     "saas_indie": [
       "arvidkahl", "jonyongfook", "mijustin", "csallen",
       "TKopelman", "hnshah", "gregisenberg", "harryjdry",
-      "dharmesh", "lennysan"
+      "dharmesh", "lennysan", "tylertringas", "robwalling",
+      "Steph_smith", "jakobgreenfeld", "damengchen", "tibo_maker",
+      "marc_louvion", "yoheinakajima", "hi_im_anders", "KevinWGlass"
+    ],
+    "devtools_eng": [
+      "ThePrimeagen", "kentcdodds", "dan_abramov", "addyosmani",
+      "wesbos", "cassidoo", "t3dotgg", "leeerob", "jevakallio",
+      "mitchellh", "dhh", "kelseyhightower", "b0rk"
     ],
     "warm_chain": [
       "MahlumAI", "rxhit05", "AishwaryaDevv", "TTrimoreau",
