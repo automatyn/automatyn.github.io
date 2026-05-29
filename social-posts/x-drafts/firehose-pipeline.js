@@ -96,16 +96,24 @@ async function main() {
   };
   log(`scrapers done: ${JSON.stringify(scrapeResults)}`);
 
-  // 2. Run drafter (which now reads candidates-api/browser/search.json + legacy)
-  log('drafting from merged candidates...');
-  const drafterRes = spawnSync('node', [path.join(DIR, 'draft-from-candidates.js'), 'firehose'], {
-    encoding: 'utf8', timeout: 60000, cwd: DIR,
-  });
-  if (drafterRes.status !== 0) {
-    log(`drafter failed: ${drafterRes.stderr || drafterRes.stdout}`);
-    return;
+  // 2. Run the keyword drafter (reads candidates-*.json, writes drafts.json).
+  // SKIP_DRAFTER=1 bypasses this: the Claude reply-drafter trigger writes its own
+  // reply drafts into drafts.json and then calls this pusher with SKIP_DRAFTER=1,
+  // because the keyword drafter OVERWRITES drafts.json and would wipe those
+  // Claude-written drafts before they are read (the bug that kept Telegram empty).
+  if (process.env.SKIP_DRAFTER === '1') {
+    log('SKIP_DRAFTER=1: not re-running keyword drafter, pushing existing drafts.json as-is.');
+  } else {
+    log('drafting from merged candidates...');
+    const drafterRes = spawnSync('node', [path.join(DIR, 'draft-from-candidates.js'), 'firehose'], {
+      encoding: 'utf8', timeout: 60000, cwd: DIR,
+    });
+    if (drafterRes.status !== 0) {
+      log(`drafter failed: ${drafterRes.stderr || drafterRes.stdout}`);
+      return;
+    }
+    log(drafterRes.stdout.split('\n').slice(-3).join(' | '));
   }
-  log(drafterRes.stdout.split('\n').slice(-3).join(' | '));
 
   // 3. Read drafts.json
   const draftsBundle = readJSON(path.join(DIR, 'drafts.json'), { drafts: [] });
