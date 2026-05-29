@@ -137,6 +137,19 @@ const VALID_TLDS_MIN = new Set([
   'gov', 'gov.uk', 'ac.uk', 'sch.uk', 'edu', 'mil', 'int', 'name', 'mobi',
 ]);
 
+// Platform / vendor domains the enricher sometimes scrapes instead of the
+// business's own address (the site-builder's support address, a CDN, an
+// unrelated brand whose pixel/script the scraper saw). Valid format, real TLD,
+// but never the lead. Emailing these wastes sends and looks like spam.
+// Added 2026-05-29 after savagex.com + wordpress.com + webador.com leaked through.
+const PLATFORM_DOMAINS = new Set([
+  'webador.com', 'wordpress.com', 'wix.com', 'wixsite.com', 'squarespace.com',
+  'godaddy.com', 'weebly.com', 'shopify.com', 'savagex.com', 'sentry.io',
+  'cloudflare.com', 'google.com', 'gstatic.com', 'googleapis.com', 'jimdo.com',
+  'site123.com', 'webflow.io', 'wordpress.org', 'w3.org', 'schema.org',
+  'example.com', 'sentry-next.wixpress.com', 'wixpress.com', 'linktr.ee',
+]);
+
 function isUnsendable(email) {
   if (!email) return true;
   if (typeof email !== 'string') return true;
@@ -148,6 +161,8 @@ function isUnsendable(email) {
   const domain = lower.split('@')[1] || '';
   // Placeholder local-part check
   if (PLACEHOLDER_LOCAL_PARTS.has(local)) return true;
+  // Platform / vendor domain check (scraped wrong: not the business)
+  if (PLATFORM_DOMAINS.has(domain)) return true;
   // Exact "kind@kind" pattern (gmail@gmail.com, info@info.co.uk, etc) — these always bounce
   const localBase = local.replace(/[^a-z]/g, '');
   const domainBase = domain.split('.')[0].replace(/[^a-z]/g, '');
