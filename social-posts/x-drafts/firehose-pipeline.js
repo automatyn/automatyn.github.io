@@ -86,7 +86,10 @@ async function main() {
   // returned 0 candidates routinely. 24h covers the realistic posting cadence of
   // accounts like karpathy/AnthropicAI without flooding us. Recency filter still
   // happens downstream in draft-from-candidates.js if we tighten there.
-  const scrapeResults = DRY ? { skipped: true } : {
+  // SKIP_SCRAPE=1 reuses the candidate files already on disk (the systemd
+  // firehose timer scrapes every 30 min, so a push-only run does not need to
+  // re-scrape, which is slow and times out on the 420s scrape-targets cap).
+  const scrapeResults = (DRY || process.env.SKIP_SCRAPE === '1') ? { skipped: true } : {
     // Use Playwright-based scrape-targets-pw.js (the original browser-use CLI version
     // returned 0 candidates for unknown reason, even with logged-in chrome — confirmed
     // 2026-05-09). The pw version writes the same candidates-browser.json schema.
