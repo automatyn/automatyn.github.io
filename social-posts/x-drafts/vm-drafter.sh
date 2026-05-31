@@ -31,10 +31,16 @@ const drafted=(()=>{try{return new Set((JSON.parse(fs.readFileSync("drafts.json"
 const foll=x=>x.author_followers||hf[(x.handle||"").toLowerCase()]?.followers||0;
 const base=x=>{const t=(x.text||"").toLowerCase();return (x.age_hours||99)<6&&!sent.has(x.tweet_id)&&!drafted.has(x.tweet_id)&&!/cointelegraph|crypto|airdrop|coinbase|\$[a-z]{2,5}\b|levelsio/i.test((x.handle||"")+" "+t)&&(x.text||"").length>50;};
 const elig=[...new Map(c.filter(base).map(x=>[x.tweet_id,x])).values()];
-let pool=elig.filter(x=>foll(x)>=1000000);
-if(pool.length<3) pool=elig.filter(x=>foll(x)>=250000); // fallback so runs are not empty
-pool.sort((a,b)=>(b.views||0)-(a.views||0)); // highest-view posts first
-const u=pool.slice(0,35); // draft the whole fresh pool per cycle, not a tiny cap (was 8 -> only ~3 pushed)
+const byViews=(a,b)=>(b.views||0)-(a.views||0);
+// Fill toward 35 in priority order: 1M+ first, then top up from 250k+, then 100k+.
+// Each tier sorted by views. Dedup so a candidate is never counted twice across tiers.
+const seen=new Set(); const pool=[];
+for(const floor of [1000000,250000,100000]){
+  if(pool.length>=35) break;
+  elig.filter(x=>foll(x)>=floor && !seen.has(x.tweet_id)).sort(byViews)
+      .forEach(x=>{ if(pool.length<35){ pool.push(x); seen.add(x.tweet_id);} });
+}
+const u=pool;
 process.stdout.write(JSON.stringify(u.map(x=>({tweet_id:x.tweet_id,handle:x.handle,followers:foll(x),views:x.views||0,text:(x.text||"").slice(0,400)}))));
 ')
 N=$(echo "$CANDS" | node -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>{try{console.log((JSON.parse(d)||[]).length)}catch{console.log(0)}})')
