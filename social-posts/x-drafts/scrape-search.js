@@ -18,22 +18,27 @@ const CDP = 'http://localhost:18800';
 // the high-follower builder/founder accounts that clear the floor.
 // Each is hit once. Live tab returns most recent posts.
 const queries = [
-  'shipping a feature',
-  '"building in public" revenue',
-  'indie hacker MRR',
-  '"vibe coding"',
+  // High-VIEW / viral discovery (Pat 2026-05-31): min_faves surfaces posts that
+  // are already blowing up, from ANY account, not just tracked handles. Reply
+  // early under a viral AI/tech post = huge impressions. These are the volume +
+  // reach driver. The downstream 250k follower floor still gates who we draft for.
+  'AI min_faves:2000',
+  'AI agents min_faves:1500',
+  'OpenAI min_faves:2000',
+  'Anthropic min_faves:1000',
+  'Claude min_faves:1000',
+  'AGI min_faves:2000',
+  'startup min_faves:2000',
+  'founder min_faves:1500',
+  'building min_faves:2000 software',
+  'the future of AI min_faves:1500',
+  // Topical / on-voice (kept from before)
   'AI coding agent',
-  'Claude vs GPT',
-  '"prompt engineering" is',
-  'startup founders hardest part',
+  '"vibe coding"',
+  'indie hacker MRR',
   'SaaS churn',
-  'cold outreach reply rate',
-  'developer productivity AI',
   'first paying customer',
-  '"product market fit" founder',
-  'agents autonomous coding',
-  'bootstrapped to profitable',
-  'open source maintainer burnout'
+  '"product market fit" founder'
 ];
 
 const skipPatterns = [

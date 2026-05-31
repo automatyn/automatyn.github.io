@@ -25,6 +25,24 @@ const handles = [
   // 2026-05-13 expansion: 12 verified handles via fxtwitter (3.7k-361k followers)
   'adamwathan','steventey','theprimeagen','iannuttall','marckohlbrugge',
   'jasonleowsg','tdinh_me','natfriedman','cjzafir','damengchen','peer_rich','t3dotgg',
+  // 2026-05-31 MEGA tier (Pat: target 1M+ accounts for max reach on replies).
+  // Reply under a viral post from these = far more impressions than mid-tier.
+  // Big list on purpose: hundreds of mega-accounts exist, more tracked = more
+  // fresh high-view posts in the pool every run. fxtwitter is one fast call each.
+  // -- AI labs / leaders --
+  'elonmusk','OpenAI','sundarpichai','satyanadella','AnthropicAI','GoogleDeepMind',
+  'perplexity_ai','xai','ylecun','drjimfan','demishassabis','alexandr_wang',
+  'gdb','miramurati','JeffDean','AndrewYNg','fchollet','goodfellow_ian',
+  'OpenAIDevs','GoogleAI','Google','Microsoft','nvidia','meta',
+  // -- tech founders / VCs (1M+) --
+  'pmarca','paulg','garrytan','jason','chamath','DavidSacks','friedberg',
+  'balajis','naval','sama','levie','patrickc','collison','brian_armstrong',
+  'jack','vkhosla','reidhoffman','bhorowitz','semil','eladgil',
+  // -- AI/tech commentators with huge reach --
+  'rowancheung','kimmonismus','mattshumer_','alliekmiller','svpino','emollick',
+  'mreflow','GregKamradt','minchoi','heybarsee','LinusEkenstam','venturetwins',
+  // -- business / general mega (broad-appeal, high-view) --
+  'naval','APompliano','RyanHoliday','jamesclear','ShaanVP','TheStoicEmperor',
 ];
 
 function fxtFetch(handle) {

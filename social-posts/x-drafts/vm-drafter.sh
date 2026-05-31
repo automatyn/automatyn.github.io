@@ -12,16 +12,25 @@ LOG=/home/marketingpatpat/openclaw/social-posts/vm-drafter.log
 ts(){ date -u "+%Y-%m-%dT%H:%M:%SZ"; }
 echo "[$(ts)] vm-drafter start" >> "$LOG"
 
-# 1. Build the qualifying candidate list (100k floor, <6h, on-audience, undrafted)
+# 1. Build the qualifying candidate list.
+# Pat 2026-05-31: target MASSIVE accounts (1M+) and the highest-VIEW posts. A
+# reply under a viral mega-account post earns vastly more impressions than a
+# mid-tier one. Prefer 1M+; if fewer than 3 qualify this run, fall back to 250k
+# so the drafter is not starved on quiet hours. Within the tier, sort by views.
 CANDS=$(node -e '
 const fs=require("fs");
 let c=[];for(const f of ["firehose-candidates.json","candidates-search.json","candidates-browser.json"]){try{(JSON.parse(fs.readFileSync(f,"utf8")).candidates||[]).forEach(x=>c.push(x))}catch{}}
 const hf=(()=>{try{return JSON.parse(fs.readFileSync("handle-followers.json","utf8"))}catch{return{}}})();
 const sent=(()=>{try{return new Set(JSON.parse(fs.readFileSync("/home/marketingpatpat/openclaw/social-posts/firehose-sent.json","utf8")).ids||[])}catch{return new Set()}})();
 const drafted=(()=>{try{return new Set((JSON.parse(fs.readFileSync("drafts.json","utf8")).drafts||[]).filter(x=>x.type==="reply").map(x=>x.tweet_id))}catch{return new Set()}})();
-const q=c.filter(x=>{const f=x.author_followers||hf[(x.handle||"").toLowerCase()]?.followers||0;const t=(x.text||"").toLowerCase();return f>=100000&&(x.age_hours||99)<6&&!sent.has(x.tweet_id)&&!drafted.has(x.tweet_id)&&!/cointelegraph|crypto|airdrop|coinbase|\$[a-z]{2,5}\b|levelsio/i.test((x.handle||"")+" "+t)&&(x.text||"").length>50;});
-const u=[...new Map(q.map(x=>[x.tweet_id,x])).values()].slice(0,8);
-process.stdout.write(JSON.stringify(u.map(x=>({tweet_id:x.tweet_id,handle:x.handle,followers:x.author_followers||hf[(x.handle||"").toLowerCase()]?.followers,text:(x.text||"").slice(0,400)}))));
+const foll=x=>x.author_followers||hf[(x.handle||"").toLowerCase()]?.followers||0;
+const base=x=>{const t=(x.text||"").toLowerCase();return (x.age_hours||99)<6&&!sent.has(x.tweet_id)&&!drafted.has(x.tweet_id)&&!/cointelegraph|crypto|airdrop|coinbase|\$[a-z]{2,5}\b|levelsio/i.test((x.handle||"")+" "+t)&&(x.text||"").length>50;};
+const elig=[...new Map(c.filter(base).map(x=>[x.tweet_id,x])).values()];
+let pool=elig.filter(x=>foll(x)>=1000000);
+if(pool.length<3) pool=elig.filter(x=>foll(x)>=250000); // fallback so runs are not empty
+pool.sort((a,b)=>(b.views||0)-(a.views||0)); // highest-view posts first
+const u=pool.slice(0,8);
+process.stdout.write(JSON.stringify(u.map(x=>({tweet_id:x.tweet_id,handle:x.handle,followers:foll(x),views:x.views||0,text:(x.text||"").slice(0,400)}))));
 ')
 N=$(echo "$CANDS" | node -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>{try{console.log((JSON.parse(d)||[]).length)}catch{console.log(0)}})')
 echo "[$(ts)] qualifying candidates: $N" >> "$LOG"
