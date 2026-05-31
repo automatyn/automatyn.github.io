@@ -69,4 +69,5 @@ req.on("error",e=>console.log("push err "+e.message));req.write(body);req.end();
 # 6. Record state so we never re-send this episode
 node -e 'require("fs").writeFileSync("'$STATE'",JSON.stringify({last_guid:"'"$GID"'",last_title:process.argv[1],processed_at:"'"$(ts)"'"},null,2))' "$TITLE"
 echo "[$(ts)] allin-monitor done, pushed: $TITLE" >> "$LOG"
-rm -f "$WORK/ep.wav"
+# Clean up ALL temp files (audio + transcript + any chunks) to save VM space.
+rm -f "$WORK"/ep.wav "$WORK"/ep.txt "$WORK"/*.wav "$WORK"/*.txt 2>/dev/null
