@@ -144,11 +144,14 @@ async function main() {
     const key = d.tweet_id || targetUrl;
     if (sentIds.has(key)) return false;
     if (seenTargets.has(key)) return false;
-    // big-account filter: lookup handle's follower count, reject if below floor.
-    // If we don't have data for the handle, prefer reject (safer than wasted reply).
+    // big-account filter: reject if below floor. Prefer the follower count the
+    // drafter stamped on the draft (d.target_followers) since the drafter saw the
+    // live candidate; fall back to the handle-followers.json lookup. The old code
+    // only used the lookup file, so any mega-handle missing from that (stale) file
+    // read as 0 followers and got silently DROPPED, which is why a fat mega pool
+    // still pushed ~1. (Fixed 2026-05-31.)
     const handle = (d.target_handle || '').toLowerCase();
-    const fdata = handleFollowers[handle];
-    const followers = fdata?.followers || 0;
+    const followers = d.target_followers || handleFollowers[handle]?.followers || 0;
     if (followers < FOLLOWER_FLOOR) return false;
     seenTargets.add(key);
     return true;

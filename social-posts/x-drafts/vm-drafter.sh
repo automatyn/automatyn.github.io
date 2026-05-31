@@ -49,6 +49,11 @@ let raw=process.argv[1]||"";
 // strip any code fence or stray prose: grab the first [...] block
 const m=raw.match(/\[[\s\S]*\]/); if(!m){console.log(0);process.exit(0);}
 let arr; try{arr=JSON.parse(m[0]);}catch{console.log(0);process.exit(0);}
+// map tweet_id -> follower count from the candidates we fed claude, so we can
+// stamp target_followers on each draft (the pusher floor reads it; relying on
+// handle-followers.json dropped mega-handles missing from that stale file).
+const cands=(()=>{try{return JSON.parse(process.argv[2]||"[]")}catch{return[]}})();
+const follById={}; cands.forEach(c=>{follById[c.tweet_id]=c.followers||0;});
 const b=(()=>{try{return JSON.parse(fs.readFileSync("drafts.json","utf8"))}catch{return{drafts:[]}}})();
 b.drafts=b.drafts||[];
 let added=0;
@@ -58,12 +63,12 @@ for(const d of arr){
   if(/—|–/.test(d.draft))continue;
   const id="r-"+d.tweet_id;
   if(b.drafts.some(x=>x.id===id))continue;
-  b.drafts.push({id,type:"reply",draft:d.draft,target_url:"https://x.com/i/web/status/"+d.tweet_id,tweet_id:d.tweet_id,target_handle:d.handle||""});
+  b.drafts.push({id,type:"reply",draft:d.draft,target_url:"https://x.com/i/web/status/"+d.tweet_id,tweet_id:d.tweet_id,target_handle:d.handle||"",target_followers:follById[d.tweet_id]||0});
   added++;
 }
 fs.writeFileSync("drafts.json",JSON.stringify(b,null,2));
 console.log(added);
-' "$RAW")
+' "$RAW" "$CANDS")
 echo "[$(ts)] drafts added to drafts.json: $ADDED" >> "$LOG"
 
 # 4. Push. SKIP_DRAFTER so the keyword drafter does not overwrite our drafts;
