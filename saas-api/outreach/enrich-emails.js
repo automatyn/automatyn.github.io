@@ -288,6 +288,9 @@ async function enrichOne(lead, opts = {}) {
     }
   }
 
+  // Stamp the miss so listNeedingEnrichment skips this lead next run (stops the
+  // queue re-grinding the same emailless sites every batch).
+  store.update(lead.id, { enrich_attempted: new Date().toISOString() });
   return { ok: false, reason: 'no_email_found' };
 }
 

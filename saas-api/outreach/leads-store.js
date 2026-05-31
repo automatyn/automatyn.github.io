@@ -126,8 +126,13 @@ function listAll() {
 
 // Leads needing email enrichment: has website but no email, not bounced/unsub.
 function listNeedingEnrichment(limit = Infinity) {
+  // Newest-first, and skip leads already attempted-and-failed (enrich_attempted).
+  // Old behaviour sliced oldest-first and re-scraped 5-week-old dead leads every
+  // run, wasting the batch on businesses that already proved emailless. Fresh
+  // never-tried leads have a far higher hit rate.
   return listAll()
-    .filter(l => !l.email && l.website && !l.bounced && !l.unsubscribed)
+    .filter(l => !l.email && l.website && !l.bounced && !l.unsubscribed && !l.enrich_attempted)
+    .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
     .slice(0, limit);
 }
 
