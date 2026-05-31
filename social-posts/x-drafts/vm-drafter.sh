@@ -29,7 +29,7 @@ const elig=[...new Map(c.filter(base).map(x=>[x.tweet_id,x])).values()];
 let pool=elig.filter(x=>foll(x)>=1000000);
 if(pool.length<3) pool=elig.filter(x=>foll(x)>=250000); // fallback so runs are not empty
 pool.sort((a,b)=>(b.views||0)-(a.views||0)); // highest-view posts first
-const u=pool.slice(0,8);
+const u=pool.slice(0,25); // draft the whole fresh pool per cycle, not a tiny cap (was 8 -> only ~3 pushed)
 process.stdout.write(JSON.stringify(u.map(x=>({tweet_id:x.tweet_id,handle:x.handle,followers:foll(x),views:x.views||0,text:(x.text||"").slice(0,400)}))));
 ')
 N=$(echo "$CANDS" | node -e 'let d="";process.stdin.on("data",c=>d+=c);process.stdin.on("end",()=>{try{console.log((JSON.parse(d)||[]).length)}catch{console.log(0)}})')
@@ -74,5 +74,5 @@ echo "[$(ts)] drafts added to drafts.json: $ADDED" >> "$LOG"
 # 4. Push. SKIP_DRAFTER so the keyword drafter does not overwrite our drafts;
 # SKIP_SCRAPE because the firehose systemd timer already scrapes every 30 min
 # (re-scraping here is slow and unnecessary).
-SKIP_DRAFTER=1 SKIP_SCRAPE=1 node firehose-pipeline.js --max=8 >> "$LOG" 2>&1
+SKIP_DRAFTER=1 SKIP_SCRAPE=1 node firehose-pipeline.js --max=25 >> "$LOG" 2>&1
 echo "[$(ts)] vm-drafter done" >> "$LOG"
