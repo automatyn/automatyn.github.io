@@ -43,7 +43,42 @@ const handles = [
   'mreflow','GregKamradt','minchoi','heybarsee','LinusEkenstam','venturetwins',
   // -- business / general mega (broad-appeal, high-view) --
   'naval','APompliano','RyanHoliday','jamesclear','ShaanVP','TheStoicEmperor',
+  // 2026-05-31 300+ expansion (Pat: more tracked handles = more fresh high-view
+  // posts per scrape, since the viral-search discovery path is unreliable). All
+  // large, active, on-or-adjacent-to-audience accounts. fxtwitter = 1 fast call each.
+  // -- more AI / ML --
+  'sama','karpathy','ylecun','AndrewYNg','goodfellow_ian','hardmaru','jeremyphoward',
+  'ClementDelangue','huggingface','LangChainAI','llama_index','jerryjliu0','rasbt',
+  'EMostaque','StabilityAI','MistralAI','cohere','AravSrinivas','perplexity_ai',
+  'OfficialLoganK','sama','_jasonwei','janleike','woj_zaremba','ilyasut','tszzl',
+  'nearcyan','repligate','goodside','mckaywrigley','swyx','simonw','transitive_bs',
+  'amasad','replit','vercel','rauchg','leeerob','cramforce','shadcn','t3dotgg',
+  // -- founders / startup / SaaS --
+  'levelsio','marc_louvion','tdinh_me','damengchen','arvidkahl','agazdecki',
+  'thepatwalls','csallen','robwalling','jakobgreenfeld','tylertringas','dvassallo',
+  'KevonCheung','dickiebush','Nicolascole77','dvassallo','heyeaslo','marckohlbrugge',
+  'jsngr','rrhoover','dharmesh','bfeld','hnshah','suhail','founderjar','gregisenberg',
+  'thejustinwelsh','dickiebush','Codie_Sanchez','awilkinson','mijustin','peer_rich',
+  // -- VC / business / finance --
+  'pmarca','bhorowitz','garrytan','jason','chamath','DavidSacks','friedberg',
+  'rabois','semil','eladgil','hunterwalk','sama','fredwilson','msuster','jwmares',
+  'tobi','dhh','levie','aaronlevie','patrickc','collison','stripe','shopify',
+  'APompliano','RyanHoliday','morganhousel','dollarsanddata','SahilBloom','ShaanVP',
+  'dickiebush','Nicolascole77','TheStoicEmperor','naval','david_perell','george__mack',
+  // -- big tech / general --
+  'elonmusk','sundarpichai','satyanadella','tim_cook','BillGates','jeffbezos',
+  'Google','Microsoft','Apple','OpenAI','AnthropicAI','GoogleDeepMind','nvidia',
+  'verge','TechCrunch','WIRED','techreview','lexfridman','hubermanlab','tferriss',
 ];
+
+// Dedupe (the list above intentionally repeats some handles across categories;
+// fetch each only once, case-insensitive).
+const _seenHandles = new Set();
+const dedupedHandles = handles.filter(h => {
+  const k = h.toLowerCase();
+  if (_seenHandles.has(k)) return false;
+  _seenHandles.add(k); return true;
+});
 
 function fxtFetch(handle) {
   return new Promise((resolve) => {
@@ -66,9 +101,9 @@ function fxtFetch(handle) {
   let scanned = 0, kept = 0, skipAge = 0, skipReply = 0, skipNoTweet = 0, broken = 0;
   const cutoff = Date.now() - hoursWindow * 3600 * 1000;
 
-  console.log(`Polling ${handles.length} firehose accounts, last ${hoursWindow}h...`);
+  console.log(`Polling ${dedupedHandles.length} firehose accounts, last ${hoursWindow}h...`);
 
-  for (const h of handles) {
+  for (const h of dedupedHandles) {
     scanned++;
     const d = await fxtFetch(h);
     const results = d && Array.isArray(d.results) ? d.results : null;
