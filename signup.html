@@ -197,6 +197,34 @@
     } catch(e) {}
   })();
 
+  // Attribution capture (added 2026-06-09). We were blind to where signups come
+  // from: Cloudflare caches page views so the origin server only sees the API
+  // call, and document.referrer on signup is just our own domain. This captures
+  // FIRST-TOUCH source (referrer + UTM + landing path) and persists it across the
+  // homepage -> signup hop, so every signup is traceable to its real source.
+  function captureAttribution() {
+    try {
+      // Only set first-touch once, so the original source survives navigation.
+      if (!localStorage.getItem('attr_first')) {
+        const p = new URLSearchParams(window.location.search);
+        const attr = {
+          referrer: document.referrer || '',
+          utm_source: p.get('utm_source') || '',
+          utm_medium: p.get('utm_medium') || '',
+          utm_campaign: p.get('utm_campaign') || '',
+          landing: window.location.pathname + window.location.search,
+          at: new Date().toISOString(),
+        };
+        localStorage.setItem('attr_first', JSON.stringify(attr));
+      }
+    } catch (e) {}
+  }
+  function getAttribution() {
+    try { return JSON.parse(localStorage.getItem('attr_first') || '{}'); }
+    catch (e) { return {}; }
+  }
+  captureAttribution();
+
   // Google Sign-In callback
   async function handleGoogleSignIn(response) {
     const errBox = document.getElementById('error-box');
@@ -205,7 +233,7 @@
       const res = await fetch(`${API}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: response.credential, plan })
+        body: JSON.stringify({ credential: response.credential, plan, attribution: getAttribution() })
       });
       const data = await res.json();
       if (!res.ok) {

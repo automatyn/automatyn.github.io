@@ -558,6 +558,25 @@
 
     <!-- Google Analytics (deferred to idle to avoid blocking main thread) -->
     <script>
+        // First-touch attribution capture (added 2026-06-09). Records the real
+        // external referrer + UTM the moment someone lands, so it survives the
+        // hop to signup.html (where document.referrer is just our own domain).
+        // signup.html reads localStorage.attr_first and sends it with signup.
+        (function(){
+          try {
+            if (!localStorage.getItem('attr_first')) {
+              var p = new URLSearchParams(window.location.search);
+              localStorage.setItem('attr_first', JSON.stringify({
+                referrer: document.referrer || '',
+                utm_source: p.get('utm_source') || '',
+                utm_medium: p.get('utm_medium') || '',
+                utm_campaign: p.get('utm_campaign') || '',
+                landing: window.location.pathname + window.location.search,
+                at: new Date().toISOString()
+              }));
+            }
+          } catch(e){}
+        })();
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
