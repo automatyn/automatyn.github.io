@@ -181,10 +181,14 @@
     const errBox = document.getElementById('error-box');
     errBox.classList.add('hidden');
     try {
+      // Carry plan intent (from ?plan=) + first-touch attribution if present, so a
+      // user who began at signup with a plan but lands here doesn't lose it. 2026-06-10.
+      var _plan = (new URLSearchParams(location.search).get('plan') || '').toLowerCase();
+      var _attr = {}; try { _attr = JSON.parse(localStorage.getItem('attr_first') || '{}'); } catch (e) {}
       const res = await fetch(`${API}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential: response.credential })
+        body: JSON.stringify({ credential: response.credential, plan: (_plan === 'pro' || _plan === 'max') ? _plan : undefined, attribution: _attr })
       });
       const data = await res.json();
       if (!res.ok) {

@@ -490,7 +490,7 @@
             if (multiple >= 10) {
                 paybackEl.textContent = `At ${Math.round(multiple)}x ROI, the Pro plan pays for itself ${Math.round(multiple)} times over. One recovered job covers the month.`;
             } else if (multiple >= 2) {
-                const booksNeeded = Math.ceil(proPrice / jobValue);
+                const booksNeeded = jobValue > 0 ? Math.ceil(proPrice / jobValue) : 1;
                 paybackEl.textContent = `Pro plan (${proLabel}/mo) pays for itself in the first ${booksNeeded} booking${booksNeeded > 1 ? 's' : ''} of the month.`;
             } else {
                 paybackEl.textContent = `Even the free tier (25 conversations/mo) covers most of this. No credit card needed.`;

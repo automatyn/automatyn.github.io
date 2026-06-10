@@ -2174,11 +2174,17 @@
             }
         }
 
+        var _autoCheckoutFired = false;
         function maybeAutoOpenCheckout() {
             if (!agentData) return;
             if (agentData.plan && agentData.plan !== 'starter') return;
             var wanted = agentData.requestedPlan;
             if (wanted !== 'pro' && wanted !== 'max') return;
+            // Guard against double-pop: the server clear below is fire-and-forget,
+            // so a reload before it lands could re-pop checkout. This session flag
+            // ensures it only ever fires once per page load. 2026-06-10.
+            if (_autoCheckoutFired) return;
+            _autoCheckoutFired = true;
             // One-shot: clear server-side so reload does not re-pop
             agentData.requestedPlan = null;
             fetch(API_URL + '/api/agent/' + agentId + '/clear-requested-plan', {
@@ -2427,7 +2433,14 @@
             drawSparkline(data.history || [count]);
         }
 
+        var _qrLoading = false;
         async function loadQR() {
+            // Guard against concurrent pairing starts (2026-06-10): each call hits
+            // the QR endpoint which wipes the auth dir and starts a fresh session.
+            // A reload or second tab firing loadQR() mid-pairing would orphan the
+            // first session. This flag serialises it.
+            if (_qrLoading) return;
+            _qrLoading = true;
             try {
                 const res = await fetch(API_URL + '/api/agent/' + agentId + '/whatsapp/qr', {
                     headers: { 'Authorization': 'Bearer ' + token },
@@ -2457,6 +2470,8 @@
                 }
             } catch (err) {
                 console.error('QR load failed:', err);
+            } finally {
+                _qrLoading = false;
             }
         }
 

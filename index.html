@@ -1813,6 +1813,7 @@
 
         function addBotMessage(text) {
             const container = document.getElementById('chat-messages');
+            if (!container) return; // chat widget is disabled (no markup) — guard dead refs (2026-06-10)
             const msgDiv = document.createElement('div');
             msgDiv.className = 'flex gap-3 mb-4';
             msgDiv.innerHTML = `
@@ -1829,6 +1830,7 @@
 
         function addUserMessage(text) {
             const container = document.getElementById('chat-messages');
+            if (!container) return; // chat widget is disabled (no markup) — guard dead refs (2026-06-10)
             const msgDiv = document.createElement('div');
             msgDiv.className = 'flex gap-3 justify-end mb-4';
             msgDiv.innerHTML = `
@@ -1842,6 +1844,7 @@
 
         function showTyping() {
             const container = document.getElementById('chat-messages');
+            if (!container) return; // chat widget is disabled (no markup) — guard dead refs (2026-06-10)
             const typingDiv = document.createElement('div');
             typingDiv.id = 'typing-indicator';
             typingDiv.className = 'flex gap-3 mb-4';
@@ -1866,6 +1869,7 @@
 
         function addEmailCaptureForm() {
             const container = document.getElementById('chat-messages');
+            if (!container) return; // chat widget is disabled (no markup) — guard dead refs (2026-06-10)
             const formDiv = document.createElement('div');
             formDiv.id = 'email-capture-form';
             formDiv.className = 'flex gap-3 mb-4';
@@ -1935,6 +1939,7 @@
 
         function sendMessage() {
             const input = document.getElementById('chat-input');
+            if (!input) return; // chat widget disabled — guard dead refs (2026-06-10)
             const text = input.value.trim();
             if (!text) return;
 
@@ -1957,16 +1962,22 @@
         }
 
         function sendQuickReply(text) {
-            document.getElementById('chat-input').value = text;
+            var ci = document.getElementById('chat-input');
+            if (!ci) return; // chat widget disabled — guard dead refs (2026-06-10)
+            ci.value = text;
             sendMessage();
         }
 
-        // Enter key to send
-        document.getElementById('chat-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
+        // Enter key to send. Guarded: chat widget markup was removed, so this ran
+        // at load on a null element and threw on every page view (2026-06-10).
+        var _chatInput = document.getElementById('chat-input');
+        if (_chatInput) {
+            _chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
     </script>
 
     <!-- Geo-pricing: show local currency for UK/EU/AU/NZ visitors -->

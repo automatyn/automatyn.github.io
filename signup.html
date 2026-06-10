@@ -229,6 +229,11 @@
   async function handleGoogleSignIn(response) {
     const errBox = document.getElementById('error-box');
     errBox.classList.add('hidden');
+    if (!response || !response.credential) {
+      errBox.textContent = 'Google sign-in did not complete. Please try again.';
+      errBox.classList.remove('hidden');
+      return;
+    }
     try {
       const res = await fetch(`${API}/api/auth/google`, {
         method: 'POST',
