@@ -1032,10 +1032,12 @@
             lossValEl.textContent = (lossPct * 100).toFixed(0) + '%';
             lostEl.textContent = fmt(lostRevenue);
             savedEl.textContent = fmt(recovered);
-            multipleEl.textContent = multiple < 10 ? multiple.toFixed(1) : Math.round(multiple);
+            // Cap the displayed ROI: a raw "244x" reads as fake and quietly kills
+            // trust in the whole page. Show a believable "10x+" ceiling. 2026-06-10.
+            multipleEl.textContent = multiple < 10 ? multiple.toFixed(1) : '10+';
 
             if (multiple >= 10) {
-                paybackEl.textContent = `At ${Math.round(multiple)}x ROI, Automatyn pays for itself ${Math.round(multiple)} times over — first recovered booking covers the month.`;
+                paybackEl.textContent = `One recovered job pays for the Pro plan many times over — the first booking you save covers the month.`;
             } else if (multiple >= 2) {
                 paybackEl.textContent = `Pro plan (${window.AUTOMATYN_PRO_LABEL || '$29'}/mo) pays for itself in the first ${Math.ceil(29 / jobValue)} booking${Math.ceil(29 / jobValue) > 1 ? 's' : ''} of the month.`;
             } else {
