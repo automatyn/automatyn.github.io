@@ -1861,7 +1861,19 @@
             if (agentData.email && /@/.test(agentData.email)) {
                 opts.customer = { email: agentData.email };
             }
-            Paddle.Checkout.open(opts);
+            // Failsafe (2026-06-10): if the Paddle SDK failed to load (CDN down,
+            // network, CSP block), Paddle is undefined and .open() throws silently
+            // — the customer clicks Upgrade and sees nothing, a lost sale. Guard it:
+            // tell them clearly + give a retry path, never fail silently.
+            if (typeof Paddle === 'undefined' || !Paddle.Checkout || typeof Paddle.Checkout.open !== 'function') {
+                alert('Payment is taking a moment to load. Please check your connection and try again in a few seconds. If it keeps happening, email support@automatyn.co and we will sort it out.');
+                return;
+            }
+            try {
+                Paddle.Checkout.open(opts);
+            } catch (e) {
+                alert('Something went wrong opening checkout. Please try again, or email support@automatyn.co and we will take your payment manually.');
+            }
         }
 
         function toggleBizMenu(e) {
@@ -2448,12 +2460,31 @@
             }
         }
 
+        // Shows a clear failure + retry button instead of leaving the user staring
+        // at a stuck QR/code with no feedback (the Adam bug: scan -> wait -> nothing
+        // -> retry 8x). 2026-06-10.
+        function showPairingFailed(reason) {
+            var placeholder = document.getElementById('qr-placeholder');
+            if (!placeholder) return;
+            placeholder.innerHTML =
+                '<div class="text-center relative z-10">' +
+                '<div class="text-4xl mb-3">⚠️</div>' +
+                '<p class="text-white font-semibold">' + (reason || 'That code expired before it connected.') + '</p>' +
+                '<p class="text-zinc-400 text-sm mt-1 mb-3">No problem, just grab a fresh one.</p>' +
+                '<button onclick="loadQR()" class="upgrade-btn px-4 py-2 text-sm">Get a new code</button>' +
+                '</div>';
+        }
+
         function pollWhatsAppConnection() {
             var attempts = 0;
-            var maxAttempts = 30; // 30 x 3s = 90 seconds
+            var maxAttempts = 40; // 40 x 3s = 120s, matches the server-side pair timeout
             var pollInterval = setInterval(async function() {
                 attempts++;
-                if (attempts > maxAttempts) { clearInterval(pollInterval); return; }
+                if (attempts > maxAttempts) {
+                    clearInterval(pollInterval);
+                    showPairingFailed('Connecting timed out.');
+                    return;
+                }
                 try {
                     var res = await fetch(API_URL + '/api/agent/' + agentId + '/whatsapp/status', {
                         headers: { 'Authorization': 'Bearer ' + token },
@@ -2465,6 +2496,13 @@
                         var placeholder = document.getElementById('qr-placeholder');
                         placeholder.innerHTML = '<div class="text-center relative z-10"><div class="text-4xl mb-3">✅</div><p class="text-white font-semibold">WhatsApp connected!</p><p class="text-zinc-400 text-sm mt-1">Your AI receptionist is now live.</p></div>';
                         loadStatus(); // Refresh all status indicators
+                        return;
+                    }
+                    // Backend now rejects stale pair sessions (QR_EXPIRED/PAIRING_EXPIRED)
+                    // instead of hanging — surface it immediately with a retry.
+                    if (data.failed || data.error || data.status === 'failed' || data.status === 'expired') {
+                        clearInterval(pollInterval);
+                        showPairingFailed('That code expired before it connected.');
                     }
                 } catch (e) {}
             }, 3000);
