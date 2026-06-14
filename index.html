@@ -672,7 +672,7 @@
                     </a>
                     <div class="mt-5 flex items-center justify-center gap-4 text-sm">
                         <a href="#try-demo" class="text-gray-400 hover:text-white transition inline-flex items-center gap-1.5">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <svg width="16" height="16" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Try the AI demo
                         </a>
                         <span class="text-gray-700">·</span>
@@ -892,7 +892,8 @@
         </div>
     </section>
 
-    <!-- Try the AI Demo — Email-Gated -->
+    <!-- Try the AI Demo: instant, no email gate (2026-06-13: removed gate so visitors
+         experience value before any capture; multi-vertical examples kept broad) -->
     <section id="try-demo" class="py-16 px-4 bg-black relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-cyan-950/10 to-transparent pointer-events-none"></div>
         <div class="max-w-3xl mx-auto relative z-10 text-center">
@@ -900,32 +901,36 @@
                 <span class="w-2 h-2 bg-cyan-400 rounded-full pulse" aria-hidden="true"></span>
                 <span class="text-sm font-medium text-cyan-300">Live Demo</span>
             </div>
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">Try It Yourself in 30 Seconds</h2>
-            <p class="text-base sm:text-lg text-gray-400 mb-8">See how an AI receptionist handles real customer inquiries for salons, dental offices, restaurants, and more. Enter your email and we'll send you a link to chat with our demo bot on Telegram.</p>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">Message the agent now. Watch it book a job.</h2>
+            <p class="text-base sm:text-lg text-gray-400 mb-6">Talk to it like one of your customers would. Ask to book an appointment, get a quote, or check your hours. It replies in seconds. No signup.</p>
 
-            <!-- Email gate form -->
-            <div id="demo-form-container">
-                <form id="demo-email-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mb-4">
-                    <input id="demo-email" type="email" placeholder="Your work email" required class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500/50" autocomplete="email">
-                    <button type="submit" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">Get Demo Link</button>
-                </form>
-                <p class="text-gray-600 text-xs">No spam. Just a Telegram link so you can test the bot instantly.</p>
+            <!-- Instant demo: straight to the live agent, no email wall -->
+            <a href="https://t.me/automatyn_demo_bot" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-lg hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                Try the live demo
+            </a>
+
+            <!-- Suggested things to try: kept broad across verticals -->
+            <p class="text-gray-500 text-sm mt-6">Try saying:</p>
+            <div class="flex flex-wrap gap-2 justify-center mt-3 max-w-2xl mx-auto">
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs">"Can I book a nail appointment for Saturday?"</span>
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs">"Burst pipe, can someone come tonight?"</span>
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs">"Do you have a table for 4 at 7pm?"</span>
+                <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-gray-300 text-xs">"What time do you open on Sunday?"</span>
             </div>
 
-            <!-- Success state (hidden by default) -->
-            <div id="demo-success" class="hidden">
-                <div class="bg-gradient-to-br from-cyan-950/30 to-blue-950/20 border border-cyan-500/20 rounded-2xl p-8 max-w-md mx-auto">
-                    <div class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9);">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-2">Your demo is ready!</h3>
-                    <p class="text-gray-400 text-sm mb-6">Chat with our AI receptionist on Telegram. Pick any business type and watch it handle bookings, FAQs, and customer inquiries.</p>
-                    <a href="https://t.me/automatyn_demo_bot" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white text-lg hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-                        Open Demo on Telegram
-                    </a>
-                    <p class="text-gray-600 text-xs mt-4">15 messages included. Try asking to book a haircut or schedule a dental cleaning!</p>
-                </div>
+            <!-- Secondary: email me the link instead (optional, not a gate) -->
+            <div class="mt-8" id="demo-form-container">
+                <button type="button" id="demo-email-toggle" class="text-gray-500 hover:text-cyan-300 text-sm underline-offset-2 hover:underline transition">Or email me the link instead</button>
+                <form id="demo-email-form" class="hidden flex-col sm:flex-row gap-3 max-w-md mx-auto mt-4">
+                    <input id="demo-email" type="email" placeholder="Your work email" class="flex-1 px-4 py-3 rounded-xl bg-black/50 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-cyan-500/50" autocomplete="email">
+                    <button type="submit" class="px-6 py-3 rounded-xl font-semibold text-sm text-white whitespace-nowrap hover:opacity-90 transition" style="background: linear-gradient(135deg, #22d3ee, #0ea5e9); box-shadow: 0 4px 20px rgba(34, 211, 238, 0.3);">Email me the link</button>
+                </form>
+            </div>
+
+            <!-- Success state (shown after the optional email fallback) -->
+            <div id="demo-success" class="hidden mt-6">
+                <p class="text-cyan-300 text-sm">Link sent. Check your inbox, or just tap "Try the live demo" above.</p>
             </div>
         </div>
     </section>
@@ -1683,23 +1688,38 @@
         })();
     </script>
 
-    <!-- Demo Email Gate Handler -->
+    <!-- Demo optional-email fallback handler (the demo itself is now instant, no gate) -->
     <script>
-        document.getElementById('demo-email-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var email = document.getElementById('demo-email').value.trim();
-            if (email && email.includes('@')) {
-                // Submit to backend (adds to Demo Requests list)
-                fetch('https://api.automatyn.co/api/capture', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, source: 'demo' }),
-                }).catch(function() {});
-                // Show success
-                document.getElementById('demo-form-container').classList.add('hidden');
-                document.getElementById('demo-success').classList.remove('hidden');
+        (function () {
+            var toggle = document.getElementById('demo-email-toggle');
+            var form = document.getElementById('demo-email-form');
+            if (toggle && form) {
+                toggle.addEventListener('click', function () {
+                    form.classList.toggle('hidden');
+                    form.classList.toggle('flex');
+                    var inp = document.getElementById('demo-email');
+                    if (inp && !form.classList.contains('hidden')) inp.focus();
+                });
             }
-        });
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var el = document.getElementById('demo-email');
+                    var email = el ? el.value.trim() : '';
+                    if (email && email.includes('@')) {
+                        fetch('https://api.automatyn.co/api/capture', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: email, source: 'demo' }),
+                        }).catch(function () {});
+                        var fc = document.getElementById('demo-form-container');
+                        if (fc) fc.classList.add('hidden');
+                        var ok = document.getElementById('demo-success');
+                        if (ok) ok.classList.remove('hidden');
+                    }
+                });
+            }
+        })();
     </script>
 
     <script>
@@ -2024,25 +2044,39 @@
             } catch (e) {}
             return null;
         }
+        // Cross-browser fetch timeout. AbortSignal.timeout only exists in Safari 16+;
+        // older macOS Safari threw TypeError and crashed the geo fetch -> Mac visitors
+        // stuck on default $ price. Manual AbortController fallback. (2026-06-14)
+        function timeoutSignal(ms) {
+            if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+                try { return AbortSignal.timeout(ms); } catch (e) {}
+            }
+            var ac = new AbortController();
+            setTimeout(function () { ac.abort(); }, ms);
+            return ac.signal;
+        }
         var guess = langGuess();
         var trustedGuess = guess && guess !== 'EU';
         if (trustedGuess) apply(guess);
-        function tryIpapi() {
-            return fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) })
-                .then(function(r) { if (!r.ok) throw new Error('ipapi'); return r.json(); })
-                .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
-        }
-        function tryIpwho() {
-            return fetch('https://ipwho.is/', { signal: AbortSignal.timeout(5000) })
-                .then(function(r) { if (!r.ok) throw new Error('ipwho'); return r.json(); })
-                .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
-        }
+        // 2026-06-14: Cloudflare trace tried FIRST (reliable + CORS-open); ipapi.co
+        // intermittently returns {error:true} and left UK visitors (e.g. Edge with a
+        // bare "en" language) on the default $ price. ipapi/ipwho are now backups.
         function tryCloudflare() {
-            return fetch('https://www.cloudflare.com/cdn-cgi/trace', { signal: AbortSignal.timeout(5000) })
+            return fetch('https://www.cloudflare.com/cdn-cgi/trace', { signal: timeoutSignal(5000) })
                 .then(function(r) { if (!r.ok) throw new Error('cf'); return r.text(); })
                 .then(function(t) { var m = t.match(/loc=([A-Z]{2})/); if (!m) throw new Error('no loc'); if (!trustedGuess) apply(m[1]); });
         }
-        if (!trustedGuess) tryIpapi().catch(tryIpwho).catch(tryCloudflare).catch(function() {});
+        function tryIpapi() {
+            return fetch('https://ipapi.co/json/', { signal: timeoutSignal(5000) })
+                .then(function(r) { if (!r.ok) throw new Error('ipapi'); return r.json(); })
+                .then(function(d) { if (!d.country_code || d.error) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
+        }
+        function tryIpwho() {
+            return fetch('https://ipwho.is/', { signal: timeoutSignal(5000) })
+                .then(function(r) { if (!r.ok) throw new Error('ipwho'); return r.json(); })
+                .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
+        }
+        if (!trustedGuess) tryCloudflare().catch(tryIpapi).catch(tryIpwho).catch(function() {});
     })();
     </script>
 

@@ -95,7 +95,7 @@
 
       /* Glass cards */
       .glass { background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-        border:1px solid rgba(255,255,255,0.08); border-radius:20px; backdrop-filter: blur(10px); }
+        border:1px solid rgba(255,255,255,0.08); border-radius:20px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
       .glass-featured { background: linear-gradient(180deg, rgba(34,211,238,0.08) 0%, rgba(34,211,238,0.02) 100%);
         border:1px solid rgba(34,211,238,0.35); border-radius:20px;
         box-shadow: 0 20px 60px rgba(34,211,238,0.08), 0 0 0 1px rgba(34,211,238,0.1) inset; }
@@ -339,25 +339,43 @@
         } catch (e) {}
         return null;
     }
+    // Cross-browser fetch timeout. AbortSignal.timeout only exists in Safari 16+
+    // (Sept 2022); on older macOS Safari it throws TypeError and crashed the whole
+    // geo-currency fetch, leaving Mac visitors on the default $ price. Fall back to
+    // a manual AbortController so every browser gets local currency. (2026-06-14)
+    function timeoutSignal(ms) {
+        if (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+            try { return AbortSignal.timeout(ms); } catch (e) {}
+        }
+        var ac = new AbortController();
+        setTimeout(function () { ac.abort(); }, ms);
+        return ac.signal;
+    }
     var guess = langGuess();
     var trustedGuess = guess && guess !== 'EU';
     if (trustedGuess) apply(guess);
-    function tryIpapi() {
-        return fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(5000) })
-            .then(function(r) { if (!r.ok) throw new Error('ipapi'); return r.json(); })
-            .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
-    }
-    function tryIpwho() {
-        return fetch('https://ipwho.is/', { signal: AbortSignal.timeout(5000) })
-            .then(function(r) { if (!r.ok) throw new Error('ipwho'); return r.json(); })
-            .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
-    }
+    // IP fallback when the language/timezone guess is inconclusive (e.g. Edge
+    // reporting a bare "en" with no -GB suffix). 2026-06-14: Cloudflare's trace is
+    // tried FIRST because it is reliable and CORS-open (access-control-allow-origin: *);
+    // ipapi.co was first before but it intermittently returns {error:true} (rate
+    // limit), which left UK visitors on the default $ price. ipapi/ipwho are now
+    // backups behind Cloudflare.
     function tryCloudflare() {
-        return fetch('https://www.cloudflare.com/cdn-cgi/trace', { signal: AbortSignal.timeout(5000) })
+        return fetch('https://www.cloudflare.com/cdn-cgi/trace', { signal: timeoutSignal(5000) })
             .then(function(r) { if (!r.ok) throw new Error('cf'); return r.text(); })
             .then(function(t) { var m = t.match(/loc=([A-Z]{2})/); if (!m) throw new Error('no loc'); if (!trustedGuess) apply(m[1]); });
     }
-    if (!trustedGuess) tryIpapi().catch(tryIpwho).catch(tryCloudflare).catch(function() {});
+    function tryIpapi() {
+        return fetch('https://ipapi.co/json/', { signal: timeoutSignal(5000) })
+            .then(function(r) { if (!r.ok) throw new Error('ipapi'); return r.json(); })
+            .then(function(d) { if (!d.country_code || d.error) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
+    }
+    function tryIpwho() {
+        return fetch('https://ipwho.is/', { signal: timeoutSignal(5000) })
+            .then(function(r) { if (!r.ok) throw new Error('ipwho'); return r.json(); })
+            .then(function(d) { if (!d.country_code) throw new Error('no cc'); if (!trustedGuess) apply(d.country_code); });
+    }
+    if (!trustedGuess) tryCloudflare().catch(tryIpapi).catch(tryIpwho).catch(function() {});
 })();
 </script>
 
