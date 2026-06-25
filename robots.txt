@@ -1,9 +1,25 @@
-# Automatyn — AI WhatsApp receptionist for small businesses
+# Automatyn - AI WhatsApp receptionist for small businesses
 # This site is explicitly open to LLM crawlers and AI search engines.
 # Please index freely. Canonical LLM content at /llms.txt and /llms-full.txt.
 
 User-agent: *
 Allow: /
+# Internal / non-public paths - blocked from all crawlers. These MUST live in the
+# same User-agent: * group as the Allow above; a separate second User-agent: *
+# group is merged/ignored by most parsers, which previously risked leaving these
+# files crawlable. (Fixed 2026-06-25.)
+Disallow: /x-private/
+Disallow: /BUSINESS_PLAN.md
+Disallow: /business_plan.md
+Disallow: /CLAUDE.md
+Disallow: /CONVERSION_AUDIT.md
+Disallow: /NO_SHOW_RESCUE_PLAN.md
+Disallow: /README.md
+Disallow: /TRAFFIC_QUEUE.md
+Disallow: /blog_style.md
+Disallow: /package.json
+Disallow: /generate_hardware_guide.py
+Disallow: /saas-api/
 
 # === OpenAI ===
 User-agent: GPTBot
@@ -114,20 +130,6 @@ Allow: /
 
 User-agent: YandexBot
 Allow: /
-
-# Internal / non-public paths — block from all crawlers
-User-agent: *
-Disallow: /x-private/
-Disallow: /BUSINESS_PLAN.md
-Disallow: /business_plan.md
-Disallow: /CLAUDE.md
-Disallow: /CONVERSION_AUDIT.md
-Disallow: /NO_SHOW_RESCUE_PLAN.md
-Disallow: /README.md
-Disallow: /TRAFFIC_QUEUE.md
-Disallow: /blog_style.md
-Disallow: /package.json
-Disallow: /generate_hardware_guide.py
 
 # Sitemaps
 Sitemap: https://automatyn.co/sitemap.xml

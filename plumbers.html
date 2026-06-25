@@ -20,7 +20,7 @@
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400;500;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* MIDNIGHT OPERATOR THEME — copied from homepage */
+        /* MIDNIGHT OPERATOR THEME - copied from homepage */
         :root {
             --accent: #22d3ee;
             --accent-dim: #0e7490;
@@ -39,7 +39,7 @@
         .bg-card { background: var(--bg-card); }
         .bg-surface { background: var(--bg-surface); }
 
-        /* gradient-text — WHITE to CYAN, exactly as homepage */
+        /* gradient-text - WHITE to CYAN, exactly as homepage */
         .gradient-text {
             background: linear-gradient(135deg, #ffffff 0%, var(--accent) 100%);
             -webkit-background-clip: text;
@@ -47,7 +47,7 @@
             background-clip: text;
         }
 
-        /* hero-gradient — radial mesh like homepage */
+        /* hero-gradient - radial mesh like homepage */
         .hero-gradient { background: var(--bg-dark); position: relative; overflow: hidden; }
         .hero-gradient::before {
             content: ''; position: absolute; top: -20%; left: -20%; right: -20%; bottom: -20%;
@@ -64,7 +64,7 @@
             66% { transform: translate(-1%, 1.5%) scale(0.98); }
         }
 
-        /* CTA buttons — identical to homepage */
+        /* CTA buttons - identical to homepage */
         .cta-primary {
             background: linear-gradient(180deg, #85e6b5 0%, #5dd492 100%);
             color: #0a0a0a !important;
@@ -116,7 +116,7 @@
             box-shadow: 0 0 0 1px rgba(117,224,167,0.12), 0 0 60px -10px rgba(117,224,167,0.18), 0 24px 60px -10px rgba(0,0,0,0.4);
         }
 
-        /* WhatsApp demo — identical CSS to homepage */
+        /* WhatsApp demo - identical CSS to homepage */
         .wa-msg {
             max-width: 85%;
             padding: 8px 12px;
@@ -173,6 +173,26 @@
             .roi-slider-label { font-size: 0.85rem !important; }
         }
     </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "AI WhatsApp Receptionist for UK Plumbers",
+        "serviceType": "AI WhatsApp receptionist",
+        "description": "An AI agent that answers WhatsApp enquiries in seconds, books jobs, and stops plumbers losing work to whoever replies first.",
+        "areaServed": "United Kingdom",
+        "provider": {
+            "@type": "Organization",
+            "name": "Automatyn",
+            "url": "https://automatyn.co/"
+        },
+        "audience": {
+            "@type": "Audience",
+            "audienceType": "UK plumbers"
+        },
+        "url": "https://automatyn.co/plumbers.html"
+    }
+    </script>
 </head>
 <body>
 
@@ -377,7 +397,7 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">You're live</h3>
-                        <p class="text-gray-400">AI replies to every enquiry in ~2 seconds. Qualifies the job, quotes your callout, books the slot. You jump in anytime by typing in the chat — AI steps aside.</p>
+                        <p class="text-gray-400">AI replies to every enquiry in ~2 seconds. Qualifies the job, quotes your callout, books the slot. You jump in anytime by typing in the chat - AI steps aside.</p>
                         <p class="text-sm text-gray-500 mt-4">24/7 from day one</p>
                     </div>
                 </div>
@@ -572,7 +592,7 @@
         </div>
     </section>
 
-    <!-- FAQ — plumber-specific -->
+    <!-- FAQ - plumber-specific -->
     <section id="faq" class="py-16 sm:py-20 px-4 bg-surface border-y border-white/5">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-12 sm:mb-16">
@@ -593,7 +613,7 @@
 
                 <details class="bg-card rounded-xl p-5 sm:p-6 cursor-pointer group border border-white/6">
                     <summary class="font-semibold text-white flex justify-between items-center gap-4"><span>Do I need a new phone number?</span><svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary>
-                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">No. You connect your existing WhatsApp number (Business or personal). Setup is the same QR-scan as linking WhatsApp Web — your phone stays logged in.</p>
+                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">No. You connect your existing WhatsApp number (Business or personal). Setup is the same QR-scan as linking WhatsApp Web - your phone stays logged in.</p>
                 </details>
 
                 <details class="bg-card rounded-xl p-5 sm:p-6 cursor-pointer group border border-white/6">
@@ -603,12 +623,12 @@
 
                 <details class="bg-card rounded-xl p-5 sm:p-6 cursor-pointer group border border-white/6">
                     <summary class="font-semibold text-white flex justify-between items-center gap-4"><span>What if I can't do a job the AI booked?</span><svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary>
-                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">Connect Google Calendar (Pro plan). The AI only offers slots that are genuinely free. If you want it to never auto-book, set it to "qualify and hand over" mode — it gathers the job details and tells the customer you'll confirm timing.</p>
+                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">Connect Google Calendar (Pro plan). The AI only offers slots that are genuinely free. If you want it to never auto-book, set it to "qualify and hand over" mode - it gathers the job details and tells the customer you'll confirm timing.</p>
                 </details>
 
                 <details class="bg-card rounded-xl p-5 sm:p-6 cursor-pointer group border border-white/6">
                     <summary class="font-semibold text-white flex justify-between items-center gap-4"><span>Is it safe? Where does the data go?</span><svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></summary>
-                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">UK-based, GDPR-compliant. Your business info is stored on ISO 27001-certified infrastructure. Customer messages are processed by Anthropic's Claude API under their enterprise data policy — no training on your data. You can export or delete everything anytime.</p>
+                    <p class="mt-4 text-gray-400 text-sm sm:text-base leading-relaxed">UK-based, GDPR-compliant. Your business info is stored on ISO 27001-certified infrastructure. Customer messages are processed by Anthropic's Claude API under their enterprise data policy - no training on your data. You can export or delete everything anytime.</p>
                 </details>
 
                 <details class="bg-card rounded-xl p-5 sm:p-6 cursor-pointer group border border-white/6">
